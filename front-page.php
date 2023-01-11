@@ -13,6 +13,8 @@ foreach($zazitky_tags_terms as $term) {
 	$zazitky_tags_asssoc[$term->slug]->meta_fields = get_term_meta( $term->term_id,  );
 }
 
+
+
 get_header();
 ?>
 <? echo "<h1>PIČOOOOOOOOOOO</h1>" ?>
