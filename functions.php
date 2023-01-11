@@ -10,7 +10,7 @@ function nv_send_mail ($args = []) {
 	if (!isset($args) || $args == [] ) return "fuckoff. dej mi kurva aspon jeden argument";
 	$body = isset($args->body) ? $args->body : "";
 
-	return wp_mail( $args["to"], $args["subject"], $body );
+	return wp_mail( $args["to"], $args["subject"], $args["body"] );
 
 }
 if ( ! function_exists('debug_wpmail') ) :
