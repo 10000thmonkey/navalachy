@@ -13,6 +13,30 @@ function nv_send_mail ($args = []) {
 	return wp_mail( $args["to"], $args["subject"], $body );
 
 }
+if ( ! function_exists('debug_wpmail') ) :
+
+	function debug_wpmail( $result = false ) {
+
+		if ( $result )
+			return;
+
+		global $ts_mail_errors, $phpmailer;
+
+		if ( ! isset($ts_mail_errors) )
+			$ts_mail_errors = array();
+
+		if ( isset($phpmailer) )
+			$ts_mail_errors[] = $phpmailer->ErrorInfo;
+
+		print_r('<pre>');
+		print_r($ts_mail_errors);
+		print_r('</pre>');
+	}
+endif;
+
+
+
+
 
 
 add_filter( 'http_request_timeout', 'my_custom_timeout' );
@@ -21,15 +45,25 @@ function my_custom_timeout( $timeout_value ) {
 }
 
 
+
+
 function nvbk_ajax_ubytovani_contact_form ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 	$from = $_POST["name"] ? $_POST['name'] : "";
-	echo json_encode( nv_send_mail (array(
-		"to" => "vojja01@gmail.com",
-		"subject" => "Message from " . $_POST['name'] . " (" . $_POST['email'] . ")",
-		"body" => $_POST['message']
-	)));
+	$headers = 
+	
+	$res = nv_send_mail (array(
+		"to" => "vojja01@gmail.com", //pozdeji vymenit za 
+		"subject" => "Nový dotaz z Valach: " . $_POST['name'] . " (" . $_POST['email'] . ")",
+		"body" => $_POST['message'],
+		"headers" => array(
+			"From: Na Valachy kontaktní formulář <info@navalachy.cz>",
+			'Content-Type: text/html; charset=UTF-8',
+			'Reply-To: '.$_POST["name"].' <'.$_POST['email'].'>',
+		)
+	));
+	echo debug_wpmail($res);
 	wp_die();
 }
 add_action("wp_ajax_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
@@ -432,6 +466,7 @@ function navalachy_modules()
 
 	include "templates/cover-image.php";
 
+	wp_enqueue_style( 'navalachy', $templ_dir."/style.css" );
 	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
 	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
 	wp_enqueue_style( "navalachy-icons", $templ_dir. "/inc/icon/style.css" );
