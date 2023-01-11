@@ -10,7 +10,7 @@ function nv_send_mail ($args = []) {
 	if (!isset($args) || $args == [] ) return "fuckoff. dej mi kurva aspon jeden argument";
 	$body = isset($args->body) ? $args->body : "";
 
-	wp_mail( $args->to, $args->subject, $body );
+	wp_mail( $args["to"], $args["subject"], $body );
 }
 
 
@@ -24,7 +24,7 @@ function nvbk_ajax_ubytovani_contact_form ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 	$from = $_POST["name"] ? $_POST['name'] : "";
-	echo wp_send_mail (array(
+	echo nv_send_mail (array(
 		"to" => "vojja01@gmail.com",
 		"subject" => "Message from " . $_POST['name'] . " (" . $_POST['email'] . ")",
 		"body" => $_POST['message']
@@ -431,7 +431,7 @@ function navalachy_modules()
 
 	include "templates/cover-image.php";
 
-	wp_enqueue_style( 'navalachy-style', $templ_dir."style.css" );
+	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
 	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
 	wp_enqueue_style( "navalachy-icons", $templ_dir. "/inc/icon/style.css" );
 
