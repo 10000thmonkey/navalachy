@@ -1,0 +1,75 @@
+---------------------------------------
+NaValachy Platform pseudo-documentation
+---------------------------------------
+
+
+
+
+#################### CSS FRAMEWORK ##########################
+
+
+
+
+##### LAYOUT #####
+
+# RESPONSIVE COLUMNS # (are stacked as rows on breakpoint < sm)
+
+	div.responsive-cols
+		div.responsive-col
+
+
+# COL-FIXED-FLEX # (like avatar on left, text on right - text is flexible)
+	
+	.col-fixed-flex
+		.col-fixed
+		.col-flex
+
+
+##### UI COMPONENTS #####
+
+# ICONSET #
+
+	.iconset
+		.icon
+			.nvicon.nvicon-<prefered icon> "icon label"
+
+# GALLERY GRID #
+
+	div.gallery
+		div.gallery-grid
+			div.gallery-item (add class w to span 2 columns - landscape images, class h for portrait)
+
+# REVIEWS #
+
+	.review
+		.review-head
+			.review-avatar
+			.review-name
+		.review-body
+			.review-text
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############### DOCUMENTATIONS, REFERENCES ################
+
+JS Calendar
+
+https://hello-week.com/#/docs/v2/methods
+
+
+Channel Manager API
+
+https://docs.smoobu.com/#url-query-parameters
