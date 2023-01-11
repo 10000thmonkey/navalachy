@@ -431,7 +431,7 @@ function navalachy_modules()
 
 	include "templates/cover-image.php";
 
-	wp_enqueue_style( 'navalachy-style', get_stylesheet_uri(), array(), _S_VERSION );
+	wp_enqueue_style( 'navalachy-style', $templ_dir."style.css" );
 	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
 	wp_enqueue_style( "navalachy-icons", $templ_dir. "/inc/icon/style.css" );
 
