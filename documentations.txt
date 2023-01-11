@@ -35,9 +35,9 @@ NaValachy Platform pseudo-documentation
 
 # GALLERY GRID #
 
-	div.gallery
-		div.gallery-grid
-			div.gallery-item (add class w to span 2 columns - landscape images, class h for portrait)
+	nv_template_gallery(
+		
+	)
 
 # REVIEWS #
 
