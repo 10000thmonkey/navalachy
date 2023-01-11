@@ -15,7 +15,7 @@ foreach($zazitky_tags_terms as $term) {
 
 get_header();
 ?>
-
+<? echo "<h1>PIČOOOOOOOOOOO</h1>" ?>
 <main id="primary" class="site-main">
 
 	<?php
