@@ -71,7 +71,8 @@ q(function(){
 	});
 	q('.modale').on("click", function (e) {
 		//e.preventDefault();
-		if (e.currentTarget.hasClass("modale")) {
+		if ( e.path.indexOf( this.q(".modal-dialog")[0] ) == -1 )
+		{
 			q('.modale').removeClass('opened');
 		    document.body.css("overflow", "unset");
 		}

@@ -10,7 +10,8 @@ function nv_send_mail ($args = []) {
 	if (!isset($args) || $args == [] ) return "fuckoff. dej mi kurva aspon jeden argument";
 	$body = isset($args->body) ? $args->body : "";
 
-	wp_mail( $args["to"], $args["subject"], $body );
+	return wp_mail( $args["to"], $args["subject"], $body );
+
 }
 
 
@@ -24,12 +25,12 @@ function nvbk_ajax_ubytovani_contact_form ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 	$from = $_POST["name"] ? $_POST['name'] : "";
-	echo nv_send_mail (array(
+	echo json_encode( nv_send_mail (array(
 		"to" => "vojja01@gmail.com",
 		"subject" => "Message from " . $_POST['name'] . " (" . $_POST['email'] . ")",
 		"body" => $_POST['message']
-	));
-	die();
+	)));
+	wp_die();
 }
 add_action("wp_ajax_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
 add_action("wp_ajax_nopriv_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
