@@ -13,7 +13,7 @@ foreach($zazitky_tags_terms as $term) {
 	$zazitky_tags_asssoc[$term->slug]->meta_fields = get_term_meta( $term->term_id,  );
 }
 
-
+$homepage_settings = pods('homepage_settings');
 
 get_header();
 ?>
@@ -26,6 +26,18 @@ get_header();
 	) );
 	?>
 	
+	<div class="section_instagram contentwrap">
+		<div class="space-around-hg slider-wrapper">
+			<?php 
+			$insta_array = get_option('homepage_settings_files');
+			foreach( $insta_array as $insta_item ) {
+				echo "<a class='slider-item'>" . nv_responsive_img( $insta_item ) . "</a>";
+			}
+			?>
+		</div>
+	</div>
+
+
 	<div class="section_zazitky">
 
 		<div class="section-block">
@@ -96,6 +108,9 @@ get_header();
 		</div>
 	</div>
 
+	<?php
+
+	?>
 
 	<div class="section_zazitky2">
 		<div class="section-block">

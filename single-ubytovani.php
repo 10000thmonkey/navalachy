@@ -1,6 +1,7 @@
 <?php
 nv_use_modules(["booking", "lightbox"]);
 global $_VAR;
+global $nv_vars;
 
 $ID = get_the_id();
 $meta_fields = get_post_meta( $ID );
@@ -13,6 +14,16 @@ $amenities_array = array();
 while( $amenities_query->fetch() ) {
 	$amenities_array[(int)$amenities_query->display("id")] = $amenities_query->display("name");
 }
+
+$nv_vars = array(
+	'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+	'host_email' => $host["billing_email"][0],
+	'apartmentId' => $ID,
+	'apartmentName' => $title,
+	'apartmentCapacity' => $meta["capacity"][0]
+	//'meta' => $meta_fields
+);
+
 
 get_header();
 ?>
@@ -91,15 +102,15 @@ get_header();
 
 
 
-		<aside class="col reservation hidden">
+		<aside class="col reservation">
 			<div class="mobile-sliding-footer">
 				
 				<div class="content-on-shown space-between">
-					<a class="btn-close" onclick="this.closestParent('aside').hide()"></a>
+					<a class="btn-close" onclick="this.closestParent('aside').removeClass('slided')"></a>
 				</div>
 
 				<div class="content-on-hidden">
-					<a class="button" onclick="this.closestParent('aside').show()">rezervovat</a>
+					<a class="button" onclick="this.closestParent('aside').addClass('slided')">rezervovat</a>
 				</div>
 
 			</div>
@@ -279,9 +290,11 @@ get_header();
 
 		<div class="padding-xl" id="map">
 		
-			<h3>Adresa</h3>
-		
-			<div style="margin-bottom:1em"><?=$meta_fields["address"][0];?></div>
+			<div class="space-around-hg">
+				<h3 class="space-around-md">Adresa</h3>
+				<span><?=$meta_fields["address"][0];?></span>
+			</div>
+
 			<iframe loading="lazy" width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=<?=urlencode($meta_fields["gps"][0]);?>+(Azzy)&amp;t=p&amp;z=8&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
 
 		</div>
@@ -371,20 +384,19 @@ get_header();
 				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 			</div>
 			<div class="modal-body padding-lg">
-				<form id="ubytovani-contact-form" action="/wp-admin/admin-ajax.php" method="POST" style="display: flex; flex-direction: column; gap: 15px">
+				<form id="ubytovani-contact-form" style="display: flex; flex-direction: column; gap: 15px">
 					<label style="">
 						<div>Jméno:</div>
-						<input class="input" name="name">
+						<input required class="input" name="name">
 					</label>
 					<label>
 						<div>Email:</div>
-						<input class="input" name="email" type="email">
+						<input required class="input" name="email" type="email">
 					</label>
 					<label>
 						<div>Dotaz:</div>
-						<textarea rows="5" class="input" name="message"></textarea>
+						<textarea required rows="5" class="input" name="message"></textarea>
 					</label>
-					<input type="hidden" name="action" value="nvbk_ubytovani_contact_form">
 					<a onclick="nvbk_ubytovani_contact_form()" class="button" style="align-self:end">Odeslat</a>
 				</form>
 			</div>
@@ -409,13 +421,15 @@ get_header();
 
 <script>
 	function nvbk_ubytovani_contact_form () {
-		var form = jQuery("form#ubytovani-contact-form");
-		jQuery.ajax({
-		    url: form.attr("action"),
-		    type: form.attr("method"),
-		    data: form.serialize(),
-		    success: (e) => console.log(e)
-		});
+		var form = q("form#ubytovani-contact-form");
+		jax.post( "/wp-admin/admin-ajax.php", {
+			"action" : "nvbk_ubytovani_contact_form",
+			"name" : form.q("input[name=name]")[0].value,
+			"email" : form.q("input[name=email]")[0].value,
+			"message" : form.q("textarea[name=message]")[0].value
+		},
+		(e) => console.log(e)
+		);
 	}
 </script>
 <?php

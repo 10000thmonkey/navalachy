@@ -90,10 +90,10 @@ class NV_Booking
 		
 		} else {
 
-			let daysSelected = this.hw.daysSelected;
 			let errorcode = -1;
 
 			//check for intersection with disabled dates
+			let daysSelected = this.hw.daysSelected;
 			let intersect = cal.hw.daysSelected.reduce(function(result, element) {
 				if (cal.disableDates.indexOf(element) !== -1) {
 					result.push(element);
@@ -157,6 +157,17 @@ class NV_Booking
 		}
 		this.focusfield();
 		this.el.datepicker.hide();
+	}
+
+	setFromUrl (begin, end)
+	{
+		let beginDay = new Date( begin );
+	 	this.el.beginValue.content( beginDay.getDate() + ". " + (beginDay.getMonth() + 1) + ". " + beginDay.getFullYear() );
+	 	this.begin = begin;
+
+		let endDay = new Date( end );
+	 	this.el.endValue.content( endDay.getDate() + ". " + (endDay.getMonth() + 1) + ". " + endDay.getFullYear() );
+	 	this.end = end;
 	}
 
 	reset ()
@@ -240,5 +251,5 @@ class NV_Booking
 	}
 
 
-	isSelected () { return ( typeof this.hw.intervalRange.begin == "number" && typeof this.hw.intervalRange.end == "number"); }
+	isSelected () { return !! ( this.begin && this.end); }
 }

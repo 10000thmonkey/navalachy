@@ -116,7 +116,7 @@ function nvbk_ajax_to_checkout()
 	$unavailable_days = $nvbk->get_disabled_days($_POST['apartmentId']);
 	$stay_array = $nvbk->get_date_range_array($_POST['begin'], $_POST['end']);
 	if ( !empty( array_intersect( $unavailable_days, $stay_array ) ) ) {
-		$return["body"] = "Chyba lávky!";
+		$return["body"] = "Termín je obsazený.";
 		echo json_encode($return);
 		wp_die();
 	}
@@ -124,23 +124,13 @@ function nvbk_ajax_to_checkout()
 
 	//GET PRICE AND SEND IN MESSAGE BODY
 	$response = $nvbk->get_new_booking_price( $_POST['begin'], $_POST['end'], $_POST['apartmentId'],1);//$_POST['people'] );
-	if ( is_wp_error($response) ) {
-		$return["body"] = var_dump($response);
-		echo json_encode($return);
-		wp_die();
-	}
 
-	
-	//IF ERROR FROM NVBK LIBRARY, SEND TO MESSAGE BODY
-	if ( ! empty( $response["errorMessages"] ) ) {
-		$return["body"] = var_dump($response["errorMessages"]);
-		echo json_encode($return);
-		wp_die ();
-	}
+	//ANY ERROR
+	if ( empty( $response["prices"] ) || ! empty( $response["errorMessages"] ) || is_wp_error($response) ) {
 
-	//ANY OTHER ERROR
-	if ( empty( $response["prices"] ) ) {
 		$return["body"] = "Rezervaci se nepodařilo vytvořit. Prosíme, kontaktujte nás.";
+		$return["response"] = $response;
+
 		echo json_encode($return);
 		wp_die();
 	}
@@ -488,7 +478,10 @@ function navalachy_modules()
 add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
 
 
-
+// wp_add_inline_script( 'nvdata', 'const nvdata = ' . json_encode( array(
+//     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+//     'otherParam' => 'some value',
+// ) ), 'before' );
 
 
 
@@ -590,6 +583,15 @@ function nv_zazitky_fetch ( $args = array() )
 
 
 
+
+function nv_register_vars ( ) {
+	global $nv_vars;
+	if ( empty( $nv_vars ) ) return;
+	wp_register_script( "nv_vars", "" );
+	wp_enqueue_script( "nv_vars" );
+	wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
+}
+add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
 
 
 

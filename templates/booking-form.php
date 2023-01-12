@@ -91,9 +91,9 @@ ob_start();
 				echo "c.disabledDays = ". json_encode( $disabledDays ) . ";"; 
 			}
 
-			echo "c.apartmentId = " . $_VAR["apartmentId"] . ";";
-			echo "c.apartmentName = '" . $_VAR["apartmentName"] . "';";
-			echo "c.capacity = " . $_VAR["capacity"] . ";";
+			echo "c.apartmentId = nv_vars.apartmentId;";
+			echo "c.apartmentName = nv_vars.apartmentName;";
+			echo "c.capacity = nv_vars.apartmentCapacity;";
 
 		else:
 
@@ -103,6 +103,7 @@ ob_start();
 
 		endif;
 		?>
+
 		cal = new NV_Booking({
 			peopleLimit: c.capacity,
 			selector: "#booking-form",
@@ -112,6 +113,13 @@ ob_start();
 			apartmentName: c.apartmentName
 		});
 		cal.el.spinner.hide();
+
+
+		var URLParams = new URLSearchParams(location.search);
+
+		if ( URLParams.get("begin") && URLParams.get("end") )
+			cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
+
 	} );
 </script>
 

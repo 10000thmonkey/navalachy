@@ -665,7 +665,11 @@ body.home {
 		}
 	}
 }
+.section_instagram {
+	a {
 
+	}
+}
 
 
 /*VOUCHERY*/
@@ -1187,7 +1191,7 @@ body.post-type-archive-product, body.single-product, body.tax-product_cat {
 
 body.woocommerce-checkout {
 	.site-header {box-shadow: none;position: static; & > div {grid-template-columns: unset; justify-content: center;} a {cursor: default;}}
-	#site-navigation, #site-navigation-mobile, #wc-stripe-payment-request-wrapper, #wc-stripe-payment-request-button-separator {display: none;}
+	.site-header .header-right, #site-navigation, #site-navigation-mobile, #wc-stripe-payment-request-wrapper, #wc-stripe-payment-request-button-separator {display: none;}
 	.site-main {.contentwrap();}
 	.woocommerce {
 		.box();
@@ -1207,7 +1211,7 @@ body.woocommerce-checkout {
 			flex-direction: column;
 		}
 
-		input {
+		input, textarea {
 			.input();
 			.transition();
 
@@ -1448,10 +1452,6 @@ body.woocommerce-checkout {
 
 body.single-ubytovani {
 
-	@media (max-width: @breakpoint-md) {
-		aside.reservation {position: static;width: auto;}
-	}
-
 	#booking-form {
 		flex-direction: column;
 		.box();
@@ -1481,7 +1481,7 @@ body.single-ubytovani {
 	.mobile-sliding-footer {
 		display: none;
 	}
-	@media (max-width: @breakpoint-sm) {
+	@media (max-width: @breakpoint-md) {
 		aside.reservation {
 			width: 100vw;
 		    max-width: unset;
@@ -1491,7 +1491,7 @@ body.single-ubytovani {
 		    background: white;
 		    .transition();
 		    box-shadow: var(--shadow-md);
-		    top: 0;
+		    top: calc(100vh - 100px); 
 		    left: 0;
 		    z-index: 10;
 		    display: flex;
@@ -1518,8 +1518,8 @@ body.single-ubytovani {
 		    		left: 0;
 		    	}
 		    	.content-on-shown {
-		    		opacity: 1;
-		    		pointer-events: auto;
+		    		opacity: 0;
+		    		pointer-events: none;
 		    		width: auto;
 				    right: 0;
 				    left: unset;
@@ -1528,16 +1528,14 @@ body.single-ubytovani {
 				    align-items: center;
 				    justify-content: center;
 		    	}
-		    	.content-on-hidden {opacity: 0;pointer-events: none;}
+		    	.content-on-hidden {opacity: 1;pointer-events: auto;}
 		    }
 
-		    &.hidden {
-		    	opacity: 1 !important;
-		    	pointer-events: auto !important;
-		    	top: calc(100vh - 100px); 
+		    &.slided {
+		    	top: 0;
 		    	.mobile-sliding-footer {
-			    	.content-on-shown {opacity: 0;pointer-events: none;}
-			    	.content-on-hidden {opacity: 1;pointer-events: auto;}
+			    	.content-on-shown {opacity: 1;pointer-events: auto;}
+			    	.content-on-hidden {opacity: 0;pointer-events: none;}
 			    }
 		    }
 		}
@@ -2052,7 +2050,29 @@ body.single-ubytovani {
 	&.success {background: rgba(155, 255, 155, 1.0);}
 }
 
+.slider-wrapper {
+	display: flex;
+	overflow: scroll;
+	scroll-snap-type: both mandatory;
+	position: relative;
+	height: 420px; //can be changed to whatever yuo want
+	padding: var(--space-md);
+	gap: var(--space-md);
+	margin: var(--space-md) -var(--space-md);
 
+	.slider-item {
+		border-radius: var(--radius-md);
+		flex: none;
+		overflow: hidden;
+		width: 250px;
+		height: 100%;
+		position: relative;
+		scroll-snap-align: start;
+	    scroll-snap-stop: normal;
+	    scroll-margin: var(--space-md);
+	    img {width: 100%; height: 100%; object-fit: cover;position: absolute;z-index: -1;}
+	}
+}
 
 
 /*LAYOUT*/

@@ -105,24 +105,6 @@ public function get_rates ( $begin, $end, $apartments = [1520050] )
 
 public function get_disabled_days ( $propertyId )
 {	
-	// $query =  "api/reservations?" . http_build_query( array(
-	// 	'from' => '2023-01-01',
-	// 	'to' => '2024-01-01',
-	// 	'excludeBlocked' => true,
-	// 	'showCancellation' => true,
-	// 	'pageSize' => 100,
-	// 	'apartmentId' => $propertyId
-	// ) );
-
-	// return wp_safe_remote_request( "https://login.smoobu.com/" . $url, array (
-	// 		'headers' => array(
-	// 			'Api-Key' => $this->NVBK_API,
-	// 			'Cache-Control' => 'no-cache'
-	// 		),
-	// 		'body' => $payload,
-	// 		'method' => $method,
-	// 		'timeout' => 30
-	// 	) );
 	return $this->sync_disabled_dates( $propertyId, false, HOUR_IN_SECONDS / 6 );
 }
 

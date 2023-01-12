@@ -18,6 +18,8 @@ if(empty($apartamentos)) {
 	}
 	set_transient("nvbk_apartamentos", $apartamentos, DAY_IN_SECONDS );
 }
+
+$is_searching = ( !empty($_GET["begin"]) && !empty($_GET["end"]) );
 ?>
 <main id="primary">
 
@@ -30,17 +32,23 @@ if(empty($apartamentos)) {
 	) );
 	?>
 	
+
+
 	<div class="ubytovani-feed contentwrap">
 	
 	<?php
 	$args = []; 
 	$emptyQuery = false;
 
-	//DETERMINE if checking for a date range availability
 
-	if (!empty($_GET['begin']) && !empty($_GET['end'])) {
+	//search for available apartmentsif checking for a date range availability
+
+	if ( $is_searching )
+	{
 		$response = $nvbk->get_availability( $_GET['begin'], $_GET['end'], $apartamentos );
-		if ($response["availableApartments"]) {
+
+		if ( !empty($response["availableApartments"]) )
+		{
 			$args['meta_query'] = array(
 				array (
 					'key' => 'calendar_id',
@@ -49,15 +57,18 @@ if(empty($apartamentos)) {
 			);
 		} else {
 			$emptyQuery = true;
+			echo "<pre>".print_r($response)."</pre>";
 		}
 	} else {
 
 	}
 
+
 	$arguments = array_merge( array( 'post_type' => 'ubytovani'	), $args);
 	$query = new WP_Query( $arguments );
 	
-	//get array of rates of all apartments 
+
+	//get array of rates of all apartments, next monday price wont be so high
 	$remote_rates_day = date( "Y-m-d", strtotime("next Monday") );
 	$remote_rates = $nvbk->get_rates( $remote_rates_day, $remote_rates_day, $apartamentos );	
 
@@ -95,13 +106,23 @@ if(empty($apartamentos)) {
 		}
 
 		foreach ( $posts as $post )
-		{ ?>
+		{ 
+
+			if ( $is_searching ) {
+				$link = $post["post_link"] . "?" . http_build_query( array(
+					"begin" => $_GET["begin"],
+					"end" => $_GET["end"]
+				) );
+			} else {
+				$link = $post["post_link"];
+			}
+			?>
 			<article class="feed-item">
-				<a href="<?= $post["post_link"];?>" class="image">
+				<a href="<?= $link;?>" class="image">
 					<?= nv_responsive_img( $post["feat_image"] ); ?>
 				</a>
 				<div class="head">
-					<a href="<?= $post["post_link"];?>"><h2><?= $post["title"]; ?></h2></a>
+					<a href="<?= $link;?>"><h2><?= $post["title"]; ?></h2></a>
 					<div class="secondary-text"><?= isset($post["meta_fields"]["address"][0]) ? $post["meta_fields"]["address"][0] : ""; ?></div>
 				</div>
 				<div class="body">
@@ -119,7 +140,7 @@ if(empty($apartamentos)) {
 							echo "od " . $remote_rates["data"][$post["meta_fields"]["calendar_id"][0]][$remote_rates_day]["price"] . ", Kč / noc";
 						?>
 					 </div>
-					<a class="button" href="<?= $post["post_link"];?>">Rezervovat</a>
+					<a class="button" href="<?= $link . "#booking-form";?>">Rezervovat</a>
 				</div>
 			</article>
 		<?php
