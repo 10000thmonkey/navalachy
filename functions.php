@@ -10,29 +10,26 @@ function nv_send_mail ($args = []) {
 	if (!isset($args) || $args == [] ) return "fuckoff. dej mi kurva aspon jeden argument";
 	$body = isset($args->body) ? $args->body : "";
 
-	return wp_mail( $args["to"], $args["subject"], $args["body"] );
+	return wp_mail( $args["to"], $args["subject"], $args["body"], $args["headers"] );
 
 }
-if ( ! function_exists('debug_wpmail') ) :
 
-	function debug_wpmail( $result = false ) {
+function debug_wpmail( $result = false ) {
 
-		if ( $result )
-			return;
+	if ( $result )
+		return;
 
-		global $ts_mail_errors, $phpmailer;
+	global $ts_mail_errors, $phpmailer;
 
-		if ( ! isset($ts_mail_errors) )
-			$ts_mail_errors = array();
+	if ( ! isset($ts_mail_errors) )
+		$ts_mail_errors = array();
 
-		if ( isset($phpmailer) )
-			$ts_mail_errors[] = $phpmailer->ErrorInfo;
+	if ( isset($phpmailer) )
+		$ts_mail_errors[] = $phpmailer->ErrorInfo;
 
-		print_r('<pre>');
-		print_r($ts_mail_errors);
-		print_r('</pre>');
-	}
-endif;
+	print_r($ts_mail_errors);
+}
+
 
 
 
@@ -730,44 +727,3 @@ require get_template_directory() . '/inc/customizer.php';
 if ( class_exists( 'WooCommerce' ) ) {
 	require get_template_directory() . '/inc/woocommerce.php';
 }
-$nv_icons = json_decode('{
-	gastro : "Valašská kuchyně",
-	tradice : "Valašské tradice",
-	pesky : "Pěšky",
-	nakole : "Na kole",
-	nalyze : "Na lyže",
-	naryby : "Na ryby",
-	naskaly : "Na skály",
-
-	location : "Pozice",
-	phone : "Telefon",
-	photos : "Fotky",
-
-	kapacita : "Kapacita",
-	karpaty : "CHKO Bílé Karpaty",
-	wifi : "Wifi",
-
-	bazen : "Bazén",
-	email : "Email",
-	krb : "Krb",
-	les : "Les",
-	frenchpress : "Frenchpress",
-	gril : "Gril",
-	hifi : "Hi-Fi",
-	hry : "Stolní hry",
-	konvice : "Varná konvice",
-	knihy : "Knihy",
-	kytara : "Kytara",
-	mikrovlnka : "Mikrovlnná trouba",
-	mixer : "Mixér",
-	ohen : "Ohniště",
-	piano : "Piano",
-	povleceni : "Povlečení",
-	remeslo : "Řemeslo",
-	stolek : "Stolek",
-	televize : "Televize",
-	venkovniposezeni : "Venkovní posezení",
-	pracka : "Pračka",
-	zehlicka : "Žehlička",
-	toustovac : "Toustovač",
-}');

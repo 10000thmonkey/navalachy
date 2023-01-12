@@ -49,9 +49,9 @@ get_header();
 					<div><?= $meta_fields["desc_short"][0]; ?></div>
 
 					<?php if(isset($meta_fields["desc_long"])): ?>
-						<div class="description-hidden hidden"><?= $meta_fields["desc_long"][0]; ?></div>
+						<div class="description-hidden"><?= $meta_fields["desc_long"][0]; ?></div>
 						<a class="button-showmore"
-							onclick="q('.description-hidden').show(); this.hide()">
+							onclick="q('.description-hidden').css('display', 'block'); this.hide()">
 							Celý popis<i class="nvicon nvicon-arrow-right"></i>
 						</a>
 					<?php endif; ?>
@@ -91,7 +91,19 @@ get_header();
 
 
 
-		<aside class="col reservation">
+		<aside class="col reservation hidden">
+			<div class="mobile-sliding-footer">
+				
+				<div class="content-on-shown space-between">
+					<a class="btn-close" onclick="this.closestParent('aside').hide()"></a>
+				</div>
+
+				<div class="content-on-hidden">
+					<a class="button" onclick="this.closestParent('aside').show()">rezervovat</a>
+				</div>
+
+			</div>
+
 			<?= nv_template_booking_form(array(
 				"iss" => true,
 				"apartmentId" => (int)$meta_fields["calendar_id"][0],
@@ -112,9 +124,9 @@ get_header();
 				<div class="modal-dialog">
 					<div class="modal-header">
 						<h3>Recenze</h3>
-						<a href="#" class="btn-close closemodale" aria-hidden="true">&times;</a>
+						<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 					</div>
-					<div class="modal-body">
+					<div class="modal-body padding-lg">
 					<?php
 
 					$pod = pods("ubytovani-reviews");
@@ -176,7 +188,7 @@ get_header();
 			<a class="button-showmore openmodale" data-modale="ubytovani-reviews">Všechny recenze (<?=$counter;?>)<i class="nvicon nvicon-arrow-right"></i></a>
 		</div>
 
-		<div class="box info cols cols-md-3 cols-sm-2 padding-xl">
+		<div class="box info cols cols-md-3 cols-sm-2 padding-xl gap-lg">
 
 			<div class="col">
 				<!--h3>Hostitel</h3-->
@@ -275,13 +287,6 @@ get_header();
 		</div>
 	</div>
 
-	<footer class="page-footer-mobile">
-		<a class="button button-secondary opnmodale" data-modale="reservation-form" href="#reservation-form">Rezervovat</a>
-	</footer>
-
-
-
-
 
 
 
@@ -291,7 +296,7 @@ get_header();
 		<div class="modal-dialog">
 			<div class="modal-header">
 				<h2>Detail ubytování</h2>
-				<a href="#" class="btn-close closemodale" aria-hidden="true">&times;</a>
+				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 			</div>
 			<div class="modal-body">
 				<?php
@@ -311,7 +316,7 @@ get_header();
 						$meta = get_post_meta($query->post->ID);
 						?>
 						<div class="section space-around-hg">
-							<div class="details cols cols-sm-2 space-around-md gap-lg">
+							<div class="details cols cols-sm-2 space-around-md gap-lg padding-lg">
 								<div class="col">
 									<h3><?=get_the_title();?></h3>
 									<p><?=get_the_content();?></p>
@@ -363,9 +368,9 @@ get_header();
 		<div class="modal-dialog">
 			<div class="modal-header">
 				<h2>Kontaktovat hostitele</h2>
-				<a href="#" class="btn-close closemodale" aria-hidden="true">&times;</a>
+				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 			</div>
-			<div class="modal-body">
+			<div class="modal-body padding-lg">
 				<form id="ubytovani-contact-form" action="/wp-admin/admin-ajax.php" method="POST" style="display: flex; flex-direction: column; gap: 15px">
 					<label style="">
 						<div>Jméno:</div>
@@ -386,7 +391,7 @@ get_header();
 		</div>
 	</div>
 
-	<div class="modale" aria-hidden="true" data-modale="ubytovani-terms">
+<!-- 	<div class="modale" aria-hidden="true" data-modale="ubytovani-terms">
 		<div class="modal-dialog">
 			<div class="modal-header">
 				<h2>Podmínky rezervace</h2>
@@ -398,7 +403,7 @@ get_header();
 				</p>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 </main>
 
