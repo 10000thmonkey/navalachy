@@ -1,0 +1,28 @@
+VOUCHERY!!!!!!!!!!!
+	zatim otestovat na woo checkout - done
+	checkout css fix!!
+
+zacit s headless - napsat ajax api na backend, frontend v js a templates
+
+woocommerce checkout detail rezervace a chaty
+
+related items v ubytovani a zazitcich - podle gps??
+
+AFFILIATE
+
+--odesilani kontaktniho formulare - vymenit muj mail za hostuv
+
+frontpage jen prvni veta!!
+
+pas reviews
+
+pas insta reels?
+
+video na frontpage?
+
+SEO
+	alt atribut img
+	redirect to ?tags={$tag}
+
+
+vyhledavaci pole??

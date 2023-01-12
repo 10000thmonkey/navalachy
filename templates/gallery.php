@@ -14,18 +14,14 @@ ob_start();
 	
 	<?php
 
-	$ids = array();
-	foreach ($_VAR["gallery"] as $key => $value) {
-		$ids[] = intval( $value );
-	}
 	$args = array( 
-	    'post_type'      => 'attachment', 
+	    'post_type' => 'attachment', 
 	    'posts_per_page' => -1, 
-	    'post_status'    => 'any', 
-	    'post__in'       => $_VAR["gallery"]
+	    'post_status' => 'any', 
+	    'post__in' => $_VAR["gallery"],
+	    "orderby" => "post__in"
 	); 
 	$gallery = get_posts($args);
-
 
 	foreach ($gallery as $image)
 	{

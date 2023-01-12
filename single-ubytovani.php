@@ -20,10 +20,9 @@ $nv_vars = array(
 	'host_email' => $host["billing_email"][0],
 	'apartmentId' => $ID,
 	'apartmentName' => $title,
-	'apartmentCapacity' => $meta["capacity"][0]
-	//'meta' => $meta_fields
+	'apartmentCapacity' => $meta_fields["capacity"][0],
+	'meta' => $meta_fields
 );
-
 
 get_header();
 ?>
@@ -143,12 +142,8 @@ get_header();
 					$pod = pods("ubytovani-reviews");
 					$query = new WP_Query( array(
 						"post_type" => "ubytovani-reviews",
-						"order" => "DESC",
-						"orderby" => "menu_order date",
-						"meta_query" => array(
-							"key" => "ubytko",
-							"value" => $ID
-						)
+						"post__in" => $meta_fields["reviews"],
+						"orderby" => "post__in"
 					));
 
 					if ($query->have_posts()) {
