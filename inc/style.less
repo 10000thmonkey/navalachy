@@ -162,6 +162,8 @@ body,button,input,select,optgroup,textarea {
 	line-height: 1.5;
 }
 
+
+.imgstretch img {width: 100%; height: 100%; object-fit: cover;}
 a {color: var(--primary);}
 a.link {cursor: pointer; &:hover {text-decoration: underline;}}
 p {color: var(--text-paragraph-color); margin: 0; &.text {margin: 15px 0;}}
@@ -1064,9 +1066,6 @@ body.single-ubytovani {
 					}
 				}
 			}
-		}
-		@media (min-width: @breakpoint-sm) {
-			.section .details {padding: 30px;}
 		}
 	}
 }
