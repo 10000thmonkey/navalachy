@@ -36,7 +36,7 @@ get_header();
 			<div class="contentwrap">
 				<div class="block">
 					<div class="block-header">
-						<h2>Do přírody</h2>
+						<a href="zazitky"><h2>Do přírody</h2></a>
 						<p>Objevujte Valašskou krajinu a místní zajímavosti!</p>
 					</div>
 					<div class="hovercards">
@@ -96,7 +96,7 @@ get_header();
 			<div class="contentwrap">
 				<div class="block">
 					<div class="block-header">
-						<h2>Za tradicí</h2>
+						<a href="/zazitky"><h2>Za tradicí</h2></a>
 						<p>Poznejte osobitou kulturu Valach všemi smysly!</p>
 					</div>
 					<div class="hovercards">
@@ -152,7 +152,7 @@ get_header();
 		<div class="contentwrap">
 			<div class="block">
 				<div class="block-header">
-					<h2>Ubytování</h2>
+					<a href="/ubytovani"><h2>Ubytování</h2></a>
 				</div>
 
 				<?php
