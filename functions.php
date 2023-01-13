@@ -456,7 +456,7 @@ function navalachy_modules()
 	wp_enqueue_style( 'navalachy', $templ_dir."/style.css" );
 	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
 	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
-	wp_enqueue_style( "navalachy-icons", $templ_dir. "/inc/icon/style.css" );
+	wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
 
 	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
 	

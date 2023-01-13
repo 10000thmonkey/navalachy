@@ -49,7 +49,7 @@ global $nv_booking;
 
     		</nav>
     		<div class="header-right">
-				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="jQuery('.site-header').toggleClass('toggle')"></button>
+				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>
     		</div>
     
   			<nav id="site-navigation-mobile" class="main-navigation-mobile">

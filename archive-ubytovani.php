@@ -34,7 +34,7 @@ $is_searching = ( !empty($_GET["begin"]) && !empty($_GET["end"]) );
 	
 
 
-	<div class="ubytovani-feed contentwrap">
+	<div class="ubytovani-feed contentwrap space-around-lg padding-lg gap-hg">
 	
 	<?php
 	$args = []; 
@@ -57,7 +57,6 @@ $is_searching = ( !empty($_GET["begin"]) && !empty($_GET["end"]) );
 			);
 		} else {
 			$emptyQuery = true;
-			echo "<pre>".print_r($response)."</pre>";
 		}
 	} else {
 

@@ -120,6 +120,13 @@ ob_start();
 		if ( URLParams.get("begin") && URLParams.get("end") )
 			cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
 
+
+		document.body.on( "click", (e) => {
+			if ( e.path.indexOf( cal.form[0] ) == -1 ) {
+				if (cal.shown) cal.show();
+			}
+		} );
+
 	} );
 </script>
 

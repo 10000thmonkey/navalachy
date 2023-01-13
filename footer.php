@@ -12,23 +12,25 @@
 ?>
 
 	<footer id="colophon" class="site-footer padding-hg">
-		<div class="contentwrap footer-top">
-			<div class="footer-col-1">
-				<div class="footer-logo">
-					<img src="/wp-content/uploads/navalachy-logo-bila.svg">
+
+		<div class="contentwrap gap-md footer-top cols cols-md-4 cols-sm-2">
+			
+			<div class="col padding-lg footer-logo">
+				<img src="/wp-content/uploads/navalachy-logo-bila.svg">
+			</div>
+			<div class="col padding-lg">
+				<div class="iconlist iconlist-hg" style="color: white">
+					<a class="icon nvicon nvicon-instagram"></a>
+					<a class="icon nvicon nvicon-facebook"></a>
+					<a class="icon nvicon nvicon-youtube"></a>
 				</div>
 			</div>
-			<div class="footer-col-2">
-				
-			</div>
-			<div class="footer-col-3">
-				<menu>
-					<li>Návrat ovečky do Bílých Karpat z.s.</li>
-					<li><a href="tel:+420776293114">+420 776 293 114</a></li>
-					<li><a href="mailto:info@navalachy.cz">info@navalachy.cz</a></li>
-				</menu>
-			</div>
-			<div class="footer-col-4">
+			<ul class="col padding-lg">
+				<li>Návrat ovečky do Bílých Karpat z.s.</li>
+				<li><a href="tel:+420776293114">+420 776 293 114</a></li>
+				<li><a href="mailto:info@navalachy.cz">info@navalachy.cz</a></li>
+			</ul>
+			<div class="col padding-lg">
 				<?php
 					wp_nav_menu(
 	    				array(
@@ -39,7 +41,8 @@
 	    		?>
 			</div>
 		</div>
-		<div class="contentwrap footer-bottom">
+
+		<div class="contentwrap footer-bottom cols-flex space-between padding-lg">
 			<div>Webdesign: 10000 Monkeys © 2022</div>
 			<div>
 				<a href="/ochrana-osobnich-udaju">Ochrana osobních údajů</a>

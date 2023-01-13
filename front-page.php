@@ -3,17 +3,9 @@ nv_use_modules(["booking"]);
 
 global $nvbk;
 
-$zazitky_tags_terms = get_terms( array(
-	"taxonomy" => "zazitky_tag", 
-	"hide_empty" => false
-));
-$zazitky_tags_asssoc = array();
-foreach($zazitky_tags_terms as $term) {
-	$zazitky_tags_asssoc[$term->slug] = $term;
-	$zazitky_tags_asssoc[$term->slug]->meta_fields = get_term_meta( $term->term_id,  );
-}
-
 $homepage_settings = pods('homepage_settings');
+
+$nv_vars = ["tags" => get_option("homepage_settings_tags_1"), "tags2" => (array) get_option("homepage_settings_tags_2") ];
 
 get_header();
 ?>
@@ -26,7 +18,7 @@ get_header();
 	) );
 	?>
 	
-	<div class="section_instagram contentwrap">
+<!-- 	<div class="section_instagram contentwrap">
 		<div class="space-around-hg slider-wrapper">
 			<?php 
 			$insta_array = get_option('homepage_settings_files');
@@ -35,7 +27,7 @@ get_header();
 			}
 			?>
 		</div>
-	</div>
+	</div> -->
 
 
 	<div class="section_zazitky">
@@ -49,13 +41,17 @@ get_header();
 					</div>
 					<div class="hovercards">
 					<?php
-					$tags = array( "pesky",	"koupani", "nakole", "naskaly", "sdetmi");
-					foreach ( $tags as $tag ) :
+					$tags_query = get_terms( "zazitky_tag", array(
+						"include" => (array) get_option("homepage_settings_tags_1"),  //[47, 29, 32, 28, 31, 30, 46],
+						"orderby" => "include",
+						"hide_empty" => false
+					) );
+					foreach ( $tags_query as $tag ) :
 						echo '
-						<a class="hovercard" href="/zazitky?tags='.$tag.'">
-							'.@nv_responsive_img( (int) $zazitky_tags_asssoc[ $tag ]->meta_fields["image"][0] ).'
+						<a class="hovercard" href="/zazitky?tags='. $tag->slug .'">
+							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
 							<div class="label">
-								<div class="nvicon nvicon-md nvicon-'.$tag.'"></div>'. $zazitky_tags_asssoc[$tag]->name .'
+								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
 							</div>
 						</a>';
 					endforeach;
@@ -71,37 +67,20 @@ get_header();
 				<div class="highlight">
 					<div class="post-highlight">
 						<?php
-						$args = array(
-							'post_type' => 'zazitky',
-							'posts_per_page' => 1,
-							'orderby' => 'date',
-							'tax_query' => array(
-								array(
-									'taxonomy' => 'zazitky_tag',
-									'field' => 'slug',
-									'terms' => 'featured_1'
-								)
-							)
-						);
-						$query = new WP_Query($args);
-						if($query->have_posts()) {
-							while ($query->have_posts()) {
-								$query->the_post();
-								?>
-								<a href="<?= get_permalink();?>">
-									<?= nv_responsive_img( get_post_thumbnail_id( get_the_ID() ) ); ?>
-								</a>
-								<div class="info">
-									<h3>Doporučujeme</h3>
-									<a href="<?= get_permalink();?>"><h2><?=the_title();?></h2></a>
-									<div class="content"><?=force_balance_tags(get_the_excerpt());?></div>
-									<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-arrow-right"></div></a>
-								</div>
-								<?php
-							}
-							wp_reset_postdata();
-						}
+						$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
+						$post_1_link = get_post_permalink( $post_1 );
 						?>
+						<a href="<?= get_post_permalink( $post_1 );?>">
+							<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+						</a>
+						<div class="info">
+							<h3>Doporučujeme</h3>
+							<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
+							<div class="content">
+								<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
+							</div>
+							<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-arrow-right"></div></a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -122,13 +101,17 @@ get_header();
 					</div>
 					<div class="hovercards">
 					<?php
-					$tags = array( "kultura", "remesla", "tradice" );
-					foreach ( $tags as $tag ) :
+					$tags_query = get_terms( "zazitky_tag", array(
+						"include" => (array) get_option("homepage_settings_tags_2"),
+						"orderby" => "include",
+						"hide_empty" => false
+					) );
+					foreach ( $tags_query as $tag ) :
 						echo '
-						<a class="hovercard" href="/zazitky?tags='.$tag.'">
-							'.@nv_responsive_img( (int) $zazitky_tags_asssoc[ $tag ]->meta_fields["image"][0] ).'
+						<a class="hovercard" href="/zazitky?tags='.$tag->slug.'">
+							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
 							<div class="label">
-								<div class="nvicon nvicon-'.$tag.'"></div>'. $zazitky_tags_asssoc[$tag]->name .'
+								<div class="nvicon nvicon-'.$tag->slug.'"></div>'. $tag->name .'
 							</div>
 						</a>';
 					endforeach;
@@ -144,40 +127,20 @@ get_header();
 				<div class="highlight">
 					<div class="post-highlight">
 						<?php
-						$args = array(
-							'post_type' => 'zazitky',
-							'posts_per_page' => 1,
-							'page' => 2,
-							'orderby' => 'date',
-							'tax_query' => array(
-								array(
-									'taxonomy' => 'zazitky_tag',
-									'field' => 'slug',
-									'terms' => 'featured_2'
-								)
-							)
-						);
-						$query = new WP_Query($args);
-						if($query->have_posts()) {
-							while ($query->have_posts()) {
-								$query->the_post();
-								?>
-								<a href="<?= get_permalink();?>">
-									<?= nv_responsive_img( get_post_thumbnail_id( get_the_ID() ) ); ?>
-								</a>
-								<div class="info">
-									<h3>Doporučujeme</h3>
-									<a href="<?= get_permalink();?>"><h2><?=the_title();?></h2></a>
-									<div class="content"><?=force_balance_tags(get_the_excerpt());?></div>
-									<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-md nvicon-arrow-right"></div></a>
-								</div>
-								<?php
-							}
-							wp_reset_postdata();
-						} else {
-							echo "zatím žádné příspěvky";
-						}
+						$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
+						$post_1_link = get_post_permalink( $post_1 );
 						?>
+						<a href="<?= get_post_permalink( $post_1 );?>">
+							<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+						</a>
+						<div class="info">
+							<h3>Doporučujeme</h3>
+							<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
+							<div class="content">
+								<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
+							</div>
+							<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-arrow-right"></div></a>
+						</div>
 					</div>
 				</div>
 			</div>

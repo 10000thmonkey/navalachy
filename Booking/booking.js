@@ -53,7 +53,7 @@ class NV_Booking
 			this.shown = false;
 		}
 		else {
-			if ( typeof this.hw.intervalRange["end"] != "number" ) {
+			if ( !!this.end ) {
 				this.focusfield( "begin" );
 			} else {
 				this.focusfield( "end" );
@@ -86,6 +86,7 @@ class NV_Booking
 		 	this.el.beginValue.content(day.getDate() + ". " + (day.getMonth() + 1) + ". " + day.getFullYear() );
 		 	this.begin = this.dateToString(day);
 
+		 	this.el.datepicker.q(".month .day.is-selected").addClass("is-begin-range");
 			this.focusfield("end");
 		
 		} else {

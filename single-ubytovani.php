@@ -39,7 +39,7 @@ get_header();
 		));
 		?>
 
-		<a href="#" class="gallery-showmore openmodale button button-primary" data-modale="ubytovani-detaily"><i class="nvicon nvicon-grid"></i>Více</a>
+		<a href="#" class="gallery-showmore openmodale button button-plain" data-modale="ubytovani-detaily">Více<i class="nvicon nvicon-grid"></i></a>
 	</div>
 
 	<div class="main columns cols-flex cols-md gap-lg contentwrap">
@@ -55,17 +55,7 @@ get_header();
 					<?=$meta_fields["address"][0];?>
 				</a>	
 
-				<div class="excerpt">
-					<div><?= $meta_fields["desc_short"][0]; ?></div>
-
-					<?php if(isset($meta_fields["desc_long"])): ?>
-						<div class="description-hidden"><?= $meta_fields["desc_long"][0]; ?></div>
-						<a class="button-showmore"
-							onclick="q('.description-hidden').css('display', 'block'); this.hide()">
-							Celý popis<i class="nvicon nvicon-arrow-right"></i>
-						</a>
-					<?php endif; ?>
-				</div>
+				<p class="excerpt"><?= $meta_fields["desc_short"][0]; ?></p>
 
 				<div class="iconset iconset-hg cols cols-sm-2">
 					
@@ -94,7 +84,9 @@ get_header();
 					endforeach;
 					?>
 				</div>
-				<a class="button-showmore openmodale" data-modale="ubytovani-detaily">Detail ubytování<i class="nvicon nvicon-arrow-right"></i></a>
+				<div class="cols-flex" style="justify-content: right;">
+					<a class="button button-icon button-plain openmodale" data-modale="ubytovani-detaily">Detail ubytování <i class="nvicon nvicon-arrow-right"></i></a>
+				</div>
 			</div>
 
 		</div><!--.section-left-->
@@ -132,8 +124,7 @@ get_header();
 
 			<div class="modale" aria-hidden="true" data-modale="ubytovani-reviews">
 				<div class="modal-dialog">
-					<div class="modal-header">
-						<h3>Recenze</h3>
+					<div class="modal-header only-close-button">
 						<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 					</div>
 					<div class="modal-body padding-lg">
@@ -191,19 +182,19 @@ get_header();
 			<div class="reviews-container">
 				<?=$first3;?>
 			</div>
-			<a class="button-showmore openmodale" data-modale="ubytovani-reviews">Všechny recenze (<?=$counter;?>)<i class="nvicon nvicon-arrow-right"></i></a>
+			<div class="cols-flex" style="justify-content: center;"><a class="button button-plain openmodale" data-modale="ubytovani-reviews">Všechny recenze (<?=$counter;?>)</a></div>
 		</div>
 
 		<div class="box info cols cols-md-3 cols-sm-2 padding-xl gap-lg">
 
 			<div class="col">
 				<!--h3>Hostitel</h3-->
-				<div class="cols-fixed-flex">
-					<div class="col-fixed avatar avatar-big">
+				<div class="cols-flex gap-hg">
+					<div class="avatar avatar-big">
 						<?= nv_responsive_img( $host["profile_picture"][0], "(min-width: 1px) 64px, 64px" ); ?>
 					</div>
 
-					<div class="col-flex">
+					<div class="col">
 						<h3><?= $host["first_name"][0] . " " . $host["last_name"][0]; ?></h3>
 						<div class="iconset">
 							<div class="icon">
@@ -217,7 +208,7 @@ get_header();
 							</div>
 						</div>
 						<a class="button button-icon button-plain button-sm openmodale" data-modale="ubytovani-contact" style="width:fit-content;">
-							<i class="nvicon nvicon-write"></i>Rychlý dotaz
+							Rychlý dotaz <i class="nvicon nvicon-write"></i>
 						</a>
 					</div>
 
@@ -302,29 +293,33 @@ get_header();
 
 	<div class="modale fullwidth" aria-hidden="true" data-modale="ubytovani-detaily">
 		<div class="modal-dialog">
-			<div class="modal-header">
-				<h2>Detail ubytování</h2>
+			<nav class="modal-header only-close-button">
 				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
-			</div>
-			<div class="modal-body">
+			</nav>
+			<article class="modal-body">
+
+				<header class="section space-around-xl cols cols-md-2 gap-lg padding-xl">
+					<div class="col">
+						<h1 class="space-around-hg"><?=$title?></h1>
+						<p style="font-size: calc(var(--font-md) + 2px); color:var(--primary);"><?=$meta_fields["desc_long"][0];?></p>
+					</div>
+					<div class="col"><?= nv_responsive_img( /*$meta_fields["photo"][0]*/ 1035 ) ?></div>
+				</header>
+
 				<?php
 				$query = new WP_Query( array(
 					"post_type" => "ubytovani-rooms",
-					//"orderby" => "menu_order",
-					"meta_query" => array(
-						array(
-							"key" => "ubytovani",
-							"value" => $ID
-						)
-					)
+					"orderby" => "post__in",
+					"post__in" => $meta_fields["rooms"]
 				));
 				if ($query->have_posts()) :
+
 					while ($query->have_posts()) :
 						$query->the_post();
 						$meta = get_post_meta($query->post->ID);
 						?>
 						<div class="section space-around-hg">
-							<div class="details cols cols-sm-2 space-around-md gap-lg padding-lg">
+							<div class="details cols cols-sm-2 space-around-md gap-lg padding-xl">
 								<div class="col">
 									<h3><?=get_the_title();?></h3>
 									<p><?=get_the_content();?></p>
@@ -368,7 +363,7 @@ get_header();
 				endif;
 				?>
 				
-			</div>
+			</article>
 		</div>
 	</div>
 
@@ -379,6 +374,7 @@ get_header();
 				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 			</div>
 			<div class="modal-body padding-lg">
+				<div class="messagebox hidden"></div>
 				<form id="ubytovani-contact-form" style="display: flex; flex-direction: column; gap: 15px">
 					<label style="">
 						<div>Jméno:</div>
@@ -416,6 +412,8 @@ get_header();
 
 <script>
 	function nvbk_ubytovani_contact_form () {
+		let messagebox = q(".modale[data-modale=ubytovani-contact] .messagebox")[0];
+
 		var form = q("form#ubytovani-contact-form");
 		jax.post( "/wp-admin/admin-ajax.php", {
 			"action" : "nvbk_ubytovani_contact_form",
@@ -423,7 +421,9 @@ get_header();
 			"email" : form.q("input[name=email]")[0].value,
 			"message" : form.q("textarea[name=message]")[0].value
 		},
-		(e) => console.log(e)
+		(e) => {
+			messagebox.show().content("Zpráva úspěšně odeslána");
+		}
 		);
 	}
 </script>
