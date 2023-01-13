@@ -111,7 +111,7 @@ get_header();
 						<a class="hovercard" href="/zazitky?tags='.$tag->slug.'">
 							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
 							<div class="label">
-								<div class="nvicon nvicon-'.$tag->slug.'"></div>'. $tag->name .'
+								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
 							</div>
 						</a>';
 					endforeach;

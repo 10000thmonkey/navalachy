@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'nvicons';
-  src:  url('fonts/nvicons.eot?udyqrd');
-  src:  url('fonts/nvicons.eot?udyqrd#iefix') format('embedded-opentype'),
-    url('fonts/nvicons.ttf?udyqrd') format('truetype'),
-    url('fonts/nvicons.woff?udyqrd') format('woff'),
-    url('fonts/nvicons.svg?udyqrd#nvicons') format('svg');
+  src:  url('fonts/nvicons.eot?4y6cvb');
+  src:  url('fonts/nvicons.eot?4y6cvb#iefix') format('embedded-opentype'),
+    url('fonts/nvicons.ttf?4y6cvb') format('truetype'),
+    url('fonts/nvicons.woff?4y6cvb') format('woff'),
+    url('fonts/nvicons.svg?4y6cvb#nvicons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -133,27 +133,23 @@
 .nvicon-calendar:before {
   content: "\e942";
 }
+.nvicon-rybareni:before {
+  content: "\e94d";
+}
+.nvicon-tradice:before {
+  content: "\e94e";
+}
+.nvicon-kultura:before {
+  content: "\e94f";
+}
+.nvicon-gastro:before {
+  content: "\e950";
+}
 .nvicon-bezky:before {
   content: "\e94b";
 }
 .nvicon-lyzovani:before {
   content: "\e94c";
-}
-.nvicon-remesla:before {
-  content: "\e94d";
-  color: #232f5b;
-}
-.nvicon-kultura:before {
-  content: "\e94f";
-  color: #232f5b;
-}
-.nvicon-gastro:before {
-  content: "\e950";
-  color: #232f5b;
-}
-.nvicon-rybareni:before {
-  content: "\e951";
-  color: #232f5b;
 }
 .nvicon-sdetmi:before {
   content: "\e922";
@@ -169,9 +165,6 @@
 }
 .nvicon-pesky:before {
   content: "\e926";
-}
-.nvicon-amenity-13:before {
-  content: "\e900";
 }
 .nvicon-amenity-13:before {
   content: "\e900";

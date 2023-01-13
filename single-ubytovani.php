@@ -303,7 +303,7 @@ get_header();
 						<h1 class="space-around-hg"><?=$title?></h1>
 						<p style="font-size: calc(var(--font-md) + 2px); color:var(--primary);"><?=$meta_fields["desc_long"][0];?></p>
 					</div>
-					<div class="col"><?= nv_responsive_img( /*$meta_fields["photo"][0]*/ 1035 ) ?></div>
+					<div class="col"><?= nv_responsive_img( $meta_fields["photo"][0] ) ?></div>
 				</header>
 
 				<?php
