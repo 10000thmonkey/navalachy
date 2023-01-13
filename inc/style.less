@@ -22,8 +22,8 @@
 	--font-xs: 12px;
 	--font-sm: 15px; 
 	--font-md: 18px;
-	--font-lg: 25px;
-	--font-hg: 32px;
+	--font-hg: 25px;
+	--font-lg: 32px;
 	--font-xl: 48px;
 	--font-xxl: 60px;
 	--font-xxxl: 100px;
@@ -173,7 +173,7 @@ b, strong {font-weight: 600;}
 menu, ul, ol, menu li, ul li, ol li {list-style: none;margin:0;padding: 0;}
 h1 {margin: 5px 0; font-size: var(--font-xl); color: var(--primary); font-weight: 600;}
 
-h2 {margin: 5px 0; font-size: var(--font-lg); color: var(--primary); font-weight: 500;}
+h2 {margin: 5px 0; font-size: var(--font-hg); color: var(--primary); font-weight: 500;}
 h3 {margin: 5px 0; font-size: var(--font-md); color: var(--primary); font-weight: 600;}
 h4 {margin: 5px 0;}
 
@@ -273,7 +273,7 @@ h4 {margin: 5px 0;}
 			li {
 				padding: 5px 0;
 				a {
-					font-size: var(--font-lg);
+					font-size: var(--font-hg);
 					text-decoration: none;
 				}
 			}
@@ -357,7 +357,7 @@ h4 {margin: 5px 0;}
 
 	h1, h5 {color: white;}
 	h1 {font-size: var(--font-xxxl);}
-	h5 {margin: 0; font-size: var(--font-lg);font-weight: 500;}
+	h5 {margin: 0; font-size: var(--font-hg);font-weight: 500;}
 
     .cover-image {
 		background-attachment: fixed;
@@ -532,7 +532,7 @@ body.home {
 		@media (max-width: @breakpoint-sm) {
 			.post-highlight {
 				flex-direction: column;flex:auto;height: auto;
-				.info {h2 {font-size: var(--font-lg);}}
+				.info {h2 {font-size: var(--font-hg);}}
 				& > a {width: auto;}
 			}
 			.highlight {padding: 30px 15px; max-width: 500px; margin: 0 auto;}
@@ -745,7 +745,7 @@ body.page-id-97 {
 /* TIPY */
 
 body.page-template-archive-zazitky {
-	.menu-item-189 {.menu_selected();}
+	.menu-item-1300 {.menu_selected();}
 	.site-main {
 		display: flex;
 		margin-top: 15px;
@@ -847,7 +847,7 @@ body.page-template-archive-zazitky {
 				.white-bg-backdrop();
 				h2 {
 					color: var(--primary);
-					font-size: var(--font-lg);
+					font-size: var(--font-hg);
 					font-weight: 500;
 				}
 				h4 {
@@ -876,6 +876,7 @@ body.page-template-archive-zazitky {
 	}
 }
 body.single-zazitky {
+	.menu-item-1300 {.menu_selected();}
 	.section-cover-image {
 		background: var(--primary);
 		.cover-image {opacity: 0.8;}
@@ -899,7 +900,7 @@ body.single-zazitky {
 /* UBYTOVANI */
 
 body.page-template-archive-ubytovani {
-	.menu-item-169 {.menu_selected();}
+	.menu-item-1303 {.menu_selected();}
 	.ubytovani-feed {
 		display: grid;
 	    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -914,13 +915,13 @@ body.page-template-archive-ubytovani {
 }
 
 body.single-ubytovani {
-	.menu-item-169 {.menu_selected();}
+	.menu-item-1303 {.menu_selected();}
 	.main h1 {
 		font-size: var(--font-hg);
 		margin: 0;
 		color: var(--primary);
 		@media (max-width: @breakpoint-sm) {font-size: var(--font-md);}
-		@media (max-width: @breakpoint-md) {font-size: var(--font-lg);}
+		@media (max-width: @breakpoint-md) {font-size: var(--font-hg);}
 	}
 	.section {
 		h2 {font-weight: 500; margin: 0; padding-bottom: 15px;}
@@ -991,7 +992,7 @@ body.single-ubytovani {
 
 	.modale[data-modale="ubytovani-detaily"] {
 		h3 {
-			font-size: var(--font-lg);
+			font-size: var(--font-hg);
 			margin: 15px 0;
 		}
 		.section {
@@ -1022,6 +1023,8 @@ body.single-ubytovani {
 
 /* BLOG */
 body.blog {
+
+	.menu-item-1082 {.menu_selected();}
 	article {
 		margin: 150px 0;
 		display: flex;
@@ -1736,16 +1739,16 @@ body.single-ubytovani {
 	    padding: 8px 16px;
 	    align-items: center;
 	    font-size: var(--font-md);
-	    line-height: var(--font-lg);
+	    line-height: var(--font-hg);
 	    vertical-align: middle;
 	    text-decoration: none;
-	    border-radius: calc(8px + var(--font-lg) / 2);
+	    border-radius: calc(8px + var(--font-hg) / 2);
 
 		.nvicon {
-			font-size: var(--font-lg);
-		    width: var(--font-lg);
-		    height: var(--font-lg);
-		    line-height: var(--font-lg);
+			font-size: var(--font-hg);
+		    width: var(--font-hg);
+		    height: var(--font-hg);
+		    line-height: var(--font-hg);
 		    vertical-align: middle;
 		    text-align: center;	
 		}
@@ -1855,7 +1858,7 @@ body.single-ubytovani {
 				    position: absolute;
 				    transition: all 1s ease;
 				    line-height: 2.5;
-				    font-size: var(--font-lg);
+				    font-size: var(--font-hg);
 				    background: white;
 				    width: var(--font-xxl);
 				    height: var(--font-xxl);
@@ -1978,6 +1981,7 @@ body.single-ubytovani {
 	background: white;
 	display: flex;
 	flex-direction: column;
+	position: relative;
 	.transition-long();
 	&:hover { 
 		border-color: var(--primary);
@@ -1985,25 +1989,29 @@ body.single-ubytovani {
 	}
 	.image {
 		width: 100%;
-		height: 40%;
 		display: block;
 		position: relative;
 		transition: 600ms ease all;
+		padding-top: 62%;
 		img {
 			object-fit: cover;
 			width: 100%;
 			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
 		}
 		.iconlist {
 			position: absolute;
-			bottom: var(--space-md);
-			right: var(--space-md);
+			bottom: 0;
+			right: 0;
+			filter: brightness(0) invert(1);
 		}
 	}
 	header {
 		h2 {
 			margin: 0;
-			font-size: var(--font-lg);
+			font-size: var(--font-hg);
 			color: var(--primary);
 			font-weight: 500;
 		}

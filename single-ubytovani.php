@@ -5,7 +5,9 @@ $NV_MODULES = [
 	"booking/lib",
 	"booking/form",
 
-	"accomodation/feed"
+	"accomodation/feed",
+
+	"experiences/feed"
 ];
 global $_VAR;
 global $nv_vars;
@@ -292,6 +294,25 @@ get_header();
 
 		</div>
 	</div>
+
+
+
+
+	<footer class="related-experiences" style="background:var(--secondary-light);">
+		<div class="contentwrap padding-xl">
+			<h2 class="space-around-hg">Populární v okolí</h2>
+
+			<div class="cols cols-sm-2 cols-md-3 gap-hg">
+				<?php
+				echo nv_template_experiences_feed( [
+					"limit" => 3,
+					"orderby" => "rand",
+				] )["data"];
+				?>
+			</div>
+		</div>
+	</footer>
+
 
 
 
