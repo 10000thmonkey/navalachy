@@ -1,9 +1,73 @@
 <?php
 require_once("inc/lib-nv.php");
-require_once("inc/lib-booking.php");
 
-global $nvbk;
-$nvbk = new NV_Booking();
+
+
+
+/*
+INCLUDE JS & CSS LIBRARIES
+available modules:
+	lightbox - lightbox gallery
+	datepicker - for reservation functionality
+*/
+
+
+$NV_MODULES = array();
+
+function nv_use_modules ( $modules ) {
+	global $NV_MODULES;
+	$NV_MODULES = $modules;
+}
+
+function navalachy_modules()
+{
+	$templ_dir = get_template_directory_uri();
+	global $NV_MODULES;
+
+	include "templates/cover-image.php";
+
+	wp_enqueue_style( 'navalachy', $templ_dir."/style.css" );
+	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
+	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
+	wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
+
+	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
+	
+	if ( in_array("lightbox", $NV_MODULES) ) {
+		wp_enqueue_script( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.js" );
+		wp_enqueue_style( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.css");
+		include "templates/gallery.php";
+	}
+	if ( in_array("booking/lib", $NV_MODULES) ) {
+		require_once("inc/lib-booking.php");
+		global $nvbk;
+		$nvbk = new NV_Booking();
+	}
+	if ( in_array("booking/form", $NV_MODULES) ) {
+		wp_enqueue_script( "booking-datepicker", $templ_dir . "/inc/hello-week.min.js" );
+		wp_enqueue_style( "booking-datepicker", $templ_dir . "/inc/hello-week.min.css" );
+		include "templates/booking-form.php";
+	}
+	if ( in_array("accomodation/feed", $NV_MODULES) ) include "templates/accomodation-feed.php";
+	if ( in_array("experiences/feed", $NV_MODULES) ) include "templates/experiences-feed.php";
+
+	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+		wp_enqueue_script( 'comment-reply' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function nv_send_mail ($args = []) {
@@ -431,53 +495,6 @@ function cc_mime_types($mimes) {
 
 
 
-
-/* INCLUDE JS & CSS LIBRARIES
-available modules:
-	lightbox - lightbox gallery
-	datepicker - for reservation functionality
-*/
-
-
-$NV_MODULES = array();
-
-function nv_use_modules ( $modules ) {
-	global $NV_MODULES;
-	$NV_MODULES = $modules;
-}
-
-function navalachy_modules()
-{
-	$templ_dir = get_template_directory_uri();
-	global $NV_MODULES;
-
-	include "templates/cover-image.php";
-
-	wp_enqueue_style( 'navalachy', $templ_dir."/style.css" );
-	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
-	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
-	wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
-
-	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
-	
-	if ( in_array("lightbox", $NV_MODULES) ) {
-		wp_enqueue_script( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.js" );
-		wp_enqueue_style( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.css");
-		include "templates/gallery.php";
-	}
-	if ( in_array("booking", $NV_MODULES) ) {
-		wp_enqueue_script( "booking-datepicker", $templ_dir . "/inc/hello-week.min.js" );
-		wp_enqueue_style( "booking-datepicker", $templ_dir . "/inc/hello-week.min.css" );
-		include "templates/booking-form.php";
-	}
-
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
-
-
 // wp_add_inline_script( 'nvdata', 'const nvdata = ' . json_encode( array(
 //     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 //     'otherParam' => 'some value',
@@ -550,7 +567,7 @@ function nv_zazitky_fetch ( $args = array() )
 			if ($terms) {
 				$terms_icons = '';
 				foreach ($terms as $term) {
-					$terms_icons .= '<div class="nvicon nvicon-'.$term->slug.'"></div>';
+					$terms_icons .= '<div class="icon nvicon nvicon-'.$term->slug.'"></div>';
 				}
 			}
 
@@ -560,7 +577,7 @@ function nv_zazitky_fetch ( $args = array() )
 				<div class="details">
 					<h2>'.$query->post->post_title.'</h2>
 					<div class="secondary-text">'.$query->post->location.'</div>
-					<div class="icons">'.$terms_icons.'</div>
+					<div class="iconlist iconlist-hg">'.$terms_icons.'</div>
 				</div>
 			</a>';
 		endwhile;

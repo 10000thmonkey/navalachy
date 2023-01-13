@@ -19,7 +19,7 @@
 				<img src="/wp-content/uploads/navalachy-logo-bila.svg">
 			</div>
 			<div class="col padding-lg">
-				<div class="iconlist iconlist-hg" style="color: white">
+				<div class="iconlist iconlist-lg" style="color: white">
 					<a class="icon nvicon nvicon-instagram"></a>
 					<a class="icon nvicon nvicon-facebook"></a>
 					<a class="icon nvicon nvicon-youtube"></a>

@@ -164,8 +164,9 @@ body,button,input,select,optgroup,textarea {
 
 
 .imgstretch img {width: 100%; height: 100%; object-fit: cover;}
-a {color: var(--primary);}
-a.link {cursor: pointer; &:hover {text-decoration: underline;}}
+a:not(.button) { color: var(--primary); font-weight: 500; text-decoration: none; cursor:pointer; .transition-fast();
+	&:hover {text-decoration: underline; text-underline-offset: 3px; opacity: .9;}
+}
 p {color: var(--text-paragraph-color); margin: 0; &.text {margin: 15px 0;}}
 hr {height: 2px; color: rgba(0,0,0,0.05);margin:15px 0;}
 b, strong {font-weight: 600;}
@@ -303,21 +304,17 @@ h4 {margin: 5px 0;}
 	background: var(--primary);
 	color: white;
 	margin: 100px 0 0;
+	a {
+		color: white;
+		&:hover {color: rgba(255, 255, 255, .8);}
+	}
 
 	.footer-top {
 
 		.footer-logo {
-			img {max-width: 125px;}
+			img {max-width: 175px;}
 		}
 		li {margin: 5px 0;}
-		a {
-			font-weight: 500;
-			color: white;
-			text-decoration: none;
-			.transition();
-
-			&:hover {text-decoration: underline; text-underline-offset: 3px; color: rgba(255, 255, 255, 0.8);}
-		}
 	}
 	.footer-bottom {
 		border-top: 2px solid rgba(255, 255, 255, 0.1);
@@ -605,37 +602,43 @@ body.home {
 			}
 		}
 		@media (max-width: @breakpoint-sm) {
-			#booking-form {flex-direction: column;align-items: center;
-		.button {align-self: center;}}
+			#booking-form {
+				flex-direction: column;align-items: center;
+				.button {align-self: center;}
+			}
+			.hovercard {
+				width: 300px;
+				height: 300px;
+			}
 		}
 	}
-	.section_voucher {
-		background: url('/wp-content/uploads/navalachy/bg-voucher.jpg');
-		background-size: cover;
-		background-position: 50%;
-		padding: 100px 15px;
-		text-align: center;
+	// .section_voucher {
+	// 	background: url('/wp-content/uploads/navalachy/bg-voucher.jpg');
+	// 	background-size: cover;
+	// 	background-position: 50%;
+	// 	padding: 100px 15px;
+	// 	text-align: center;
 
-		@ur: ~"ur";
-		@f: ~"#";
-		@s: ~"clip-frontpage-top";
-		clip-path: e("@{ur}l(@{f}@{s})");
+	// 	@ur: ~"ur";
+	// 	@f: ~"#";
+	// 	@s: ~"clip-frontpage-top";
+	// 	clip-path: e("@{ur}l(@{f}@{s})");
 
-		h2 {margin: 30px 0; text-align: center; font-size: var(--font-xl);}
-		.voucher-banner {
-			display: block;
-			text-align: center;
-			img {border-radius: var(--radius-md);}
-		}
-		.button {
-			display: inline-flex;
-			margin: 30px 0;
-		}
-		@media (max-width: @breakpoint-sm) {
+	// 	h2 {margin: 30px 0; text-align: center; font-size: var(--font-xl);}
+	// 	.voucher-banner {
+	// 		display: block;
+	// 		text-align: center;
+	// 		img {border-radius: var(--radius-md);}
+	// 	}
+	// 	.button {
+	// 		display: inline-flex;
+	// 		margin: 30px 0;
+	// 	}
+	// 	@media (max-width: @breakpoint-sm) {
 		
-		}
-	}
-	.section_zazitky, .section_zazitky2 {
+	// 	}
+	// }
+	.section_zazitky, .section_zazitky2, .section_ubytovani {
 		@media (max-width: @breakpoint-sm) {
 			.hovercards {
 				display: flex;
@@ -867,7 +870,6 @@ body.page-template-archive-zazitky {
 		@media (max-width: @breakpoint-sm) {
 			display: flex;
 			flex-direction: column;
-			align-items: center;
 			a.item {max-width: 450px;}
 		}
 
@@ -879,10 +881,18 @@ body.single-zazitky {
 		.cover-image {opacity: 0.8;}
 		.cover-content {text-align: left;.padding-xl()}
 	}
+	.related-accomodation {
+		.hovercard {
+			.label {flex-direction: column;gap:0;line-height: initial;}
+		}
+	}
 	@media (max-width: @breakpoint-md) {
 		main article {max-width: @breakpoint-sm;}
 		.section-cover-image .cover-content {max-width: @breakpoint-sm;}
 	}
+	@media (max-width: @breakpoint-sm) {
+		.map iframe {max-height: 400px;}
+	} 
 }
 
 
@@ -899,68 +909,7 @@ body.page-template-archive-ubytovani {
 			flex-direction: column;
 			align-items: center;
 		}
-	}
-	.feed-item {
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-md);
-		overflow: hidden;
-		background: white;
-		display: flex;
-		flex-direction: column;
-		.transition-long();
-		&:hover { 
-			border-color: var(--primary);
-			.image {background-size:105%;}
-		}
-		.image {
-			width: 100%;
-			height: 40%;
-			display: block;
-			transition: 600ms ease all;
-			img {
-				object-fit: cover;
-				width: 100%;
-				height: 100%;
-			}
-		}
-
-		.head, .body, .foot {padding: 30px;}
-		.head {
-			h2 {
-				margin: 0;
-				font-size: var(--font-lg);
-				color: var(--primary);
-				font-weight: 500;
-			}
-			p {
-				margin: 0;
-			}
-		}
-		.body {
-			flex: 1;
-			padding: 0 30px;
-			.detail {
-				display: flex;
-				margin: 10px 0;
-				.nvicon {
-					padding: 5px;
-					font-size: 16px;
-					width: 35px;
-				}
-			}
-		}
-		.foot {
-			display: flex;
-		    align-items: center;
-		    justify-content: space-between;
-		    gap: 15px;
-		    .button-primary {
-		    	font-size: var(--font-md);
-		    	font-weight: 500;
-		    }
-		    .button-secondary {}
-		}
-		a {text-decoration: none;}
+		.fieldgroup.hovering:hover {background: white;}
 	}
 }
 
@@ -1651,7 +1600,14 @@ body.single-ubytovani {
 	.slider-next { right: 0; }
 
 	@media(max-width: @breakpoint-xs) {
-		.gallery-grid {	grid-template-columns: repeat(auto-fill, minmax(130px,1fr));}
+		.gallery-grid {	
+			width: 100%;
+			grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+			.gallery-image {
+				&.w { height: 55vw; }
+				&.h { height: 70vw; }
+			}
+		}
 		.gallery-image {height: 200px;}
 	}
 }
@@ -1948,9 +1904,6 @@ body.single-ubytovani {
 }
 .hovercard {
 	.transition();
-	background-size: cover;
-	background-position: 50%;
-	background-repeat: no-repeat;
 	position: relative;
 	display: flex;
 	justify-content: left;
@@ -2018,7 +1971,68 @@ body.single-ubytovani {
 		&:after {opacity: 1; transform: translateX(10px);}
 	}
 }
-
+.feed-item {
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-md);
+	overflow: hidden;
+	background: white;
+	display: flex;
+	flex-direction: column;
+	.transition-long();
+	&:hover { 
+		border-color: var(--primary);
+		.image {background-size:105%;}
+	}
+	.image {
+		width: 100%;
+		height: 40%;
+		display: block;
+		position: relative;
+		transition: 600ms ease all;
+		img {
+			object-fit: cover;
+			width: 100%;
+			height: 100%;
+		}
+		.iconlist {
+			position: absolute;
+			bottom: var(--space-md);
+			right: var(--space-md);
+		}
+	}
+	header {
+		h2 {
+			margin: 0;
+			font-size: var(--font-lg);
+			color: var(--primary);
+			font-weight: 500;
+		}
+		p {
+			margin: 0;
+		}
+	}
+	section {
+		flex: 1;
+		padding-top: 0;
+		.detail {
+			display: flex;
+			margin: 10px 0;
+			.nvicon {
+				padding: 5px;
+				font-size: 16px;
+				width: 35px;
+			}
+		}
+	}
+	footer {
+		display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	    gap: 15px;
+		padding-top: 0;
+	}
+	a {text-decoration: none;}
+}
 
 .iconset {
 	display: flex;
@@ -2055,10 +2069,18 @@ body.single-ubytovani {
 			height: calc(var(--font-lg) + var(--space-xs) * 2);
 		}
 	}
+	&.iconset-lg {
+		.icon {line-height: calc(var(--font-xl) + var(--space-sm) * 2);}
+		.nvicon {
+			padding: var(--space-sm);
+			font-size: var(--font-xl);
+			width: calc(var(--font-xl) + var(--space-sm) * 2);
+			height: calc(var(--font-xl) + var(--space-sm) * 2);
+		}
+	}
 }
 .iconlist {
 	display: flex;
-	gap: var(--space-sm);
 	color: var(--primary);
 	.icon {
 		width: calc(var(--font-md) + var(--space-xxs) * 2);
@@ -2075,6 +2097,14 @@ body.single-ubytovani {
 			font-size: var(--font-lg);
 			width: calc(var(--font-lg) + var(--space-xs) * 2);
 			height: calc(var(--font-lg) + var(--space-xs) * 2);
+		}
+	}
+	&.iconlist-lg {
+		.icon {
+			padding: var(--space-md);
+			font-size: var(--font-xl);
+			width: calc(var(--font-xl) + var(--space-md) * 2);
+			height: calc(var(--font-xl) + var(--space-md) * 2);
 		}
 	}
 }
@@ -2136,6 +2166,9 @@ body.single-ubytovani {
 	display: grid;
 	grid-template-columns: 1fr;
 
+	&.cols-2 {grid-template-columns: 1fr 1fr;}
+	&.cols-3 {grid-template-columns: 1fr 1fr;}
+	&.cols-4 {grid-template-columns: 1fr 1fr;}
 
 	&.cols-sm-2 {
 		@media(min-width: @breakpoint-sm) {

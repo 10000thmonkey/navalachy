@@ -1,17 +1,23 @@
 <?php /* Template Name: NV/Experiences/Archive */
+$NV_MODULES = [
+	"experiences/feed"
+];
+
+$meta_fields = get_post_meta( get_the_ID() );
+
 get_header();
 ?>
 <main id="primary">
 
 	<?php
 	echo nv_template_cover_image( array(
-		"attachment" => get_post_thumbnail_id( get_the_id() ),
-		"heading" => $meta_fields["heading"][0],
-		"subheading" => $meta_fields["subheading"][0]
+		"attachment" => get_post_thumbnail_id( ),
+		"heading" => ( !empty($meta_fields["heading"]) ? $meta_fields["heading"] : "" ),
+		"subheading" => ( !empty($meta_fields["subheading"]) ? $meta_fields["heading"] : "" )
 	) );
 	?>
 	
-	<div class="contentwrap">
+	<div class="contentwrap padding-lg">
 		
 		<div class="opened" id="filter-tipy-modale" data-modale="filter-mobile">
 			<div class="modal-dialog">
@@ -81,10 +87,8 @@ get_header();
 				if (isset( $_GET["orderby"] )){
 					$args["orderby"] = $_GET["orderby"];
 				}
-				ob_start();
-				nv_zazitky_fetch ( $args );
-				$query = json_decode(ob_get_clean(), true);
-				echo $query["data"];
+				
+				echo nv_template_experiences_feed ( $args ) ["data"];
 				?>
 			</div>
 			<div style="display:flex;justify-content: center;">

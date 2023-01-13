@@ -1,5 +1,12 @@
 <?php
-nv_use_modules(["booking", "lightbox"]);
+$NV_MODULES = [
+	"lightbox",
+
+	"booking/lib",
+	"booking/form",
+
+	"accomodation/feed"
+];
 global $_VAR;
 global $nv_vars;
 

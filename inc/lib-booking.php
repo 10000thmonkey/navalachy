@@ -134,5 +134,23 @@ public function sync_disabled_dates ( $propertyId, $caching = false, $transientC
 	//echo print_r( $response["bookings"] );
 	return $dates;
 }
+public function get_apartments_array ()
+{
+	$apartamentos = get_transient("nvbk_apartamentos");
+	if(empty($apartamentos)) {
+		$query = new WP_Query(array(
+			"post_type" => "ubytovani",
+		));
+		$apartamentos = [];
+		while ($query->have_posts()) {
+			$query->the_post();
+			$cal_id = get_post_meta($query->post->ID, "calendar_id");
+			$apartamentos[ $query->post->ID ] = (int)$cal_id[0];
+		}
+		set_transient("nvbk_apartamentos", $apartamentos, DAY_IN_SECONDS );
+	}
+	return $apartamentos;
+}
+
 }
 ?>

@@ -1,5 +1,9 @@
 <?php
-nv_use_modules(["lightbox"]);
+$NV_MODULES = [
+	"lightbox",
+	"accomodation/feed",
+	"booking/lib"
+];
 
 $ID = get_the_id();
 $meta_fields = get_post_meta( $ID );
@@ -77,6 +81,21 @@ get_header();
 		</div>
 
 	</article>
+
+	<footer class="related-accomodation" style="background:var(--secondary-light);">
+		<div class="contentwrap padding-xl">
+			<h2 class="space-around-hg">Populární ubytování v okolí</h2>
+
+			<div class="cols cols-sm-2 cols-md-3 gap-hg">
+				<?php
+				echo nv_template_accomodation_feed( array(
+					"apartments" => $nvbk->get_apartments_array(),
+					"hovercards" => true
+				) );
+				?>
+			</div>
+		</div>
+	</footer>
 </main>
 <?php
 get_footer();

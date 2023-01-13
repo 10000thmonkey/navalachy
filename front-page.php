@@ -1,11 +1,15 @@
 <?php
-nv_use_modules(["booking"]);
+nv_use_modules([
+	"booking/lib",
+	"booking/form",
+	"accomodation/feed"
+]);
 
 global $nvbk;
 
-$homepage_settings = pods('homepage_settings');
-
-$nv_vars = ["tags" => get_option("homepage_settings_tags_1"), "tags2" => (array) get_option("homepage_settings_tags_2") ];
+$nv_vars = [
+	
+];
 
 get_header();
 ?>
@@ -87,16 +91,12 @@ get_header();
 		</div>
 	</div>
 
-	<?php
-
-	?>
-
 	<div class="section_zazitky2">
 		<div class="section-block">
 			<div class="contentwrap">
 				<div class="block">
 					<div class="block-header">
-						<a href="/zazitky"><h2>Za tradicí</h2></a>
+						<a href="/zazitky"><h2>Za zážitky</h2></a>
 						<p>Poznejte osobitou kulturu Valach všemi smysly!</p>
 					</div>
 					<div class="hovercards">
@@ -161,52 +161,10 @@ get_header();
 				
 				<div class="hovercards">
 					<?php
-					$query = new WP_Query( array(
-						'post_type' => 'ubytovani',
+					echo nv_template_accomodation_feed( array(
+						"apartments" => $nvbk->get_apartments_array(),
+						"hovercards" => true
 					) );
-
-					$reviewAssoc = array();
-					$reviews = pods ( "ubytovani-reviews" );
-					$reviews->find( array(
-						"select" => "*",
-						"join" => "LEFT JOIN `wp_podsrel` ON `t`.`id` = `wp_podsrel`.`item_id`"
-					) );
-
-					while( $reviews->fetch() ) {
-						$reviewAssoc[$reviews->display("related_item_id")][] = $reviews->row();
-					}
-					
-					while( $query->have_posts() ): $query->the_post();
-
-						$feat_image = get_the_post_thumbnail_url();
-						$post_link = get_post_permalink($query->post->ID);
-						$meta_fields = get_post_meta($query->post->ID);
-						echo '
-						<a class="hovercard" href="'.$post_link.'" style="background-image:url(\''.$feat_image.'\')">
-							<!--div class="icon nvicon"></div-->
-							<div class="label">
-								<div>'.$query->post->post_title.'</div>
-								<div class="secondary-text">'. (isset($meta_fields["address"][0]) ? $meta_fields["address"][0] : "") . '</div>
-							</div>
-						</a>';
-						if ( isset($reviewsAssoc[$query->post->ID]) ) :
-							$pod = $reviewsAssoc[$query->post->ID];
-							echo '
-							<div class="review">
-								<div class="review-head">
-									<div class="review-avatar">'.nv_responsive_img(get_post_thumbnail_id()).'</div>
-									<div>
-										<div class="review-name">'.display("name").'</div>
-										<div class="review-source">'.$review->display("zdroj").'</div>
-									</div>
-								</div>
-								<div class="review-body">
-									<div class="review-text">'.$pod->display("recenze").'</div>
-								</div>
-							</div>';
-						endif;
-					endwhile;
-					wp_reset_postdata();
 					?>
 				</div>
 			</div>
