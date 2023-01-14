@@ -173,9 +173,8 @@ a {
 	color: var(--primary);
 	text-decoration: none;
 	.transition-fast();
-	&:hover { opacity: .9 }
 	&.link { font-weight: 500;
-		&:hover {text-decoration: underline; text-underline-offset: 3px;}
+		&:hover {text-decoration: underline; text-underline-offset: 3px;opacity: .9}
 	}
 }
 p {color: var(--text-paragraph-color); margin: 0; &.text {margin: 15px 0;}}
@@ -410,6 +409,7 @@ h4 {margin: 5px 0;}
 body.home {
 	.site-header {
 		background: transparent; 
+		backdrop-filter: none;
 		position: fixed;
 		width: 100%;
 		box-shadow: none;
@@ -455,6 +455,7 @@ body.home {
 			.slider-items {
 				height: auto;
 				justify-content: initial;
+				align-items: center;
 				padding: 0 calc((100vw - var(--width)) / 2 - (100vw - var(--width)) / 8);
 			}
 		    article {
@@ -593,6 +594,7 @@ body.home {
 	.section_experiences2 {
 		.section-block {
 			.hovercards {gap: 100px;}
+			.hovercard:before {padding-top: 100%;}
 			.hovercard {border-radius: var(--radius-lg);}
 			.hovercard .label {left: 30px;bottom: 30px;}
 			.hovercard:after {bottom:40px;}
@@ -614,6 +616,25 @@ body.home {
 			.hovercard:before {padding-top: 50%;}
 		}
 	}
+	.section_experiences, .section_experiences2 {
+		@media (max-width: @breakpoint-sm) {
+			.hovercards {
+				margin: 15px -15px;
+				padding: 0 15px;
+			}
+			.hovercard {
+			    flex: none;
+			    height: 300px;
+			    width: 185px;
+			    scroll-snap-align: start;
+			    scroll-snap-stop: normal;
+			    scroll-margin: 60px;
+			}
+		}
+	}
+
+
+
 	.section_accomodation {
 		.hovercards {
 			grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
@@ -621,6 +642,7 @@ body.home {
 				flex:1;
 				&:before {
 					background: linear-gradient(0deg,rgba(35,47,91,.75) 15%,transparent 50%);
+					padding-top: 100%;
 				}
 				.label {
 					flex-direction: column;
@@ -640,6 +662,7 @@ body.home {
 			}
 		}
 	}
+
 	// .section_voucher {
 	// 	background: url('/wp-content/uploads/navalachy/bg-voucher.jpg');
 	// 	background-size: cover;
@@ -666,33 +689,7 @@ body.home {
 		
 	// 	}
 	// }
-	.section_experiences, .section_experiences2, .section_accomodation {
-		@media (max-width: @breakpoint-sm) {
-			.hovercards {
-				display: flex;
-				overflow: scroll;
-				scroll-snap-type: both mandatory;
-				position: relative;
-				height: 300px;
-				margin: 15px -15px;
-				padding: 0 15px;
-				gap: 15px;
-			}
-			.hovercard {
-			    flex: none;
-			    height: 300px;
-			    width: 230px;
-			    scroll-snap-align: start;
-			    scroll-snap-stop: normal;
-			    scroll-margin: 60px;
-			}
-		}
-	}
-}
-.section_instagram {
-	a {
 
-	}
 }
 
 
@@ -1754,7 +1751,6 @@ nv-slider {
 		overflow: scroll;
 		scroll-snap-type: both mandatory;
 		position: relative;
-		height: 420px; //can be changed to whatever yuo want
 		padding: var(--space-md);
 		gap: var(--space-md);
 		margin: calc(var(--space-md) - var(--space-md));
@@ -1763,7 +1759,7 @@ nv-slider {
 		.layer(1);
 		pointer-events: none;
 	}
-	article {
+	article, a {
 		border-radius: var(--radius-md);
 		flex: none;
 		overflow: hidden;
@@ -1834,14 +1830,13 @@ nv-slider {
 	gap: 5px;
 	text-decoration: none;
 	border-radius: var(--radius-md);
-	overflow: hidden; 
+	overflow: hidden;
 	
 	img {
 		.layer(-1);
 		object-fit: cover;
 	}
-	.label {
-		display: flex;
+	.iconset, .label {
 		position: absolute;
 		left: 15px;
 		bottom: 15px;
@@ -1850,14 +1845,14 @@ nv-slider {
 		font-weight: 500;
 		text-decoration: none;
 		line-height: 40px;
-		gap: 10px;
+		.icon {gap: 15px;}
 	}
 
 	&:before {
 		.transition();
+		width: 100%;
 		content: " ";
-		.layer(1);
-		padding-top: 100%;
+		padding-top: 162%;
 		background: linear-gradient(0deg, fade(@primary,50%) 15%, transparent 50%);
 	}
 	&:after {
@@ -2167,7 +2162,7 @@ nv-slider {
 .iconset {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: 15px;
 	color: var(--primary);
 	.icon {
 		display: flex;

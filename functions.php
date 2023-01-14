@@ -33,7 +33,7 @@ function navalachy_modules()
 
 	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
 	
-	if ( in_array("ui/lightbox", $NV_MODULES) ) {
+	if ( in_array("ui/gallery", $NV_MODULES) ) {
 		wp_enqueue_script( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.js" );
 		wp_enqueue_style( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.css");
 		include "templates/gallery.php";

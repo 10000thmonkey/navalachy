@@ -3,7 +3,7 @@ nv_use_modules([
 	"booking/lib",
 	"booking/form",
 	"accomodation/feed",
-	"ui/slider"
+	"ui/slider",
 ]);
 
 global $nvbk;
@@ -26,18 +26,18 @@ get_header();
 	?>
 	
 	<div class="section_testimonials space-around-xl">
-		<nv-slider class="space-around-hg slider-wrapper controls center" style="height:auto">
+		<nv-slider controls class="space-around-hg slider-wrapper center" style="height:auto">
 
 				<?php
 				$testimonials = pods("reviews")->find( ["where" => "d.homepage = 1"] );
 
 				while( $testimonials->fetch() )
 				{
-					$img = nv_responsive_img( get_post_thumbnail_id( $testimonials->display( "ID" ) ) );
+					$img = @nv_responsive_img( get_post_thumbnail_id( $testimonials->display( "ID" ) ) );
 
 					echo <<<HTML
 					
-					<article class="card padding-xxl rows center gap-md space-around-md"> 
+					<article class="card padding-xl rows center gap-md space-around-md"> 
 						<div class="avatar avatar-xxxl"> $img </div>
 						<h2 style="font-size: var(--font-hg)">{$testimonials->display( "title" )}</h2>
 						<p>{$testimonials->display( "text" )}</p>
@@ -46,7 +46,7 @@ get_header();
 					HTML;
 				}
 				?>
-				
+
 		</nv-slider>
 	</div>
 
@@ -60,25 +60,35 @@ get_header();
 						<a href="experiences"><h2>Do přírody</h2></a>
 						<p>Objevujte Valašskou krajinu a místní zajímavosti!</p>
 					</div>
-					<div class="hovercards">
-					<?php
-					$tags_query = get_terms( "experiences_tags", array(
-						"include" => (array) get_option("homepage_settings_tags_1"),  
-						"orderby" => "include",
-						"hide_empty" => false
-					) );
-					foreach ( $tags_query as $tag ) :
-						echo '
-						<a class="hovercard" href="/experiences?tags='. $tag->slug .'">
-							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
-							<div class="label">
-								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
-							</div>
-						</a>';
-					endforeach;
-					?>
-					</div>
-					<a class="button button-icon" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
+
+					<nv-slider class="hovercards">
+						<?php
+						$tags_query = get_terms( "experiences_tags", array(
+							"include" => (array) get_option("homepage_settings_tags_1"),  
+							"orderby" => "include",
+							"hide_empty" => false
+						) );
+						foreach ( $tags_query as $tag )
+						{
+							$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
+							echo <<<HTML
+
+							<a class="hovercard" href="/experiences?tags={$tag->slug}">
+								$i
+								<div class="iconset">
+									<div class="icon">
+										<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+										{$tag->name}
+									</div>
+								</div>
+							</a>
+
+							HTML;
+						}
+						?>
+					</nv-slider>
+
+					<a class="button button-icon" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>
@@ -123,15 +133,23 @@ get_header();
 						"orderby" => "include",
 						"hide_empty" => false
 					) );
-					foreach ( $tags_query as $tag ) :
-						echo '
-						<a class="hovercard" href="/experiences?tags='.$tag->slug.'">
-							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
-							<div class="label">
-								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
+					foreach ( $tags_query as $tag )
+					{
+						$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
+						echo <<<HTML
+
+						<a class="hovercard" href="/experiences?tags={$tag->slug}">
+							$i
+							<div class="iconset">
+								<div class="icon">
+									<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+									{$tag->name}
+								</div>
 							</div>
-						</a>';
-					endforeach;
+						</a>
+
+						HTML;
+					}
 					?>
 					</div>
 					<a class="button button-icon" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>

@@ -1,6 +1,6 @@
 <?php
 $NV_MODULES = [
-	"lightbox",
+	"ui/gallery",
 
 	"booking/lib",
 	"booking/form",
