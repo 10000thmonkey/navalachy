@@ -54,82 +54,16 @@ get_header();
 	<div class="section_experiences">
 
 		<div class="section-block">
-			<div class="contentwrap">
-				<div class="block">
-					<div class="block-header">
-						<a href="experiences"><h2>Do přírody</h2></a>
-						<p>Objevujte Valašskou krajinu a místní zajímavosti!</p>
-					</div>
-
-					<nv-slider class="hovercards">
-						<?php
-						$tags_query = get_terms( "experiences_tags", array(
-							"include" => (array) get_option("homepage_settings_tags_1"),  
-							"orderby" => "include",
-							"hide_empty" => false
-						) );
-						foreach ( $tags_query as $tag )
-						{
-							$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
-							echo <<<HTML
-
-							<a class="hovercard" href="/experiences?tags={$tag->slug}">
-								$i
-								<div class="iconset">
-									<div class="icon">
-										<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
-										{$tag->name}
-									</div>
-								</div>
-							</a>
-
-							HTML;
-						}
-						?>
-					</nv-slider>
-
-					<a class="button button-icon" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+			<div class="contentwrap box padding-xl rows gap-lg">
+				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
+					<a href="experiences"><h2>Do přírody</h2></a>
+					<p class="text-primary">Objevujte Valašskou krajinu a místní zajímavosti!</p>
 				</div>
-			</div>
-		</div>
 
-		<div class="section-highlight">
-			<div class="contentwrap">
-				<div class="highlight">
-					<div class="post-highlight">
-						<?php
-						$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
-						$post_1_link = get_post_permalink( $post_1 );
-						?>
-						<a href="<?= get_post_permalink( $post_1 );?>">
-							<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
-						</a>
-						<div class="info">
-							<h3>Doporučujeme</h3>
-							<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
-							<div class="content">
-								<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
-							</div>
-							<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-arrow-right"></div></a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="section_experiences2">
-		<div class="section-block">
-			<div class="contentwrap">
-				<div class="block">
-					<div class="block-header">
-						<a href="/experiences"><h2>Za zážitky</h2></a>
-						<p>Poznejte osobitou kulturu Valach všemi smysly!</p>
-					</div>
-					<div class="hovercards">
+				<nv-slider class="hovercards">
 					<?php
 					$tags_query = get_terms( "experiences_tags", array(
-						"include" => (array) get_option("homepage_settings_tags_2"),
+						"include" => (array) get_option("homepage_settings_tags_1"),  
 						"orderby" => "include",
 						"hide_empty" => false
 					) );
@@ -151,31 +85,99 @@ get_header();
 						HTML;
 					}
 					?>
+				</nv-slider>
+
+				<a class="self-end button button-icon" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+			</div>
+		</div>
+
+		<div class="section-highlight">
+			<div class="contentwrap highlight padding-xl">
+				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
+
+				<?php
+				$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
+				$post_1_link = get_post_permalink( $post_1 );
+				?>
+
+					<a href="<?= get_post_permalink( $post_1 );?>">
+						<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+					</a>
+					<div class="info rows gap-sm space-around-lg">
+						<h3 class="secondary-text">Doporučujeme</h3>
+						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
+						<div class="content">
+							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
+						</div>
+						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">
+							Více<i class="nvicon nvicon-arrow-right"></i>
+						</a>
 					</div>
-					<a class="button button-icon" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section_experiences2">
+
+		<div class="section-block">
+			<div class="contentwrap box padding-xl rows gap-lg">
+				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
+					<a href="/experiences"><h2>Za zážitky</h2></a>
+					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
+				</div>
+
+				<div class="hovercards">
+				<?php
+				$tags_query = get_terms( "experiences_tags", array(
+					"include" => (array) get_option("homepage_settings_tags_2"),
+					"orderby" => "include",
+					"hide_empty" => false
+				) );
+				foreach ( $tags_query as $tag )
+				{
+					$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
+					echo <<<HTML
+
+					<a class="hovercard" href="/experiences?tags={$tag->slug}">
+						$i
+						<div class="iconset">
+							<div class="icon">
+								<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+								{$tag->name}
+							</div>
+						</div>
+					</a>
+
+					HTML;
+				}
+				?>
+				</div>
+				<a class="button button-icon self-end" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
 				</div>
 			</div>
 		</div>
 
 		<div class="section-highlight">
-			<div class="contentwrap">
-				<div class="highlight">
-					<div class="post-highlight">
-						<?php
-						$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
-						$post_1_link = get_post_permalink( $post_1 );
-						?>
-						<a href="<?= get_post_permalink( $post_1 );?>">
-							<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
-						</a>
-						<div class="info">
-							<h3>Doporučujeme</h3>
-							<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
-							<div class="content">
-								<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
-							</div>
-							<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent">Více<div class="nvicon nvicon-arrow-right"></div></a>
+			<div class="contentwrap highlight padding-xl">
+				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
+
+					<?php
+					$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
+					$post_1_link = get_post_permalink( $post_1 );
+					?>
+					<a href="<?= get_post_permalink( $post_1 );?>">
+						<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+					</a>
+					<div class="info rows gap-sm space-around-lg">
+						<h3 class="secondary-text">Doporučujeme</h3>
+						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
+						<div class="content">
+							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
 						</div>
+						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<div class="nvicon nvicon-arrow-right"></div></a>
+
 					</div>
 				</div>
 			</div>
@@ -184,24 +186,22 @@ get_header();
 
 
 	<div class="section-block section_accomodation">
-		<div class="contentwrap">
-			<div class="block">
-				<div class="block-header">
-					<a href="/accomodation"><h2>Ubytování</h2></a>
-				</div>
+		<div class="contentwrap box rows padding-xl gap-xl">
+			<div class="block-header">
+				<a href="/accomodation"><h2>Ubytování</h2></a>
+			</div>
 
+			<?php
+			echo nv_template_booking_form(array("iss" => false));
+			?>
+			
+			<div class="hovercards">
 				<?php
-				echo nv_template_booking_form(array("iss" => false));
+				echo nv_template_accomodation_feed( array(
+					"apartments" => $nvbk->get_apartments_array(),
+					"hovercards" => true
+				) );
 				?>
-				
-				<div class="hovercards">
-					<?php
-					echo nv_template_accomodation_feed( array(
-						"apartments" => $nvbk->get_apartments_array(),
-						"hovercards" => true
-					) );
-					?>
-				</div>
 			</div>
 		</div>
 	</div>

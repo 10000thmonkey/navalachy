@@ -55,16 +55,16 @@ get_header();
 
 		<div class="sections-left col">
 
-			<div class="header box padding-xl">
+			<div class="box padding-xl gap-lg rows">
 
-				<h1>
-					<?= get_the_title();?>
-				</h1>
-				<a class="secondary-text" style="text-decoration: none;" href="#map">
-					<?=$meta_fields["address"][0];?>
-				</a>	
+				<div>
+					<h1><?= get_the_title();?></h1>
+					<a class="secondary-text" style="text-decoration: none;" href="#map">
+						<?=$meta_fields["address"][0];?>
+					</a>	
+				</div>
 
-				<p class="excerpt"><?= $meta_fields["desc_short"][0]; ?></p>
+				<p><?= $meta_fields["desc_short"][0]; ?></p>
 
 				<div class="iconset iconset-hg cols cols-sm-2">
 					
@@ -155,26 +155,34 @@ get_header();
 
 							$query->the_post();
 							$meta = get_post_meta(get_the_id());
-							$avatarImg = get_post_thumbnail_id();
-							if (empty($avatarImg)) $avatarImg = 1364;
 
-							if ($meta["ubytko"][0] != $ID) continue;
+							$t = get_the_title();
+							$s = $pod->display("source");
+							$c = $pod->display("text");
+
+							$avatarId = get_post_thumbnail_id();
+							if (empty($avatarId)) $avatarId = 1364;
+							$avatarImg = nv_responsive_img( $avatarId, "(min-width:1px) 64px, 64px");
+							
+							//if ($meta["ubytko"][0] != $ID) continue;
 
 							$pod->fetch(get_the_id());
 
-							$r = '
+							$r = <<<HTML
 							<div class="review">
 								<div class="review-head">
-									<div class="review-avatar">'.nv_responsive_img($avatarImg, "(min-width:1px) 64px, 64px").'</div>
+									<div class="review-avatar">$avatarImg</div>
 									<div>
-										<h3 class="review-name">'.get_the_title().'</h3>
-										<div class="review-source">'.$pod->display("zdroj").'</div>
+										<h3 class="review-name">$t</h3>
+										<div class="review-source">$s</div>
 									</div>
 								</div>
 								<div class="review-body">
-									<div class="review-text">'.$pod->display("recenze").'</div>
+									<div class="review-text">$c</div>
 								</div>
-							</div>';
+							</div>
+							HTML;
+
 							echo $r;
 
 							if ($counter < 3) $first3 .= $r;
@@ -203,17 +211,17 @@ get_header();
 						<?= nv_responsive_img( $host["profile_picture"][0], "(min-width: 1px) 64px, 64px" ); ?>
 					</div>
 
-					<div class="col">
+					<div class="col rows gap-md">
 						<h3><?= $host["first_name"][0] . " " . $host["last_name"][0]; ?></h3>
 						<div class="iconset">
 							<div class="icon">
 								<i class="nvicon nvicon-phone"></i>
-								<span class="hidden"></span>
-								<a class="link" onclick="this.parentElement.q('span').show().content('<?= $host["billing_phone"][0];?>'); this.remove();">Zobrazit</a>
+								<span class="nodisplay"></span>
+								<a class="link" onclick="this.parentElement.q('span').removeClass('nodisplay').content('<?= $host["billing_phone"][0];?>'); this.remove();">Zobrazit</a>
 							</div>
 							<div class="icon">
 								<i class="nvicon nvicon-email"></i>
-								<?= $host["billing_email"][0];?>
+								<a href="mailto:<?= $host["billing_email"][0];?>"><?= $host["billing_email"][0];?></a>
 							</div>
 						</div>
 						<a class="button button-icon button-plain button-sm openmodale" data-modale="accomodation-contact" style="width:fit-content;">
@@ -283,10 +291,10 @@ get_header();
 		</div>
 
 
-		<div class="padding-xl" id="map">
+		<div class="padding-xl rows gap-md" id="map">
 		
 			<div class="space-around-hg">
-				<h3 class="space-around-md">Adresa</h3>
+				<h3>Adresa</h3>
 				<span><?=$meta_fields["address"][0];?></span>
 			</div>
 

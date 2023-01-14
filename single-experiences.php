@@ -1,6 +1,6 @@
 <?php
 $NV_MODULES = [
-	"lightbox",
+	"ui/gallery",
 	"accomodation/feed",
 	"booking/lib"
 ];
@@ -37,7 +37,7 @@ get_header();
 
 			<div class="tags">
 				<?php
-				$tags = get_the_terms($post, "experiences_tag");
+				$tags = get_the_terms($post, "experiences_tags");
 
 				if($tags) {	foreach ($tags as $tag) {?>
 					
@@ -49,29 +49,31 @@ get_header();
 				<?php } } ?>
 			</div>
 			
-			<div class="details">
+			<div class="iconset">
 				<?php
 				$details = array("location", "ticket", "time", "link");
 
-				foreach ( $details as $detail ) {
-					if ( isset($meta_fields[$detail][0]) && $meta_fields[$detail][0] != "") { ?>	
+				foreach ( $details as $detail )
+				{
+					if ( isset($meta_fields[$detail][0]) && $meta_fields[$detail][0] != "")
+					{
+						if ($detail == "location") {
+							$c = $meta_fields[$detail][0].'<br><a href="geo:'.$meta_fields["gps"][0].'">'.$meta_fields["gps"][0].'</a>';
+						} elseif ($detail == "link") {
+							$c = '<a target="_blank" href="'.$meta_fields["link"][0].'">'.$meta_fields["link"][0].'</a>';
+						} else {
+							$c = $meta_fields[$detail][0];
+						}
 
-						<div class="detail">
-							<div class="icon icon-<?php echo $detail; ?>"></div>
-							<p class="content">
-								<?php
-								if ($detail == "location") {
-									echo $meta_fields[$detail][0].'<br><a href="'.$meta_fields["gps"][0].'">'.$meta_fields["gps"][0].'</a>';
-								} elseif ($detail == "link") {
-									echo '<a href="'.$meta_fields["link"][0].'">'.$meta_fields["link"][0].'</a>';
-								} else {
-									echo $meta_fields[$detail][0];
-								}
-								?>
-							</p>
+						echo <<<HTML
+						<div class="icon">
+							<i class="nvicon nvicon-$detail"></i>
+							$c
 						</div>
-
-				<?php }	} ?>
+						HTML;
+					}
+				}
+				?>
 			</div>
 
 			<div class="map">

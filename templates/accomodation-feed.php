@@ -99,7 +99,7 @@ function nv_template_accomodation_feed ( $VAR )
 
 
 				$rate = "";
-				$cal_in_response = array_key_exists( (int)$meta["calendar_id"][0], $remote_rates["data"] );
+				$cal_in_response = @array_key_exists( (int)$meta["calendar_id"][0], $remote_rates["data"] );
 				if ( $cal_in_response ) {
 					$rate = <<<HTML
 					od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$remote_rates["data"][$meta["calendar_id"][0]][$remote_rates_day]["price"]},-&nbsp;</span> Kč / noc

@@ -2,23 +2,26 @@ VOUCHERY!!!!!!!!!!!
 	zatim otestovat na woo checkout - done
 	checkout css fix!!
 
-zacit s headless - napsat ajax api na backend, frontend v js a templates
+@zacit s headless - napsat ajax api na backend, frontend v js a templates
 
-woocommerce checkout detail rezervace a chaty
+@woocommerce checkout detail rezervace a chaty
 
-related items v ubytovani a zazitcich - podle gps??
+projit emailing - zatim bez manualu
 
-AFFILIATE
+--related items v ubytovani a zazitcich - podle gps??
+	pridat ikonky
+--related accomod. v zazitcich
+
+--pas reviews, zatim takto?
+
+@AFFILIATE
 
 --odesilani kontaktniho formulare - vymenit muj mail za hostuv
 
-frontpage jen prvni veta!! 
 
-pas reviews
+@ ??? pas insta reels
 
-pas insta reels?
-
-video na frontpage?
+@ ??? video na frontpage? - catharine? -> call
 
 SEO
 	alt atribut img

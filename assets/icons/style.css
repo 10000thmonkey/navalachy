@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'nvicons';
-  src:  url('fonts/nvicons.eot?4y6cvb');
-  src:  url('fonts/nvicons.eot?4y6cvb#iefix') format('embedded-opentype'),
-    url('fonts/nvicons.ttf?4y6cvb') format('truetype'),
-    url('fonts/nvicons.woff?4y6cvb') format('woff'),
-    url('fonts/nvicons.svg?4y6cvb#nvicons') format('svg');
+  src:  url('fonts/nvicons.eot?1hj462');
+  src:  url('fonts/nvicons.eot?1hj462#iefix') format('embedded-opentype'),
+    url('fonts/nvicons.ttf?1hj462') format('truetype'),
+    url('fonts/nvicons.woff?1hj462') format('woff'),
+    url('fonts/nvicons.svg?1hj462#nvicons') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -33,6 +33,9 @@
 }
 .nvicon-facebook:before {
   content: "\e949";
+}
+.nvicon-link:before {
+  content: "\e951";
 }
 .nvicon-menu:before {
   content: "\e94a";
