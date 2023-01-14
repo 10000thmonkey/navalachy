@@ -90,7 +90,7 @@ q(function(){
 	q(".gallery-slider").each( function (e)
 	{
 		ggg = this;
-		const gallery = this;
+		const slider = this;
 		const items = this.q(".gallery-image");
 
 		let prev = createNode("a")
@@ -99,9 +99,9 @@ q(function(){
 		{
 			for ( let item of items )
 			{
-				if ( gallery.scrollLeft > item.offsetLeft ) 
+				if ( slider.scrollLeft > item.offsetLeft ) 
 				{
-					gallery.scrollTo( {
+					slider.scrollTo( {
 						left: item.offsetLeft,
 						top: 0,
 						behavior: "smooth"
@@ -116,9 +116,9 @@ q(function(){
 		{
 			for ( let item of items )
 			{
-				if ( gallery.scrollLeft < item.offsetLeft ) 
+				if ( slider.scrollLeft < item.offsetLeft ) 
 				{
-					gallery.scrollTo( {
+					slider.scrollTo( {
 						left: item.offsetLeft,
 						top: 0,
 						behavior: "smooth"

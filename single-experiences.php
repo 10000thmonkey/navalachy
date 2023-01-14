@@ -37,11 +37,11 @@ get_header();
 
 			<div class="tags">
 				<?php
-				$tags = get_the_terms($post, "zazitky_tag");
+				$tags = get_the_terms($post, "experiences_tag");
 
 				if($tags) {	foreach ($tags as $tag) {?>
 					
-					<a class="tag" href="/zazitky/?tags=<?php echo $tag->slug;?>">
+					<a class="tag" href="/experiences/?tags=<?php echo $tag->slug;?>">
 						<div class="nvicon nvicon-<?php echo $tag->slug;?>"></div>
 						<?php echo $tag->name;?>
 					</a>

@@ -2,14 +2,17 @@
 nv_use_modules([
 	"booking/lib",
 	"booking/form",
-	"accomodation/feed"
+	"accomodation/feed",
+	"ui/slider"
 ]);
 
 global $nvbk;
 
+
 $nv_vars = [
 	
 ];
+
 
 get_header();
 ?>
@@ -22,37 +25,51 @@ get_header();
 	) );
 	?>
 	
-<!-- 	<div class="section_instagram contentwrap">
-		<div class="space-around-hg slider-wrapper">
-			<?php 
-			$insta_array = get_option('homepage_settings_files');
-			foreach( $insta_array as $insta_item ) {
-				echo "<a class='slider-item'>" . nv_responsive_img( $insta_item ) . "</a>";
-			}
-			?>
-		</div>
-	</div> -->
+	<div class="section_testimonials space-around-xl">
+		<nv-slider class="space-around-hg slider-wrapper controls center" style="height:auto">
+
+				<?php
+				$testimonials = pods("reviews")->find( ["where" => "d.homepage = 1"] );
+
+				while( $testimonials->fetch() )
+				{
+					$img = nv_responsive_img( get_post_thumbnail_id( $testimonials->display( "ID" ) ) );
+
+					echo <<<HTML
+					
+					<article class="card padding-xxl rows center gap-md space-around-md"> 
+						<div class="avatar avatar-xxxl"> $img </div>
+						<h2 style="font-size: var(--font-hg)">{$testimonials->display( "title" )}</h2>
+						<p>{$testimonials->display( "text" )}</p>
+					</article>
+
+					HTML;
+				}
+				?>
+				
+		</nv-slider>
+	</div>
 
 
-	<div class="section_zazitky">
+	<div class="section_experiences">
 
 		<div class="section-block">
 			<div class="contentwrap">
 				<div class="block">
 					<div class="block-header">
-						<a href="zazitky"><h2>Do přírody</h2></a>
+						<a href="experiences"><h2>Do přírody</h2></a>
 						<p>Objevujte Valašskou krajinu a místní zajímavosti!</p>
 					</div>
 					<div class="hovercards">
 					<?php
-					$tags_query = get_terms( "zazitky_tag", array(
-						"include" => (array) get_option("homepage_settings_tags_1"),  //[47, 29, 32, 28, 31, 30, 46],
+					$tags_query = get_terms( "experiences_tags", array(
+						"include" => (array) get_option("homepage_settings_tags_1"),  
 						"orderby" => "include",
 						"hide_empty" => false
 					) );
 					foreach ( $tags_query as $tag ) :
 						echo '
-						<a class="hovercard" href="/zazitky?tags='. $tag->slug .'">
+						<a class="hovercard" href="/experiences?tags='. $tag->slug .'">
 							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
 							<div class="label">
 								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
@@ -61,7 +78,7 @@ get_header();
 					endforeach;
 					?>
 					</div>
-					<a class="button button-icon" href="/zazitky">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
+					<a class="button button-icon" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
 				</div>
 			</div>
 		</div>
@@ -91,24 +108,24 @@ get_header();
 		</div>
 	</div>
 
-	<div class="section_zazitky2">
+	<div class="section_experiences2">
 		<div class="section-block">
 			<div class="contentwrap">
 				<div class="block">
 					<div class="block-header">
-						<a href="/zazitky"><h2>Za zážitky</h2></a>
+						<a href="/experiences"><h2>Za zážitky</h2></a>
 						<p>Poznejte osobitou kulturu Valach všemi smysly!</p>
 					</div>
 					<div class="hovercards">
 					<?php
-					$tags_query = get_terms( "zazitky_tag", array(
+					$tags_query = get_terms( "experiences_tags", array(
 						"include" => (array) get_option("homepage_settings_tags_2"),
 						"orderby" => "include",
 						"hide_empty" => false
 					) );
 					foreach ( $tags_query as $tag ) :
 						echo '
-						<a class="hovercard" href="/zazitky?tags='.$tag->slug.'">
+						<a class="hovercard" href="/experiences?tags='.$tag->slug.'">
 							'.@nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] ).'
 							<div class="label">
 								<div class="nvicon nvicon-md nvicon-'.$tag->slug.'"></div>'. $tag->name .'
@@ -117,7 +134,7 @@ get_header();
 					endforeach;
 					?>
 					</div>
-					<a class="button button-icon" href="/zazitky">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
+					<a class="button button-icon" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
 				</div>
 			</div>
 		</div>
@@ -148,11 +165,11 @@ get_header();
 	</div>
 
 
-	<div class="section-block section_ubytovani">
+	<div class="section-block section_accomodation">
 		<div class="contentwrap">
 			<div class="block">
 				<div class="block-header">
-					<a href="/ubytovani"><h2>Ubytování</h2></a>
+					<a href="/accomodation"><h2>Ubytování</h2></a>
 				</div>
 
 				<?php

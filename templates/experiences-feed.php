@@ -5,7 +5,7 @@ function nv_template_experiences_feed ( $VAR = [] )
 	$html = "";
 	
 	$wpargs = [
-		'post_type' => 'zazitky',
+		'post_type' => 'experiences',
 		'post_status' => 'publish'
 	];
 
@@ -15,16 +15,9 @@ function nv_template_experiences_feed ( $VAR = [] )
 
 	if ( !empty($VAR["tagfilter"]) )
 		$wpargs['tax_query'][] = array( array(
-			'taxonomy' => 'zazitky_tag',
+			'taxonomy' => 'experiences_tag',
 			'field' => 'slug',
 			'terms' => $VAR["tagfilter"]
-		) );
-
-	if ( !empty($VAR["categoryfilter"]) )
-		$wpargs['tax_query'][] = array( array(
-			'taxonomy' => 'zazitky_category',
-			'field' => 'slug',
-			'terms' => $VAR["categoryfilter"]
 		) );
 
 	if ( !empty($VAR["orderby"]) )
@@ -42,7 +35,7 @@ function nv_template_experiences_feed ( $VAR = [] )
 		{
 			$query->the_post();
 
-			$terms = get_the_terms($query->post, "zazitky_tag");
+			$terms = get_the_terms($query->post, "experiences_tags");
 			if ( !empty( $terms ) )
 			{
 				$terms_icons = '';

@@ -33,11 +33,14 @@ function navalachy_modules()
 
 	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
 	
-	if ( in_array("lightbox", $NV_MODULES) ) {
+	if ( in_array("ui/lightbox", $NV_MODULES) ) {
 		wp_enqueue_script( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.js" );
 		wp_enqueue_style( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.css");
 		include "templates/gallery.php";
 	}
+	if ( in_array("ui/slider", $NV_MODULES) ) 
+		wp_enqueue_script( "lightbox", $templ_dir . "/assets/slider.js" );
+
 	if ( in_array("booking/lib", $NV_MODULES) ) {
 		require_once("inc/lib-booking.php");
 		global $nvbk;
@@ -48,6 +51,7 @@ function navalachy_modules()
 		wp_enqueue_style( "booking-datepicker", $templ_dir . "/inc/hello-week.min.css" );
 		include "templates/booking-form.php";
 	}
+
 	if ( in_array("accomodation/feed", $NV_MODULES) ) include "templates/accomodation-feed.php";
 	if ( in_array("experiences/feed", $NV_MODULES) ) include "templates/experiences-feed.php";
 
@@ -57,6 +61,14 @@ function navalachy_modules()
 }
 add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
 
+function nv_register_vars ( ) {
+	global $nv_vars;
+	if ( empty( $nv_vars ) ) return;
+	wp_register_script( "nv_vars", "" );
+	wp_enqueue_script( "nv_vars" );
+	wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
+}
+add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
 
 
 
@@ -115,16 +127,26 @@ function nvbk_ajax_ubytovani_contact_form ()
 	$headers = 
 	
 	$res = nv_send_mail (array(
-		"to" => "vojja01@gmail.com", //pozdeji vymenit za 
-		"subject" => "Nový dotaz z Valach: " . $_POST['name'] . " (" . $_POST['email'] . ")",
+		"to" => $_POST["host_email"], 
+		"subject" => "Nový dotaz z Valach od " . $_POST['name'] . " (" . $_POST['email'] . ")",
 		"body" => $_POST['message'],
 		"headers" => array(
 			"From: Na Valachy kontaktní formulář <info@navalachy.cz>",
 			'Content-Type: text/html; charset=UTF-8',
 			'Reply-To: '.$_POST["name"].' <'.$_POST['email'].'>',
 		)
+	));	
+
+	$res = nv_send_mail (array(
+		"to" => $_POST["email"], 
+		"subject" => "NaValachy.cz: Dotaz jsme majiteli odeslali.",
+		"body" => "Váš dotaz na e-mail ".$_POST["host_email"]." byl úspěšně zaslán.",
+		"headers" => array(
+			"From: NaValachy.cz <info@navalachy.cz>",
+			'Content-Type: text/html; charset=UTF-8'
+		)
 	));
-	echo debug_wpmail($res);
+	//echo debug_wpmail($res);
 	wp_die();
 }
 add_action("wp_ajax_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
@@ -495,26 +517,13 @@ function cc_mime_types($mimes) {
 
 
 
-// wp_add_inline_script( 'nvdata', 'const nvdata = ' . json_encode( array(
-//     'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-//     'otherParam' => 'some value',
-// ) ), 'before' );
-
-
-
-
-
-
-
-
-
 
 // FILTROVANI ZAZITKU
 
-add_action('wp_ajax_nv_filter_tipy', 'nv_filter_tipy_function', 1, 1); 
-add_action('wp_ajax_nopriv_nv_filter_tipy', 'nv_filter_tipy_function', 1, 1);
+add_action('wp_ajax_nv_filter_experiences', 'nv_filter_experiences_function', 1, 1); 
+add_action('wp_ajax_nopriv_nv_filter_experiences', 'nv_filter_experiences_function', 1, 1);
 
-function nv_filter_tipy_function( $args )
+function nv_filter_experiences_function( $args )
 {
 	if ( !is_array ($args) ) {
 		$args = array (
@@ -524,91 +533,15 @@ function nv_filter_tipy_function( $args )
 			"paged" => $_POST['paged'],
 		);
 	}
-	echo nv_zazitky_fetch( $args );
+
+	echo nv_experiences_fetch( $args );
 	die();
 }
 
-function nv_zazitky_fetch ( $args = array() )
-{
-	@ini_set("display_errors", 0);
-	
-	$wpargs = array(
-		'post_type' => 'zazitky',
-		'posts_per_page' => 12,
-		'post_status' => 'publish'
-	);
-	//add arguments to query, if they are provided
-	if ( $args["tagfilter"] )
-		$wpargs['tax_query'][] = array( array(
-			'taxonomy' => 'zazitky_tag',
-			'field' => 'slug',
-			'terms' => $args["tagfilter"]
-		) );
-	if ( $args["categoryfilter"] )
-		$wpargs['tax_query'][] = array( array(
-			'taxonomy' => 'zazitky_category',
-			'field' => 'slug',
-			'terms' => $args["categoryfilter"]
-		) );
-	if ( $args["orderby"] )	$wpargs["orderby"] = $args["orderby"];
-	if ( $args["paged"] ) $wpargs["paged"] = $args["paged"];
-
-	//$wpargs ["paged"] = 1;
-	//echo var_dump($args);
-
-	$query = new WP_Query( $wpargs );
-	
-	if( $query->have_posts() )
-	{
-		ob_start();
-		while( $query->have_posts() ): $query->the_post();
-
-			$terms = get_the_terms($query->post, "zazitky_tag");
-			if ($terms) {
-				$terms_icons = '';
-				foreach ($terms as $term) {
-					$terms_icons .= '<div class="icon nvicon nvicon-'.$term->slug.'"></div>';
-				}
-			}
-
-			echo
-			'<a class="item" href="'.get_post_permalink($query->post->ID).'">
-				'.nv_responsive_img( get_post_thumbnail_id($query->post->ID), "(min-width: 1px) 500px, 500px" ).'
-				<div class="details">
-					<h2>'.$query->post->post_title.'</h2>
-					<div class="secondary-text">'.$query->post->location.'</div>
-					<div class="iconlist iconlist-hg">'.$terms_icons.'</div>
-				</div>
-			</a>';
-		endwhile;
-		echo json_encode(array(
-			"page" => $query->max_num_pages,
-			"data" => ob_get_clean()
-		));
-
-		wp_reset_postdata();
-		return;
-	} else {
-		echo json_encode(array(
-			"page" => 1,
-			"data" => "No posts found"
-		));
-		return false;
-	}
-}
 
 
 
 
-
-function nv_register_vars ( ) {
-	global $nv_vars;
-	if ( empty( $nv_vars ) ) return;
-	wp_register_script( "nv_vars", "" );
-	wp_enqueue_script( "nv_vars" );
-	wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
-}
-add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
 
 
 
@@ -675,7 +608,8 @@ function navalachy_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
-			'menu-1' => esc_html__( 'Primary', 'navalachy' ),
+			'menu-header' => esc_html__( 'Header', 'navalachy' ),
+			'menu-footer' => esc_html__( 'Footer', 'navalachy' ),
 		)
 	);
 
@@ -696,35 +630,6 @@ function navalachy_setup() {
 		)
 	);
 
-	// Set up the WordPress core custom background feature.
-	add_theme_support(
-		'custom-background',
-		apply_filters(
-			'navalachy_custom_background_args',
-			array(
-				'default-color' => 'ffffff',
-				'default-image' => '',
-			)
-		)
-	);
-
-	// Add theme support for selective refresh for widgets.
-	add_theme_support( 'customize-selective-refresh-widgets' );
-
-	/**
-	 * Add support for core custom logo.
-	 *
-	 * @link https://codex.wordpress.org/Theme_Logo
-	 */
-	add_theme_support(
-		'custom-logo',
-		array(
-			'height'      => 250,
-			'width'       => 250,
-			'flex-width'  => true,
-			'flex-height' => true,
-		)
-	);
 }
 add_action( 'after_setup_theme', 'navalachy_setup' );
 
@@ -739,7 +644,7 @@ require get_template_directory() . '/inc/template-functions.php';
 /**
  * Customizer additions.
  */
-require get_template_directory() . '/inc/customizer.php';
+//require get_template_directory() . '/inc/customizer.php';
 /*
  * Load WooCommerce compatibility file.
  */

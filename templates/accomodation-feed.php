@@ -31,7 +31,7 @@ function nv_template_accomodation_feed ( $VAR )
 		}
 	}
 
-	$arguments = array_merge( array( 'post_type' => 'ubytovani' ), $args );
+	$arguments = array_merge( array( 'post_type' => 'accomodation' ), $args );
 	$query = new WP_Query( $arguments );
 
 	if ( ! $emptyQuery && $query->have_posts() )

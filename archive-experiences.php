@@ -19,15 +19,15 @@ get_header();
 	
 	<div class="contentwrap padding-lg">
 		
-		<div class="opened" id="filter-tipy-modale" data-modale="filter-mobile">
+		<div class="opened" id="filter-experiences-modale" data-modale="filter-mobile">
 			<div class="modal-dialog">
 				<div class="modal-body" style="padding:5px">
-					<form action="<?php echo site_url(); ?>/wp-admin/admin-ajax.php" method="POST" id="tipy-filter">
+					<form action="<?php echo site_url(); ?>/wp-admin/admin-ajax.php" method="POST" id="experiences-filter">
 						<div class="filter-tags">
 							<?php
 							$nv_tags = get_terms(
 								array(
-									'taxonomy'   => 'zazitky_tag',
+									'taxonomy'   => 'experiences_tags',
 									'hide_empty' => false,
 								)
 							);
@@ -35,8 +35,8 @@ get_header();
 
 							foreach ( $nv_tags as $nv_tag ) :
 								$output .= '
-								<input type="checkbox" name="tagfilter[]" id="nv_tipy_tag_toggle-'.$nv_tag->slug.'" value="'.$nv_tag->slug.'">
-								<label class="filter-tag button button-plain button-icon-right" for="nv_tipy_tag_toggle-'.$nv_tag->slug.'">
+								<input type="checkbox" name="tagfilter[]" id="nv_experiences_tag_toggle-'.$nv_tag->slug.'" value="'.$nv_tag->slug.'">
+								<label class="filter-tag button button-plain button-icon-right" for="nv_experiences_tag_toggle-'.$nv_tag->slug.'">
 									<div class="filter-tag-icon nvicon nvicon-'.$nv_tag->slug.'"></div>
 									<div class="filter-tag-name">'.$nv_tag->name.'</div>
 								</label>';
@@ -47,24 +47,24 @@ get_header();
 							?>
 						</div>
 
-						<input type="hidden" name="action" value="nv_filter_tipy">
+						<input type="hidden" name="action" value="nv_filter_experiences">
 						<input type="hidden" name="paged" value="1">
 					</form>
 				</div>
 				<div class="modal-footer">
-					<a class="button closemodale" onclick="jQuery('#filter-tipy-modale').removeClass('modale'); tipyFilter(true)">OK</a>
+					<a class="button closemodale" onclick="jQuery('#filter-experiences-modale').removeClass('modale'); experiencesFilter(true)">OK</a>
 				</div>
 			</div>
 		</div>
 
 		
-		<div class="tipy-feed-wrapper" style="position: relative;">
+		<div class="experiences-feed-wrapper" style="position: relative;">
 
 			<div class="filter-mobilebar">
-				<a class="button button-transparent-secondary button-icon" data-modale="filter-mobile" onclick="jQuery('#filter-tipy-modale').addClass('modale');">Filtrovat<div class="nvicon nvicon-filter"></div></a>
+				<a class="button button-transparent-secondary button-icon" data-modale="filter-mobile" onclick="jQuery('#filter-experiences-modale').addClass('modale');">Filtrovat<div class="nvicon nvicon-filter"></div></a>
 			</div>
 
-			<div id="tipy-feed" class="show">
+			<div id="experiences-feed" class="show">
 				<?php
 				$args = array(
 					"tagfilter" => false,
@@ -107,10 +107,10 @@ get_header();
 	let nv_filter_tags = [];
 	let nv_filter_categories = [];
 
-	let filterform = jQuery('#tipy-filter');
-	let feed = jQuery('#tipy-feed');
+	let filterform = jQuery('#experiences-filter');
+	let feed = jQuery('#experiences-feed');
 	let spinner = jQuery('.spinner-wrapper');
-	let counter = jQuery("#tipy-filter input[name=paged");
+	let counter = jQuery("#experiences-filter input[name=paged");
 	let loadMoreBtn = jQuery("#button-loadmore");
 
 	function loadMore ()
@@ -132,7 +132,7 @@ get_header();
 		});
 	}
 
-	function tipyFilter (isFromModal = false)
+	function experiencesFilter (isFromModal = false)
 	{
 		if (isMobile && !isFromModal) return false;
 
@@ -215,7 +215,7 @@ get_header();
 	}
 	jQuery(function(){
 		updateFilter(true);
-		jQuery('#tipy-filter input[type=checkbox]').on("change", () => { tipyFilter(); });
+		jQuery('#experiences-filter input[type=checkbox]').on("change", () => { experiencesFilter(); });
 	});
 </script>
 

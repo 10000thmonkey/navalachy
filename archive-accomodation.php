@@ -30,7 +30,7 @@ get_header();
 	) );
 	?>
 
-	<div class="ubytovani-feed contentwrap space-around-lg padding-lg gap-hg">
+	<div class="accomodation-feed contentwrap space-around-lg padding-lg gap-hg">
 		
 		<?php
 		echo nv_template_accomodation_feed( array(

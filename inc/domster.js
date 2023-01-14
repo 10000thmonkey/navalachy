@@ -85,7 +85,9 @@ jax = {
 
 
 
-var createNode = function (el) {return document.createElement(el);};
+var createNode = function (el = "div") {
+	return document.createElement(el);
+};
 
 var q = function (q) {
 	if (typeof q == "function") return document.on("DOMContentLoaded", (e)=>q(e));
@@ -103,8 +105,18 @@ NodeList.prototype.q = function(c) {
 	return new NodeListConstruct(list);
 }
 
-Node.prototype.append = function (el) {this.appendChild(el);return this};
-NodeList.prototype.append = function (el) { console.log(this);this[0].appendChild(el); return this; }
+Node.prototype.insert = function (el) {
+	const parent = this;
+	if (el instanceof NodeList) {
+		for( let e of el ) {
+			parent.appendChild( e );
+		};
+	} else {
+		parent.appendChild(el);
+	}
+	return parent;
+};
+NodeList.prototype.insert = function (el) { console.log(this);this[0].insert(el); return this; }
 
 Node.prototype.remove = function () {return this.parentElement.removeChild(this);};
 NodeList.prototype.remove = function () {
