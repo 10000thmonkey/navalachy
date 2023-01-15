@@ -13,7 +13,6 @@ $nv_vars = [
 	
 ];
 
-
 get_header();
 ?>
 <main id="primary" class="site-main">
@@ -21,7 +20,7 @@ get_header();
 	<?php
 	echo nv_template_cover_image( array(
 		"attachment" => get_post_thumbnail_id( get_the_id() ),
-		"content" => '<img decoding="async" src="'.get_site_url().'/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
+		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
 	) );
 	?>
 	
