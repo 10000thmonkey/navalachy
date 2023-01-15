@@ -12,6 +12,7 @@ available modules:
 */
 
 
+
 $NV_MODULES = array();
 
 function nv_use_modules ( $modules ) {
@@ -72,9 +73,36 @@ add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
 
 
 
+/**
+ * Remove Woo Styles and Scripts from non-Woo Pages
+ * @link https://gist.github.com/DevinWalker/7621777#gistcomment-1980453
+ * @since 1.7.0
+ */
+function nv_remove_woocommerce_styles_scripts() {
 
+	// Skip Woo Pages
+	if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
+		return;
+	}
+	// Otherwise...
+	remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
+	remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
+	remove_action('wp_print_footer_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
 
+	wp_dequeue_script( "woocommerce" );
+	wp_dequeue_script( "wc-add-to-cart" );
+	wp_dequeue_script( "wc-cart-fragments-js-extra" );
 
+	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
+}
+
+add_action( 'template_redirect', 'nv_remove_woocommerce_styles_scripts', 999 );
+
+function nv_disable_wc_block_styles () {
+	wp_dequeue_style( "wc-blocks-style" );
+	wp_dequeue_style( "wc-blocks-vendors-style" );
+}
+add_action( "enqueue_block_assets", "nv_disable_wc_block_styles", 999 );
 
 
 
