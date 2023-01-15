@@ -154,8 +154,7 @@ get_header();
 				}
 				?>
 				</div>
-				<a class="button button-icon self-end" href="/experiences">Objevujte<div class="nvicon nvicon-arrow-right"></div></a>
-				</div>
+				<a class="button button-icon self-end" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
@@ -176,7 +175,7 @@ get_header();
 						<div class="content">
 							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
 						</div>
-						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<div class="nvicon nvicon-arrow-right"></div></a>
+						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
 
 					</div>
 				</div>
