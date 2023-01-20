@@ -25,36 +25,24 @@ function navalachy_modules()
 	$templ_dir = get_template_directory_uri();
 	global $NV_MODULES;
 
-	include "templates/cover-image.php";
+	include "UI/cover-image.php";
 
-	wp_enqueue_style( 'navalachy', $templ_dir."/style.css" );
-	wp_enqueue_style( 'navalachy-style', $templ_dir."/inc/style.css" );
-	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/legacy.css" );
+	//wp_enqueue_style( 'navalachy', $templ_dir."/assets/style.css" );
+	wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css" );
+	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/assets/legacy.css" );
 	wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
 
-	wp_enqueue_script( "domster", $templ_dir. "/inc/domster.js" );
+	wp_enqueue_script( "domster", $templ_dir. "/assets/domster.js" );
 	
-	if ( in_array("ui/gallery", $NV_MODULES) ) {
-		wp_enqueue_script( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.js" );
-		wp_enqueue_style( "lightbox", $templ_dir . "/inc/lightbox/lightbox.min.css");
-		include "templates/gallery.php";
-	}
-	if ( in_array("ui/slider", $NV_MODULES) ) 
-		wp_enqueue_script( "lightbox", $templ_dir . "/assets/slider.js" );
-
-	if ( in_array("booking/lib", $NV_MODULES) ) {
-		require_once("inc/lib-booking.php");
-		global $nvbk;
-		$nvbk = new NV_Booking();
-	}
-	if ( in_array("booking/form", $NV_MODULES) ) {
-		wp_enqueue_script( "booking-datepicker", $templ_dir . "/inc/hello-week.min.js" );
-		wp_enqueue_style( "booking-datepicker", $templ_dir . "/inc/hello-week.min.css" );
-		include "templates/booking-form.php";
+	if ( !empty( $NV_MODULES ) )
+	{
+		foreach ( $NV_MODULES as $M )
+		{
+			include "$M.php";
+		}
 	}
 
-	if ( in_array("accomodation/feed", $NV_MODULES) ) include "templates/accomodation-feed.php";
-	if ( in_array("experiences/feed", $NV_MODULES) ) include "templates/experiences-feed.php";
+	do_action( "nv_load_modules" );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

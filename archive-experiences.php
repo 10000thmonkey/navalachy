@@ -1,6 +1,7 @@
 <?php /* Template Name: NV/Experiences/Archive */
 $NV_MODULES = [
-	"experiences/feed"
+	"Experiences/feed",
+	"Experiences/tags"
 ];
 
 $meta_fields = get_post_meta( get_the_ID() );
@@ -12,8 +13,8 @@ get_header();
 	<?php
 	echo nv_template_cover_image( array(
 		"attachment" => get_post_thumbnail_id( ),
-		"heading" => ( !empty($meta_fields["heading"]) ? $meta_fields["heading"] : "" ),
-		"subheading" => ( !empty($meta_fields["subheading"]) ? $meta_fields["heading"] : "" )
+		"heading" => ( !empty($meta_fields["heading"]) ? $meta_fields["heading"][0] : "" ),
+		"subheading" => ( !empty($meta_fields["subheading"]) ? $meta_fields["subheading"][0] : "" )
 	) );
 	?>
 	
@@ -23,7 +24,7 @@ get_header();
 			<div class="modal-dialog">
 				<div class="modal-body" style="padding:5px">
 					<form action="<?php echo site_url(); ?>/wp-admin/admin-ajax.php" method="POST" id="experiences-filter">
-						<div class="filter-tags">
+						<div class="filter-tags tags">
 							<?php
 							$nv_tags = get_terms(
 								array(
@@ -31,19 +32,16 @@ get_header();
 									'hide_empty' => false,
 								)
 							);
-							$output = "";
-
-							foreach ( $nv_tags as $nv_tag ) :
-								$output .= '
-								<input type="checkbox" name="tagfilter[]" id="nv_experiences_tag_toggle-'.$nv_tag->slug.'" value="'.$nv_tag->slug.'">
-								<label class="filter-tag button button-plain button-icon-right" for="nv_experiences_tag_toggle-'.$nv_tag->slug.'">
-									<div class="filter-tag-icon nvicon nvicon-'.$nv_tag->slug.'"></div>
-									<div class="filter-tag-name">'.$nv_tag->name.'</div>
-								</label>';
-								
-							endforeach;
-
-							echo $output;
+							foreach ( $nv_tags as $nv_tag ) {
+								echo <<<HTML
+								<input type="checkbox" name="tagfilter[]" id="nv_experiences_tag_toggle-{$nv_tag->slug}" value="{$nv_tag->slug}">
+								<label class="tag button button-plain button-icon button-icon-right" for="nv_experiences_tag_toggle-{$nv_tag->slug
+									}">
+									<i class="nvicon nvicon-{$nv_tag->slug}"></i>
+									<div>{$nv_tag->name}</div>
+								</label>
+								HTML;
+							}
 							?>
 						</div>
 

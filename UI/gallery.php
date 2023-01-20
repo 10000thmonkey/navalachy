@@ -3,6 +3,10 @@
 
 function nv_template_gallery( $_VAR ) {
 
+$templ_dir = get_template_directory_uri();
+wp_enqueue_script( "lightbox", $templ_dir . "/assets/lightbox/lightbox.min.js" );
+wp_enqueue_style( "lightbox", $templ_dir . "/assets/lightbox/lightbox.min.css");
+
 $_VAR["slider"] = isset($_VAR["slider"]) ? $_VAR["slider"] : false;
 $output = NULL;
 ob_start();

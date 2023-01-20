@@ -1,13 +1,14 @@
 <?php
 $NV_MODULES = [
-	"ui/gallery",
+	"UI/gallery",
 
-	"booking/lib",
-	"booking/form",
+	"Booking/lib",
+	"Booking/form",
 
-	"accomodation/feed",
-
-	"experiences/feed"
+	"Accomodation/feed",
+ 
+	"Experiences/feed",
+	"Experiences/tags"
 ];
 global $_VAR;
 global $nv_vars;
@@ -308,7 +309,12 @@ get_header();
 
 	<footer class="related-experiences" style="background:var(--secondary-light);">
 		<div class="contentwrap padding-xl">
-			<h2 class="space-around-hg">Populární v okolí</h2>
+			<div class="cols-flex space-between space-around-hg">
+				<h2 class="">Populární v okolí</h2>
+				<div class="tags">
+					<?= nv_template_experiences_tags(["include" => [52, 29, 28, 46]]);?>
+				</div>
+			</div>
 
 			<div class="cols cols-sm-2 cols-md-3 gap-hg">
 				<?php
@@ -318,6 +324,7 @@ get_header();
 				] )["data"];
 				?>
 			</div>
+
 		</div>
 	</footer>
 

@@ -1,6 +1,9 @@
 <?php
 //provide array of Attachment IDs, component will handle rest
 
+wp_enqueue_script( "booking-datepicker", $templ_dir . "/assets/hello-week.min.js" );
+wp_enqueue_style( "booking-datepicker", $templ_dir . "/assets/hello-week.min.css" );
+
 function nv_template_booking_form( $_VAR ) {
 
 global $nvbk;

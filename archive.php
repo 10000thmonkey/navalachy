@@ -1,5 +1,4 @@
 <?php
-/* Template Name: NV/Blog/Archive */
 get_header();
 ?>
 
@@ -7,7 +6,6 @@ get_header();
 
 	<?php
 	echo nv_template_cover_image( array(
-		"attachment" => ,
 		"heading" => "Coming soon..."
 	) );
 	?>

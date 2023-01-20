@@ -1,8 +1,11 @@
 <?php
+global $nvbk;
+$nvbk = new NV_Booking();
+
 class NV_Booking {
 
-private $NVBK_API = "fSYOWh6Qb0guxN8U6sBY2D7VrW1HrAFXJIP1XrMwqa";
-private $NVBK_USER = 526450;
+private $NVBK_API = "NY7JGjs7qBoKQqWCM7TDngEWw8vta1cIYoQWxlvNib";
+private $NVBK_USER = 543631;
 
 public function get_date_range_array ( $first, $last, $array = [] )
 {

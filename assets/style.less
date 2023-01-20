@@ -127,22 +127,26 @@
 @fontfamily: "Poppins";
 @font-face { //400
 	font-family: @fontfamily;
-	src: url("/wp-content/themes/navalachy/inc/font/Poppins-Regular.ttf");
+	font-display: swap;
+	src: url("/wp-content/themes/navalachy/assets/font/Poppins-Regular.ttf");
 	font-weight: 400;
 }
 @font-face { 
 	font-family: @fontfamily;
-	src: url("/wp-content/themes/navalachy/inc/font/Poppins-Medium.ttf");
+	font-display: swap;
+	src: url("/wp-content/themes/navalachy/assets/font/Poppins-Medium.ttf");
 	font-weight: 500;
 }
 @font-face { 
 	font-family: @fontfamily;
-	src: url("/wp-content/themes/navalachy/inc/font/Poppins-SemiBold.ttf");
+	font-display: swap;
+	src: url("/wp-content/themes/navalachy/assets/font/Poppins-SemiBold.ttf");
 	font-weight: 600;
 }
 @font-face { 
 	font-family: @fontfamily;
-	src: url("/wp-content/themes/navalachy/inc/font/Poppins-Bold.ttf");
+	font-display: swap;
+	src: url("/wp-content/themes/navalachy/assets/font/Poppins-Bold.ttf");
 	font-weight: 700;
 }
 
@@ -558,6 +562,7 @@ body.home {
 			.hovercard {border-radius: var(--radius-lg);}
 			.hovercard .label {left: 30px;bottom: 30px;}
 			.hovercard:after {bottom:40px;}
+			.hovercard .iconset {bottom: 25px; left: 25px;}
 		}
 		.section-highlight {
 			margin-top: -250px;
@@ -743,20 +748,7 @@ body.page-template-archive-experiences {
 		flex-wrap: wrap;
 		justify-content: center;
 
-		label.filter-tag {
-			align-items: center;
-			padding: 15px 30px;
-
-			.filter-tag-icon {
-				font-size: var(--font-hg);
-	  			color: var(--primary);
-			}
-			.filter-tag-name {
-				font-size: var(--font-sm);
-			}
-		}
-		
-		input:checked + label.filter-tag {
+		input:checked + .tag {
 			background: var(--primary);
 			border-color: var(--primary);
 			.filter-tag-name, .filter-tag-icon {color: white;}
@@ -1773,7 +1765,9 @@ nv-slider {
 	&.info {background: rgba(155, 155, 255, 1.0);}
 	&.success {background: rgba(155, 255, 155, 1.0);}
 }
+.tag {
 
+}
 
 .hovercard {
 	.transition();
@@ -1977,25 +1971,36 @@ nv-slider {
 	gap: 15px;
 
 	.tag {
-		display: flex;
-		gap: 10px;
-	    background: rgba(0,0,0,0.05);
-	    padding: 8px 16px;
-	    align-items: center;
-	    font-size: var(--font-md);
-	    line-height: var(--font-hg);
-	    vertical-align: middle;
-	    text-decoration: none;
-	    border-radius: calc(8px + var(--font-hg) / 2);
-
-		.nvicon {
-			font-size: var(--font-hg);
-		    width: var(--font-hg);
-		    height: var(--font-hg);
-		    line-height: var(--font-hg);
-		    vertical-align: middle;
-		    text-align: center;	
+		position: relative;
+	    overflow: hidden;
+	    padding-left: 22px;
+	    border-radius: 25px;
+	    border-top-right-radius: 5px;
+	    border-bottom-right-radius: 5px;
+		&:before {
+		    content: "";
+		    position: absolute;
+		    left: -28px;
+		    border-color: transparent;
+		    border-right-color: rgba(0,0,0,.05);
+		    width: 0;
+		    height: 0;
+		    border-width: 25px 25px;
+		    border-style: solid;
+		    z-index: 1;
 		}
+	    .button {
+		    border-radius: 5px;
+		    border-top-left-radius: 0;
+		    border-bottom-left-radius: 0;
+		    padding: 10px 30px 10px 10px;
+		    height: 50px;
+	    }
+		.nvicon {
+		}
+	}
+	& > div {
+		font-size: var(--font-sm);
 	}
 }
 
@@ -2023,14 +2028,12 @@ nv-slider {
 	&:active {box-shadow: none; transform: translateY(2px);}
 
 	&.button-icon {
-		padding: 15px 30px 15px 50px;
 		align-items: center;
 		.nvicon {font-size: var(--font-md);}
 	}
 	&.button-icon-right {
 		padding: 15px 50px 15px 30px;
 		align-items: center;
-		.nvicon {font-size: var(--font-md);}
 	}
 	&.button-icon-only {
 		padding: 10px;
@@ -2251,7 +2254,7 @@ nv-slider {
 .space-between {
 	display: flex;
 	justify-content: space-between;
-	align-items: space-between;
+	align-items: center;
 }
 .self-end {align-self: end}
 .self-center {align-self: center;}

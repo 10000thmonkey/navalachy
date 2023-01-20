@@ -134,13 +134,15 @@ q(function(){
 
 
 
-	lightbox.option({
-		'resizeDuration': 200,
-		'fadeDuration': 200,
-		'imageFadeDuration' : 200,
-		'wrapAround': true,
-		'disableScrolling' : true
-	})
+	if ( undefined !== lightbox ) {
+		lightbox.option({
+			'resizeDuration': 200,
+			'fadeDuration': 200,
+			'imageFadeDuration' : 200,
+			'wrapAround': true,
+			'disableScrolling' : true
+		});
+	}
 });
 
 

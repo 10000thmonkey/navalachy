@@ -1,8 +1,8 @@
 <?php /* Template Name: NV/Accomodation/Archive */
 $NV_MODULES = [
-	"booking/lib",
-	"booking/form",
-	"accomodation/feed"
+	"Booking/lib",
+	"Booking/form",
+	"Accomodation/feed"
 ];
 
 

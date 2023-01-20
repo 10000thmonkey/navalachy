@@ -1,9 +1,9 @@
 <?php
 nv_use_modules([
-	"booking/lib",
-	"booking/form",
-	"accomodation/feed",
-	"ui/slider",
+	"Booking/lib",
+	"Booking/form",
+	"Accomodation/feed",
+	"UI/slider",
 ]);
 
 global $nvbk;
@@ -71,7 +71,7 @@ get_header();
 						$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
 						echo <<<HTML
 
-						<a class="hovercard" href="/experiences?tags={$tag->slug}">
+						<a class="hovercard" href="/tipy?tags={$tag->slug}">
 							$i
 							<div class="iconset">
 								<div class="icon">
@@ -139,7 +139,7 @@ get_header();
 					$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
 					echo <<<HTML
 
-					<a class="hovercard" href="/experiences?tags={$tag->slug}">
+					<a class="hovercard" href="/tipy?tags={$tag->slug}">
 						$i
 						<div class="iconset">
 							<div class="icon">
@@ -174,6 +174,7 @@ get_header();
 						<div class="content">
 							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
 						</div>
+				
 						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
 
 					</div>
@@ -223,12 +224,11 @@ get_header();
 </svg>
 
 <script type="text/javascript">
-jQuery(()=> {
-	let bodyEl = jQuery(document.body);
+q(()=> {
 	document.addEventListener("scroll", ()=>{
-		(window.scrollY * 2 ) <= window.innerHeight ? bodyEl.removeClass("scrolled") : bodyEl.addClass("scrolled");
+		(window.scrollY * 2 ) <= window.innerHeight ? document.body.removeClass("scrolled") : document.body.addClass("scrolled");
 	});
-window.scrollY == 0 ? bodyEl.removeClass("scrolled") : bodyEl.addClass("scrolled");
+window.scrollY == 0 ? document.body.removeClass("scrolled") : document.body.addClass("scrolled");
 });
 </script>
 <?php

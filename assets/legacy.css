@@ -19,57 +19,25 @@ body {
 main {
 	display: block;
 }
-
-/**
- * Correct the font size and margin on `h1` elements within `section` and
- * `article` contexts in Chrome, Firefox, and Safari.
- */
-
-/* Grouping content
-	 ========================================================================== */
-
-/**
- * 1. Add the correct box sizing in Firefox.
- * 2. Show the overflow in Edge and IE.
- */
 hr {
 	box-sizing: content-box;
 	height: 0;
 	overflow: visible;
 }
-
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
 pre {
 	font-family: monospace, monospace;
 	font-size: 1em;
 }
 
-/* Text-level semantics
-	 ========================================================================== */
-
-/**
- * Remove the gray background on active links in IE 10.
- */
 a {
 	background-color: transparent;
 }
-
-/**
- * 1. Remove the bottom border in Chrome 57-
- * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
- */
 abbr[title] {
 	border-bottom: none;
 	text-decoration: underline;
 	text-decoration: underline dotted;
 }
-/**
- * 1. Correct the inheritance and scaling of font size in all browsers.
- * 2. Correct the odd `em` font sizing in all browsers.
- */
+
 code,
 kbd,
 samp {
@@ -77,17 +45,10 @@ samp {
 	font-size: 1em;
 }
 
-/**
- * Add the correct font size in all browsers.
- */
 small {
 	font-size: 80%;
 }
 
-/**
- * Prevent `sub` and `sup` elements from affecting the line height in
- * all browsers.
- */
 sub,
 sup {
 	font-size: 75%;
@@ -104,23 +65,12 @@ sup {
 	top: -0.5em;
 }
 
-/* Embedded content
-	 ========================================================================== */
-
-/**
- * Remove the border on images inside links in IE 10.
- */
 img {
 	border-style: none;
 }
 
 /* Forms
 	 ========================================================================== */
-
-/**
- * 1. Change the font styles in all browsers.
- * 2. Remove the margin in Firefox and Safari.
- */
 button,
 input,
 optgroup,
@@ -131,20 +81,11 @@ textarea {
 	line-height: 1.15;
 	margin: 0;
 }
-
-/**
- * Show the overflow in IE.
- * 1. Show the overflow in Edge.
- */
 button,
 input {
 	overflow: visible;
 }
 
-/**
- * Remove the inheritance of text transform in Edge, Firefox, and IE.
- * 1. Remove the inheritance of text transform in Firefox.
- */
 button,
 select {
 	text-transform: none;
