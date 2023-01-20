@@ -7,7 +7,7 @@ get_header();
 
 	<?php
 	echo nv_template_cover_image( array(
-		"attachment" => get_post_thumbnail_id( get_the_ID() ),
+		"attachment" => 1568,
 		"heading" => "Coming soon..."
 	) );
 	?>

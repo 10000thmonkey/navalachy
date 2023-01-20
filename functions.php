@@ -541,6 +541,8 @@ add_action('wp_ajax_nopriv_nv_filter_experiences', 'nv_filter_experiences_functi
 
 function nv_filter_experiences_function( $args )
 {
+	require_once("Experiences/feed.php");
+
 	if ( !is_array ($args) ) {
 		$args = array (
 			"tagfilter" => $_POST['tagfilter'],
@@ -549,8 +551,8 @@ function nv_filter_experiences_function( $args )
 			"paged" => $_POST['paged'],
 		);
 	}
-
-	echo nv_experiences_fetch( $args );
+	echo var_dump($args);
+	echo nv_template_experiences_feed( $args );
 	die();
 }
 

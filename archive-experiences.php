@@ -24,7 +24,7 @@ get_header();
 			<div class="modal-dialog">
 				<div class="modal-body" style="padding:5px">
 					<form action="<?php echo site_url(); ?>/wp-admin/admin-ajax.php" method="POST" id="experiences-filter">
-						<div class="filter-tags tags">
+						<div class="filter-tags">
 							<?php
 							$nv_tags = get_terms(
 								array(
@@ -105,21 +105,18 @@ get_header();
 	let nv_filter_tags = [];
 	let nv_filter_categories = [];
 
-	let filterform = jQuery('#experiences-filter');
-	let feed = jQuery('#experiences-feed');
-	let spinner = jQuery('.spinner-wrapper');
-	let counter = jQuery("#experiences-filter input[name=paged");
-	let loadMoreBtn = jQuery("#button-loadmore");
+	let filterform = q('#experiences-filter')[0];
+	let feed = q('#experiences-feed');
+	let spinner = q('.spinner-wrapper');
+	let counter = q("#experiences-filter input[name=paged");
+	let loadMoreBtn = q("#button-loadmore");
 
 	function loadMore ()
 	{
 		counter.attr("value", parseInt(counter.attr("value"))+1);
 		
-		jQuery.ajax({
-			url: filterform.attr('action'),
-			data: filterform.serialize(), // form data
-			type: filterform.attr('method'), // POST
-			success:function(data)
+		jax.post( filterform.attr('action'), filterform.serialize(),
+			(data) =>
 			{
 				data = JSON.parse(data);
 				feed.html(feed.html() + data["data"]); // insert data
@@ -127,31 +124,29 @@ get_header();
 				if (counter.attr("value") == data["page"])
 					loadMoreBtn.addClass("hidden");
 			}
-		});
+		);
 	}
 
 	function experiencesFilter (isFromModal = false)
 	{
 		if (isMobile && !isFromModal) return false;
 
-		jQuery.ajax({
-			url: filterform.attr('action'),
-			data: filterform.serialize(), // form data
-			type: filterform.attr('method'), // POST
-			beforeSend: function(xhr){
-				feed.removeClass("show");
-				spinner.addClass("show");
-			},
-			success: function(data){
-				data = JSON.parse(data);
-				counter.attr("value", 1);
-				updateFilter(false, filterform);
-				feed.html(data["data"]); // insert data
-				feed.addClass("show");
-				if (parseInt(data["page"]) == 1)
-					loadMoreBtn.addClass("hidden");
-				else 
-					loadMoreBtn.removeClass("hidden");
+		feed.removeClass("show");
+		spinner.addClass("show");
+
+		jax.post( filterform.attr('action'), filterform.serialize(),
+		(data) =>
+		{
+			data = JSON.parse(data);
+			counter.attr("value", 1);
+			updateFilter(false, filterform);
+			feed.html(data["data"]); // insert data
+			feed.addClass("show");
+			if (parseInt(data["page"]) == 1) {
+				loadMoreBtn.addClass("hidden");
+			}
+			else {
+				loadMoreBtn.removeClass("hidden");
 				spinner.removeClass("show");
 			}
 		});
@@ -170,7 +165,7 @@ get_header();
 					nv_urlparams.get("tags").split(",");
 
 				for(let tag of nv_filter_tags)
-					document.querySelector(".filter-tags input[type=checkbox][value="+tag+"]").checked = true;
+					q(".filter-tags input[type=checkbox][value="+tag+"]").checked = true;
 			}
 			
 			if ( nv_urlparams.get("categories") == null ) {
@@ -182,7 +177,7 @@ get_header();
 					nv_urlparams.get("categories").split(",");
 				
 				for(let category of nv_filter_categories)
-					document.querySelector(".filter-categories input[type=checkbox][value="+category+"]").checked = true;
+					q(".filter-categories input[type=checkbox][value="+category+"]").checked = true;
 			}
 			
 		} else { //form changed, write to URL
@@ -190,8 +185,8 @@ get_header();
 			nv_filter_tags = [];
 			nv_filter_categories = [];
 
-			let nv_filter_tags_checkboxes = form.find(".filter-tags input[type=checkbox]");
-			let nv_filter_categories_checkboxes = form.find(".filter-categories input[type=checkbox]");
+			let nv_filter_tags_checkboxes = form.q(".filter-tags input[type=checkbox]");
+			let nv_filter_categories_checkboxes = form.q(".filter-categories input[type=checkbox]");
 			
 			for ( let checkbox of nv_filter_tags_checkboxes)
 				{ if (checkbox.checked) nv_filter_tags.push(checkbox.value); }
@@ -211,9 +206,9 @@ get_header();
 			history.pushState(null,null,"?"+unescape(nv_urlparams.toString()));
 		}
 	}
-	jQuery(function(){
+	q(function(){
 		updateFilter(true);
-		jQuery('#experiences-filter input[type=checkbox]').on("change", () => { experiencesFilter(); });
+		q('#experiences-filter input[type=checkbox]').on("change", () => { experiencesFilter(); });
 	});
 </script>
 

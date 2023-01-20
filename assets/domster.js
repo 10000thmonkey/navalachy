@@ -59,7 +59,7 @@ jax = {
 		    else if(x.status != 200) {er ? er(x) : null;}
 		  }
 		};
-		x.send(new URLSearchParams(d).toString());
+		x.send(new URLSearchParams(d));
 	},
 	// synchronous, DEPRECATED
 	sync:function(u,m,d)
