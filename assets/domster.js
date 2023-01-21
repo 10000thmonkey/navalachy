@@ -141,7 +141,14 @@ Node.prototype.on = function (name,callback) {this.addEventListener(name,callbac
 NodeList.prototype.on = function (n, c) {
 	return this.each( function () { this.on(n, c) } ); }
 
-Node.prototype.content = function (text) {this.innerHTML = text;return this;};
+Node.prototype.content = function (text) {
+	if (text) {
+		this.innerHTML = text;
+		return this;
+	} else {
+		return this.innerHTML;
+	}
+};
 NodeList.prototype.content = function (c) {
 	return this.each( function() { this.content(c);
 	} ); };

@@ -3,7 +3,6 @@
 function nv_template_experiences_feed ( $VAR = [] )
 {
 	$html = "";
-	
 	$wpargs = [
 		'post_type' => 'experiences',
 		'post_status' => 'publish'
@@ -11,11 +10,11 @@ function nv_template_experiences_feed ( $VAR = [] )
 
 	//add arguments to query, if they are provided
 	if ( !empty($VAR["limit"]) )
-		$wpargs["posts_per_page"] = $VAR["limit"];
+		$wpargs["posts_per_page"] = 9;
 
 	if ( !empty($VAR["tagfilter"]) )
 		$wpargs['tax_query'][] = array( array(
-			'taxonomy' => 'experiences_tag',
+			'taxonomy' => 'experiences_tags',
 			'field' => 'slug',
 			'terms' => $VAR["tagfilter"]
 		) );

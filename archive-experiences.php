@@ -103,25 +103,30 @@ get_header();
 <script>
 	let nv_urlparams = new URLSearchParams(location.search);
 	let nv_filter_tags = [];
-	let nv_filter_categories = [];
 
 	let filterform = q('#experiences-filter')[0];
-	let feed = q('#experiences-feed');
+	let feed = q('#experiences-feed')[0];
 	let spinner = q('.spinner-wrapper');
-	let counter = q("#experiences-filter input[name=paged");
+	//let counter = q("#experiences-filter input[name=paged");
 	let loadMoreBtn = q("#button-loadmore");
+	let counter = 1;
 
 	function loadMore ()
 	{
-		counter.attr("value", parseInt(counter.attr("value"))+1);
+		counter += 1;
 		
-		jax.post( filterform.attr('action'), filterform.serialize(),
+		jax.post( filterform.attr('action'), 
+			{
+				action: "nv_filter_experiences",
+				paged: counter,
+				tagfilter: nv_filter_tags
+			},
 			(data) =>
 			{
 				data = JSON.parse(data);
-				feed.html(feed.html() + data["data"]); // insert data
+				feed.content( feed.content() + data["data"] ); // insert data
 
-				if (counter.attr("value") == data["page"])
+				if (counter == parseInt(data["page"]) )
 					loadMoreBtn.addClass("hidden");
 			}
 		);
@@ -131,17 +136,26 @@ get_header();
 	{
 		if (isMobile && !isFromModal) return false;
 
+		updateFilter(false, filterform);
+
 		feed.removeClass("show");
 		spinner.addClass("show");
+		console.log(filterform.serialize());
 
-		jax.post( filterform.attr('action'), filterform.serialize(),
+		jax.post( filterform.attr('action'),
+		{
+			action: "nv_filter_experiences",
+			paged: counter,
+			tagfilter: nv_filter_tags
+		},
 		(data) =>
 		{
 			data = JSON.parse(data);
-			counter.attr("value", 1);
-			updateFilter(false, filterform);
-			feed.html(data["data"]); // insert data
+			counter = 1;
+
+			feed.content( data["data"] ); // insert data
 			feed.addClass("show");
+
 			if (parseInt(data["page"]) == 1) {
 				loadMoreBtn.addClass("hidden");
 			}
@@ -168,40 +182,19 @@ get_header();
 					q(".filter-tags input[type=checkbox][value="+tag+"]").checked = true;
 			}
 			
-			if ( nv_urlparams.get("categories") == null ) {
-				nv_filter_categories = [];
-			} else {
-				nv_filter_categories = 
-					( nv_urlparams.get("categories").indexOf(",") == -1 ) ?
-					[nv_urlparams.get("categories")] :
-					nv_urlparams.get("categories").split(",");
-				
-				for(let category of nv_filter_categories)
-					q(".filter-categories input[type=checkbox][value="+category+"]").checked = true;
-			}
-			
 		} else { //form changed, write to URL
 			
 			nv_filter_tags = [];
-			nv_filter_categories = [];
 
 			let nv_filter_tags_checkboxes = form.q(".filter-tags input[type=checkbox]");
-			let nv_filter_categories_checkboxes = form.q(".filter-categories input[type=checkbox]");
 			
 			for ( let checkbox of nv_filter_tags_checkboxes)
 				{ if (checkbox.checked) nv_filter_tags.push(checkbox.value); }
-			for ( let checkbox of nv_filter_categories_checkboxes)
-				{ if (checkbox.checked) nv_filter_categories.push(checkbox.value); }
 			
-			if (!!nv_filter_tags[0])
+			if ( nv_filter_tags.length !== 0 )
 				nv_urlparams.set("tags", nv_filter_tags.join(","));
 			else
 				nv_urlparams.delete("tags");
-
-			if (!!nv_filter_categories[0])
-				nv_urlparams.set("categories", nv_filter_categories.join(","));
-			else
-				nv_urlparams.delete("categories");
 			
 			history.pushState(null,null,"?"+unescape(nv_urlparams.toString()));
 		}

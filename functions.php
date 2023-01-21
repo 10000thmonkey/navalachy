@@ -546,13 +546,14 @@ function nv_filter_experiences_function( $args )
 	if ( !is_array ($args) ) {
 		$args = array (
 			"tagfilter" => $_POST['tagfilter'],
-			"categoryfilter" => $_POST['categoryfilter'],
-			"orderby" => $_POST['orderby'],
+			"orderby" => "date",
 			"paged" => $_POST['paged'],
 		);
 	}
-	echo var_dump($args);
-	echo nv_template_experiences_feed( $args );
+	//echo var_dump($_POST['tagfilter']);
+	echo json_encode(nv_template_experiences_feed( $args ));
+
+	//echo nv_template_experiences_feed( $args )["args"];
 	die();
 }
 
