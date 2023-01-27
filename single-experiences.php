@@ -1,8 +1,8 @@
 <?php
 $NV_MODULES = [
-	"ui/gallery",
-	"accomodation/feed",
-	"booking/lib"
+	"UI/gallery",
+	"Accomodation/feed",
+	"Booking/lib"
 ];
 
 $ID = get_the_id();
