@@ -424,6 +424,7 @@ body.home {
 		position: fixed;
 		width: 100%;
 		box-shadow: none;
+		&.toggle .site-branding {visibility: visible;}
 		.site-branding {visibility: hidden;}
 		.site-branding *, .main-navigation * {filter: grayscale(100%) brightness(100);}
 	}
@@ -764,7 +765,9 @@ body.page-template-archive-experiences {
 		display: none;
 		justify-content: right;
 		position: fixed;
+		left: 0;
 		bottom: 0;
+		z-index: 4;
 		padding: 15px;
 		width:100%;
 	}
@@ -785,7 +788,7 @@ body.page-template-archive-experiences {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 		gap: 15px;
-		margin: 30px 0px;
+		margin: 30px auto;
 		visibility: hidden;
 		justify-content: center;
 
@@ -847,6 +850,7 @@ body.page-template-archive-experiences {
 		@media (max-width: @breakpoint-sm) {
 			display: flex;
 			flex-direction: column;
+			max-width: 500px;
 			a.item {max-width: 450px;}
 		}
 
@@ -915,6 +919,7 @@ body.single-accomodation {
 			justify-content: center;
 			align-items: center;
 			z-index: 5;
+			.white-bg-backdrop();
 		}
 	}
 
@@ -1436,7 +1441,11 @@ body.single-accomodation {
 				    align-items: center;
 				    justify-content: center;
 		    	}
-		    	.content-on-hidden {opacity: 1;pointer-events: auto;}
+		    	.content-on-hidden {
+		    		opacity: 1;
+		    		pointer-events: auto;
+		    		padding: 20px;
+		    	}
 		    }
 
 		    &.slided {
