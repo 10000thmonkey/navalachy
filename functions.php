@@ -652,18 +652,6 @@ function navalachy_setup() {
 }
 add_action( 'after_setup_theme', 'navalachy_setup' );
 
-/**
- * Custom template tags for this theme.
- */
-require get_template_directory() . '/inc/template-tags.php';
-/**
- * Functions which enhance the theme by hooking into WordPress.
- */
-require get_template_directory() . '/inc/template-functions.php';
-/**
- * Customizer additions.
- */
-//require get_template_directory() . '/inc/customizer.php';
 /*
  * Load WooCommerce compatibility file.
  */

@@ -127,32 +127,30 @@ get_header();
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
 				</div>
 
-				<div class="hovercards">
-				<?php
-				$tags_query = get_terms( "experiences_tags", array(
-					"include" => (array) get_option("homepage_settings_tags_2"),
-					"orderby" => "include",
-					"hide_empty" => false
-				) );
-				foreach ( $tags_query as $tag )
-				{
-					$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
-					echo <<<HTML
-
-					<a class="hovercard" href="/tipy?tags={$tag->slug}">
-						$i
-						<div class="iconset">
-							<div class="icon">
-								<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
-								{$tag->name}
+				<nv-slider class="hovercards">
+					<?php
+					$tags_query = get_terms( "experiences_tags", array(
+						"include" => (array) get_option("homepage_settings_tags_2"),
+						"orderby" => "include",
+						"hide_empty" => false
+					) );
+					foreach ( $tags_query as $tag )
+					{
+						$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
+						echo <<<HTML
+						<a class="hovercard" href="/tipy?tags={$tag->slug}">
+							$i
+							<div class="iconset">
+								<div class="icon">
+									<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+									{$tag->name}
+								</div>
 							</div>
-						</div>
-					</a>
-
-					HTML;
-				}
-				?>
-				</div>
+						</a>
+						HTML;
+					}
+					?>
+				</nv-slider>
 				<a class="button button-icon self-end" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
