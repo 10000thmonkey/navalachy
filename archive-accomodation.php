@@ -4,7 +4,7 @@ $NV_MODULES = [
 	"Booking/form",
 	"Accomodation/feed"
 ];
-
+    
 
 $meta_fields = get_post_meta( get_the_ID() );
 

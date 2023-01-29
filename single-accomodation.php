@@ -111,7 +111,7 @@ get_header();
 				</div>
 
 				<div class="content-on-hidden">
-					<a class="button" onclick="this.closestParent('aside').addClass('slided')">rezervovat</a>
+					<a class="button" onclick="this.closestParent('aside').addClass('slided')">Rezervovat</a>
 				</div>
 
 			</div>
