@@ -1,6 +1,7 @@
 <?php
 $NV_MODULES = [
 	"UI/gallery",
+	"Experiences/tags",
 	"Accomodation/feed",
 	"Booking/lib"
 ];
@@ -37,16 +38,8 @@ get_header();
 
 			<div class="tags">
 				<?php
-				$tags = get_the_terms($post, "experiences_tags");
-
-				if($tags) {	foreach ($tags as $tag) {?>
-					
-					<a class="tag" href="/experiences/?tags=<?php echo $tag->slug;?>">
-						<div class="nvicon nvicon-<?php echo $tag->slug;?>"></div>
-						<?php echo $tag->name;?>
-					</a>
-
-				<?php } } ?>
+				echo nv_template_experiences_tags( [ "terms" => get_the_terms($post, "experiences_tags") ] );
+				?>
 			</div>
 			
 			<div class="iconset">
@@ -58,7 +51,7 @@ get_header();
 					if ( isset($meta_fields[$detail][0]) && $meta_fields[$detail][0] != "")
 					{
 						if ($detail == "location") {
-							$c = $meta_fields[$detail][0].'<br><a href="geo:'.$meta_fields["gps"][0].'">'.$meta_fields["gps"][0].'</a>';
+							$c = "<div>" . $meta_fields[$detail][0] . '<br><a href="geo:'.$meta_fields["gps"][0].'">'.$meta_fields["gps"][0].'</a></div>';
 						} elseif ($detail == "link") {
 							$c = '<a target="_blank" href="'.$meta_fields["link"][0].'">'.$meta_fields["link"][0].'</a>';
 						} else {
@@ -91,7 +84,6 @@ get_header();
 			<div class="cols cols-sm-2 cols-md-3 gap-hg">
 				<?php
 				echo nv_template_accomodation_feed( array(
-					"apartments" => $nvbk->get_apartments_array(),
 					"hovercards" => true
 				) );
 				?>

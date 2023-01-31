@@ -39,7 +39,7 @@ function nv_template_accomodation_feed ( $VAR )
 
 		//get array of rates of all apartments, next monday price wont be so high
 		$remote_rates_day = date( "Y-m-d", strtotime("next Monday") );
-		$remote_rates = $nvbk->get_rates( $remote_rates_day, $remote_rates_day, $VAR["apartments"] );	
+		//$remote_rates = $nvbk->get_rates( $remote_rates_day, $remote_rates_day, $VAR["apartments"] );	
 
 
 		while ( $query->have_posts() )

@@ -128,8 +128,8 @@ q(function(){
 			}
 		} );
 
-		gallery.parentElement.append(prev);
-		gallery.parentElement.append(next);
+		slider.parentElement.append(prev);
+		slider.parentElement.append(next);
 	});
 
 

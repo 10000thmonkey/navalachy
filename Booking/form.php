@@ -85,15 +85,13 @@ ob_start();
 		if ($iss) :
 
 			echo "c.iss = true;";
-			$disabledDays = $nvbk->get_disabled_days( $_VAR["apartmentId"] );
+			$disabledDays = nvbk_getDisabledDays( $_VAR["ical"] );
 
-			if ( is_wp_error($disabledDays) ) {
-				echo "c.disabledDays = [];";
-				echo "var systemerror = " . json_encode( $disabledDays ) . ";";
+			if ( empty($disabledDays) ) {
+			 	echo "c.disabledDays = [];";
 			} else {
-				echo "c.disabledDays = ". json_encode( $disabledDays ) . ";"; 
+			 	echo "c.disabledDays = ". json_encode( $disabledDays ) . ";"; 
 			}
-
 			echo "c.apartmentId = nv_vars.apartmentId;";
 			echo "c.apartmentName = nv_vars.apartmentName;";
 			echo "c.capacity = nv_vars.apartmentCapacity;";

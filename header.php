@@ -20,6 +20,7 @@ global $nv_booking;
 
 
 	<?php wp_head(); ?>
+	<?php if (!WP_DEBUG): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
@@ -28,6 +29,7 @@ global $nv_booking;
 		})(document);
 		smartlook('init', '794196b5441c964e421dc60be90b282ea9023239', { region: 'eu' });
 	</script>
+	<?php endif; ?>
 </head>
 
 <body <?php body_class(); ?>>

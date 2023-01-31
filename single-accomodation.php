@@ -30,8 +30,7 @@ $nv_vars = array(
 	'host_email' => $host["billing_email"][0],
 	'apartmentId' => $ID,
 	'apartmentName' => $title,
-	'apartmentCapacity' => $meta_fields["capacity"][0],
-	'meta' => $meta_fields
+	'apartmentCapacity' => $meta_fields["capacity"][0]
 );
 
 get_header();
@@ -120,7 +119,8 @@ get_header();
 				"iss" => true,
 				"apartmentId" => (int)$meta_fields["calendar_id"][0],
 				"apartmentName" => $title,
-				"capacity" => (int)$meta_fields["capacity"][0]
+				"capacity" => (int)$meta_fields["capacity"][0],
+				"ical" => $meta_fields["ical_url"][0]
 			)); ?>
 		</aside>
 
@@ -309,7 +309,7 @@ get_header();
 
 	<footer class="related-experiences" style="background:var(--secondary-light);">
 		<div class="contentwrap padding-xl">
-			<div class="cols-flex space-between space-around-hg">
+			<div class="cols-flex cols-md gap-md space-between space-around-hg">
 				<h2 class="">Populární v okolí</h2>
 				<div class="tags">
 					<?= nv_template_experiences_tags(["include" => [52, 29, 28, 46]]);?>

@@ -1,13 +1,21 @@
 <?php
 function nv_template_experiences_tags ( $VAR )
 {
-	$nv_tags = get_terms(
-		array(
-			'taxonomy'   => 'experiences_tags',
-			'hide_empty' => false,
-			"include" => !empty( $VAR["include"] ) ? $VAR["include"] : ""
-		)
-	);
+	if ( empty( $VAR["terms"] ) )
+	{
+		$nv_tags = get_terms(
+			array(
+				'taxonomy'   => 'experiences_tags',
+				'hide_empty' => false,
+				"include" => !empty( $VAR["include"] ) ? $VAR["include"] : ""
+			)
+		);
+	}
+	else
+	{
+		$nv_tags = $VAR["terms"];
+	}
+	
 	$c = "";
 
 	if ( !empty( $VAR["filter"] ) && $VAR["filter"] )

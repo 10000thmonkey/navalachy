@@ -1,4 +1,48 @@
-<?php
+<?php 
+
+function nvbk_getDisabledDays ( $feed )
+{
+	require_once("lib-ical.php");
+
+	$ical   = new ICal( $feed );
+	$events = $ical->events();
+	$disabledDates = [];
+
+	if($events) 
+	{
+	    foreach($events as $event)
+	    {
+	        //print_r($event["DTSTART"]);
+	        $start = strtotime( str_replace('TZ','T000000Z', $event['DTSTART']) );
+	        $end = strtotime( str_replace('TZ','T000000Z', $event['DTEND']) ) - 60;
+
+	        for($i = $start; $i<= $end; $i = $i + 60*60*24)
+	        {
+	            $calendarData[date('Y',$i)][date('n',$i)][date('j',$i)] = 'booked';
+	            array_push( $disabledDates, date('Y-m-d',$i) );
+	        }
+	        
+	    }
+	    return $disabledDates;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 global $nvbk;
 $nvbk = new NV_Booking();
 
@@ -156,4 +200,4 @@ public function get_apartments_array ()
 }
 
 }
-?>
+*/

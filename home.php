@@ -1,7 +1,10 @@
 <?php
 /* Template Name: NV/Blog/Archive */
+
 get_header();
+
 ?>
+
 
 <main id="primary" class="site-main">
 
