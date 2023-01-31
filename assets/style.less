@@ -880,9 +880,11 @@ body.single-experiences {
 
 body.page-template-archive-accomodation {
 	.menu-item-1303 {.menu_selected();}
-	.accomodation-feed {
-		display: grid;
-	    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+	@media (min-width: @breakpoint-xs) {
+		.accomodation-feed {
+			display: grid;
+		    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+		}
 	}
 	#booking-form {
 		@media (max-width: @breakpoint-sm) {
