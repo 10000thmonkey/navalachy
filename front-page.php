@@ -195,7 +195,6 @@ get_header();
 			<div class="hovercards">
 				<?php
 				echo nv_template_accomodation_feed( array(
-					"apartments" => $nvbk->get_apartments_array(),
 					"hovercards" => true
 				) );
 				?>
