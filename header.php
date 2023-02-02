@@ -8,8 +8,8 @@
  *
  * @package navalachy
  */
-global $nv_booking;
 
+$user = wp_get_current_user();
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -20,7 +20,7 @@ global $nv_booking;
 
 
 	<?php wp_head(); ?>
-	<?php if (!WP_DEBUG): ?>
+	<?php if (!WP_DEBUG && !array_key_exists("administrator", $user->roles)): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];

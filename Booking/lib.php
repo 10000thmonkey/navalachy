@@ -116,10 +116,11 @@ class NVBK
 		global $wpdb;
 
 		$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-		                        WHERE `calendar_id` = %s
+		                        WHERE `calendar_id` = %d
 		                        AND `end_date` >= %s
-		                        AND `start_date` <= %s",
-		                        $apartment_id, $begin." 00:00:00", $end." 00:00:00" );
+		                        AND `start_date` <= %s
+		                        AND `status` NOT LIKE 'PENDING'",
+		                        (int)$apartment_id, $begin." 00:00:00", $end." 00:00:00" );
 
 		$res = $wpdb->get_results($query);
 
