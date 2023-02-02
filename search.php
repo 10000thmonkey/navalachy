@@ -33,15 +33,46 @@ get_header();
 				 * If you want to overload this in a child theme then include a file
 				 * called content-search.php and that will be used instead.
 				 */
-				get_template_part( 'template-parts/content', 'search' );
+				?>
+				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<header class="entry-header">
+						<?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' ); ?>
+
+						<?php if ( 'post' === get_post_type() ) : ?>
+						<div class="entry-meta">
+							<?php
+							navalachy_posted_on();
+							navalachy_posted_by();
+							?>
+						</div><!-- .entry-meta -->
+						<?php endif; ?>
+					</header><!-- .entry-header -->
+
+					<?php navalachy_post_thumbnail(); ?>
+
+					<div class="entry-summary">
+						<?php the_excerpt(); ?>
+					</div><!-- .entry-summary -->
+
+					<footer class="entry-footer">
+						<?php navalachy_entry_footer(); ?>
+					</footer><!-- .entry-footer -->
+				</article><!-- #post-<?php the_ID(); ?> -->
+
+			<?php
 
 			endwhile;
 
 			the_posts_navigation();
 
 		else :
+			?>
 
-			get_template_part( 'template-parts/content', 'none' );
+			<p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'navalachy' ); ?></p>
+			
+			<?php
+
+			get_search_form();
 
 		endif;
 		?>

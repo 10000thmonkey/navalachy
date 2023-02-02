@@ -10,6 +10,8 @@ $NV_MODULES = [
 	"Experiences/feed",
 	"Experiences/tags"
 ];
+
+//global $nvbk;
 global $_VAR;
 global $nv_vars;
 
@@ -117,7 +119,7 @@ get_header();
 
 			<?= nv_template_booking_form(array(
 				"iss" => true,
-				"apartmentId" => (int)$meta_fields["calendar_id"][0],
+				"apartmentId" => (int)$ID,
 				"apartmentName" => $title,
 				"capacity" => (int)$meta_fields["capacity"][0],
 				"ical" => $meta_fields["ical_url"][0]

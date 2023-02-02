@@ -50,6 +50,7 @@ function navalachy_modules()
 }
 add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
 
+
 function nv_register_vars ( ) {
 	global $nv_vars;
 	if ( empty( $nv_vars ) ) return;
@@ -203,8 +204,9 @@ add_action("wp_ajax_nopriv_nvbk_show_rates", "nvbk_ajax_show_rates");
 function nvbk_ajax_to_checkout()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
-	require_once("inc/lib-booking.php");
-	$nvbk = new NV_Booking();
+	require_once("Booking/lib.php");
+
+	$nvbk = new NVBK();
 	$cart = WC()->cart;
 	$cart_cache = DAY_IN_SECONDS * 2;
 
@@ -215,31 +217,18 @@ function nvbk_ajax_to_checkout()
 
 
 	//CHECK IF DATE IS AVAILABLE, IF NOT, RETURN ERROR IN MESSAGE BODY
-	$unavailable_days = $nvbk->get_disabled_days($_POST['apartmentId']);
-	$stay_array = $nvbk->get_date_range_array($_POST['begin'], $_POST['end']);
-	if ( !empty( array_intersect( $unavailable_days, $stay_array ) ) ) {
+	if ( ! $nvbk->is_available( $_POST['apartmentId'], $_POST['begin'], $_POST['end'] ) )
+	{
 		$return["body"] = "Termín je obsazený.";
+		
 		echo json_encode($return);
 		wp_die();
 	}
 
 
 	//GET PRICE AND SEND IN MESSAGE BODY
-	$response = $nvbk->get_new_booking_price( $_POST['begin'], $_POST['end'], $_POST['apartmentId'],1);//$_POST['people'] );
-
-	//ANY ERROR
-	if ( empty( $response["prices"] ) || ! empty( $response["errorMessages"] ) || is_wp_error($response) ) {
-
-		$return["body"] = "Rezervaci se nepodařilo vytvořit. Prosíme, kontaktujte nás.";
-		$return["response"] = $response;
-
-		echo json_encode($return);
-		wp_die();
-	}
-
-
-	//echo print_r($response);
-	$price = (int)reset($response["prices"])["price"];
+	$price = $nvbk->get_new_booking_price( $_POST['apartmentId'], $_POST['begin'], $_POST['end'] );
+	
 
 	//IF OK, SEND PRICE TO MESSAGE BODY
 	if ( isset($_POST['preCheckout']) && $_POST['preCheckout'] == "yes" )
@@ -249,6 +238,8 @@ function nvbk_ajax_to_checkout()
 	}
 	else
 	{	
+		$booking_id = $nvbk->insert_booking ( (int)$_POST['apartmentId'], $_POST["begin"], $_POST["end"] );
+
 		$args = array(
 			"nvbk_booking_apartmentId" => $_POST["apartmentId"],
 			"nvbk_booking_apartmentName" => $_POST["apartmentName"],
@@ -256,6 +247,7 @@ function nvbk_ajax_to_checkout()
 			"nvbk_booking_end" => $_POST["end"],
 			"nvbk_booking_price" => (int)$price,
 			"nvbk_booking_people" => $_POST["people"],
+			"nvbk_booking_id" => (int)$booking_id,
 		);
 
 		if ( !$cart->is_empty() ) $cart->empty_cart();
@@ -266,8 +258,11 @@ function nvbk_ajax_to_checkout()
 		$cart->set_session();
 		$cart->maybe_set_cart_cookies();
 
+
+
 		$return["success"] = true;
 	}
+	
 	echo json_encode($return);
 	wp_die ();
 }
@@ -287,7 +282,7 @@ add_action( 'woocommerce_before_calculate_totals', 'nv_woo_custom_price_to_cart_
 
 
 function nvbk_cart_product_title( $title, $cart_item, $cart_item_key ) {
-	@session_start();
+	//@session_start();
 	$name = $cart_item["nvbk_booking_apartmentName"];
 	if (!empty($name))
 		return $name;
@@ -311,34 +306,33 @@ function nv_order_received_redirect(){
         return; 
     }
 
-    include_once("inc/lib-booking.php");
-    $nvbk = new NV_Booking();
+    include_once("Booking/lib.php");
+    $nvbk = new NVBK();
 
 
     $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
    
-    // if( 'navalachy_qrpayment' === $order->get_payment_method() ) {
-    //     if cash of delivery, redirecto to a custom thank you page
-    //    wp_safe_redirect( site_url( 'zblaaabluu' ) );
-    //    exit; // always exit
-    // }
-    //echo json_encode($order_meta);
-	$response = $nvbk->confirm_reservation( array( 
-	 	  "arrivalDate" => $order_meta["nvbk_booking_begin"][0],
-		"departureDate" => $order_meta["nvbk_booking_end"][0],
-		  "apartmentId" => $order_meta["nvbk_booking_apartmentId"][0],
-		    "firstName" => $order->get_billing_first_name(),
-		     "lastName" => $order->get_billing_last_name(),
-		        "email" => $order->get_billing_email(),
-		        "phone" => $order->get_billing_phone(),
-		       "notice" => $order->get_customer_note(),
-		       "adults" => $order_meta["nvbk_booking_people"][0],
-		        "price" => $order_meta["nvbk_booking_price"][0],
-		     "language" => "cs"
-	 ) );
-	//file_put_contents("log.log", var_dump($response));
+    do_action("QM/debug", $nvbk->confirm_booking( $order_meta["nvbk_booking_id"], $order_id ) );
+
+
+	// $response = $nvbk->confirm_reservation( array( 
+	//  	  "arrivalDate" => $order_meta["nvbk_booking_begin"][0],
+	// 	"departureDate" => $order_meta["nvbk_booking_end"][0],
+	// 	  "apartmentId" => $order_meta["nvbk_booking_apartmentId"][0],
+	// 	    "firstName" => $order->get_billing_first_name(),
+	// 	     "lastName" => $order->get_billing_last_name(),
+	// 	        "email" => $order->get_billing_email(),
+	// 	        "phone" => $order->get_billing_phone(),
+	// 	       "notice" => $order->get_customer_note(),
+	// 	       "adults" => $order_meta["nvbk_booking_people"][0],
+	// 	        "price" => $order_meta["nvbk_booking_price"][0],
+	// 	     "language" => "cs"
+	//  ) );
+
+
+
     //wp_safe_redirect( get_site_url()."/thankyou?key=" . $_GET['key'] );
 }
 add_action( 'template_redirect', 'nv_order_received_redirect');
@@ -351,7 +345,15 @@ function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
 	
 	foreach ( $cart->get_cart() as $cart_item )
 	{
-		$values = ["nvbk_booking_apartmentId", "nvbk_booking_apartmentName", "nvbk_booking_begin", "nvbk_booking_end", "nvbk_booking_price", "nvbk_booking_people" ];
+		$values = [
+			"nvbk_booking_apartmentId",
+			"nvbk_booking_apartmentName",
+			"nvbk_booking_begin",
+			"nvbk_booking_end",
+			"nvbk_booking_price",
+			"nvbk_booking_people",
+			"nvbk_booking_id"
+		];
 		foreach ( $values as $value ) {
 			update_post_meta( $order_id, $value, $cart_item[$value] );
 		}
