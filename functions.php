@@ -201,7 +201,7 @@ add_action("wp_ajax_nopriv_nvbk_show_rates", "nvbk_ajax_show_rates");
 
 
 
-function nvbk_ajax_to_checkout()
+function nvbk_ajax_to_checkout ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 	require_once("Booking/lib.php");
@@ -314,24 +314,7 @@ function nv_order_received_redirect(){
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
    
-    do_action("QM/debug", $nvbk->confirm_booking( $order_meta["nvbk_booking_id"], $order_id ) );
-
-
-	// $response = $nvbk->confirm_reservation( array( 
-	//  	  "arrivalDate" => $order_meta["nvbk_booking_begin"][0],
-	// 	"departureDate" => $order_meta["nvbk_booking_end"][0],
-	// 	  "apartmentId" => $order_meta["nvbk_booking_apartmentId"][0],
-	// 	    "firstName" => $order->get_billing_first_name(),
-	// 	     "lastName" => $order->get_billing_last_name(),
-	// 	        "email" => $order->get_billing_email(),
-	// 	        "phone" => $order->get_billing_phone(),
-	// 	       "notice" => $order->get_customer_note(),
-	// 	       "adults" => $order_meta["nvbk_booking_people"][0],
-	// 	        "price" => $order_meta["nvbk_booking_price"][0],
-	// 	     "language" => "cs"
-	//  ) );
-
-
+    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"], $order_id );
 
     //wp_safe_redirect( get_site_url()."/thankyou?key=" . $_GET['key'] );
 }

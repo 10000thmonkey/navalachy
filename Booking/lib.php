@@ -170,7 +170,7 @@ class NVBK
 							empty( $event["STATUS"] ) ?
 								"unknown" :
 								strtolower($event["STATUS"]);
-						$fields = ["summary" => $event["SUMMARY"]];
+						$fields = ["summary" => $event["SUMMARY"], "description" => $event["DESCRIPTION"]];
 
 				    	array_push($values, ...array_values( [
 				            'calendar_id' => absint($apartment),

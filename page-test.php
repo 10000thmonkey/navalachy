@@ -16,10 +16,12 @@ $res = $nvbk->get_bookings( 149 );
 //print_r($res);
 
 foreach ($res as $row) {
-	echo unserialize( $row->fields )["summary"] . "<br>";
-	echo $row->start_date . " - " .  $row->end_date . "<br>";
-	echo $row->status . "<br>";
-	echo $row->uid . "<br>";
+	echo "summary:".unserialize( $row->fields )["summary"] . "<br>";
+	echo "description:".unserialize( $row->fields )["description"] . "<br>";
+	echo "date:".$row->start_date . " - " .  $row->end_date . "<br>";
+	echo "order:".$row->order_id . "<br>";
+	echo "status:".$row->status . "<br>";
+	echo "uid:".$row->uid . "<br>";
 	echo "<br>.<br>";
 }
 //$nvbk->sync();
