@@ -86,12 +86,16 @@ ob_start();
 		if ($iss) : //will be loading async
 		?>
 			
-			jax.post( "/wp-admin/admin-ajax.php", { action: "nvbk_get_disabled_days", apartmentId: nv_vars.apartmentId }, (data) =>
-			{
+			jax.post( "/wp-admin/admin-ajax.php", {
+				"action": "nvbk_get_disabled_dates",
+				"apartmentId": nv_vars.apartmentId
+			},
+			(data) => {
 				c.iss = true;
 				c.apartmentId = nv_vars.apartmentId;
 				c.apartmentName = nv_vars.apartmentName;
 				c.capacity = nv_vars.apartmentCapacity;
+				c.disabledDays = JSON.parse(data);
 
 				loadDatePicker(c);
 			});

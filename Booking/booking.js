@@ -255,6 +255,9 @@ class NV_Booking
 	isSelected () { return !! ( this.begin && this.end); }
 }
 
+
+var cal;
+
 function loadDatePicker ( c )
 {
 	cal = new NV_Booking({
@@ -267,8 +270,8 @@ function loadDatePicker ( c )
 	});
 	cal.el.spinner.hide();
 
-	
-	var URLParams = new URLSearchParams(location.search);
+
+	let URLParams = new URLSearchParams(location.search);
 
 	if ( URLParams.get("begin") && URLParams.get("end") )
 		cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );

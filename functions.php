@@ -35,7 +35,7 @@ function navalachy_modules()
 	{
 		foreach ( $NV_MODULES as $M )
 		{
-			include "$M.php";
+			include_once("$M.php");
 		}
 	}
 
@@ -133,6 +133,22 @@ function my_custom_timeout( $timeout_value ) {
 
 
 
+function nvbk_ajax_get_disabled_dates ()
+{
+	include_once("Booking/lib.php");
+	header("Content-Type: application/json; charset=UTF-8");
+
+	$apartmentId = $_POST["apartmentId"];
+
+	echo json_encode( $nvbk->get_disabled_dates( (int)$apartmentId ) );
+	die();
+}
+
+add_action("wp_ajax_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
+add_action("wp_ajax_nopriv_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
+
+
+
 
 function nvbk_ajax_ubytovani_contact_form ()
 {
@@ -170,38 +186,10 @@ add_action("wp_ajax_nopriv_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_co
 
 
 
-
-
-function nvbk_ajax_show_rates ()
-{
-	global $nvbk;
-	if(WP_DEBUG) @ini_set("display_errors", 1);
-	
-	header("Content-Type: application/json; charset=UTF-8");
-
-	$from = $_POST["from"];
-	$to = $_POST["to"];
-	$apartmentId = $_POST["apartmentId"];
-
-	$response = $nvbk->get_rates($from, $to, [(int)$apartmentId]);
-
-	echo json_encode( $response );
-	die();
-}
-add_action("wp_ajax_nvbk_show_rates", "nvbk_ajax_show_rates");
-add_action("wp_ajax_nopriv_nvbk_show_rates", "nvbk_ajax_show_rates");
-
-
-
-
-
-
-
-
 function nvbk_ajax_to_checkout ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
-	require_once("Booking/lib.php");
+	include_once("Booking/lib.php");
 
 	$nvbk = new NVBK();
 	$cart = WC()->cart;

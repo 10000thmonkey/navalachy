@@ -88,13 +88,16 @@ class NVBK
 			"guests" => $wc_order_meta["nvbk_booking_people"],
 			"booking_id" => $wc_order_meta["nvbk_booking_id"]
     	]);
-    	do_action("qm/debug", wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6", array(
-		    'body'    => $data,
-		    'headers' => array(
-		    	'Content-Type' => 'application/json',
-		        //'Authorization' => 'Basic ' . base64_encode( "spiderweb" . ':' . "hovnokleslo" ),
-		    ),
-		) ) );
+
+    	$confirm_booking = wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6",
+    	    array(
+			    'body'    => $data,
+			    'headers' => array(
+			    	'Content-Type' => 'application/json'
+		    	)
+			)
+		);
+		add_action("qm/debug", $confirm_booking );
 
     	return $results;
     }
@@ -258,13 +261,19 @@ class NVBK
 
 
 
-	public function get_disabled_days ( $apartmentId )
+	public function get_disabled_dates ( $apartmentId )
 	{
 		global $wpdb;
 
-		$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-		                         WHERE `calendar_id` = %s", $apartmentId );
+		$query = $wpdb->prepare( "
+			SELECT * FROM {$this->table_name}
+			WHERE `calendar_id` = %s
+			AND `end_date` >= %s
+			AND `start_date` < %s"
+		, $apartmentId, date("Y-m-d 00:00:00"), date('Y-m-d 00:00:00', strtotime("+1 year") ) );
 		$results = $wpdb->get_results( $query );
+
+		//return count($results);
 
 		$disabledDates = [];
 
@@ -315,21 +324,3 @@ class NVBK
 }
 global $nvbk;
 $nvbk = new NVBK();
-
-
-
-function nvbk_ajax_show_rates ()
-{
-	global $nvbk;
-	header("Content-Type: application/json; charset=UTF-8");
-
-	$apartmentId = $_POST["apartmentId"];
-
-	$response = $nvbk->get_disabled_days( (int)$apartmentId );
-
-	echo json_encode( $response );
-	die();
-}
-
-add_action("wp_ajax_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
-add_action("wp_ajax_nopriv_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
