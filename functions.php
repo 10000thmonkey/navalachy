@@ -1,9 +1,6 @@
 <?php
 require_once("inc/lib-nv.php");
 
-
-
-
 /*
 INCLUDE JS & CSS LIBRARIES
 available modules:
@@ -314,7 +311,7 @@ function nv_order_received_redirect(){
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
    
-    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"], $order_id );
+    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
 
     //wp_safe_redirect( get_site_url()."/thankyou?key=" . $_GET['key'] );
 }

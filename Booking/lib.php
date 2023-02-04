@@ -64,7 +64,7 @@ class NVBK
     }
 
 
-    public function confirm_booking ( $booking_id, $wc_order_id )
+    public function confirm_booking ( $booking_id, $wc_order_id, $wc_order, $wc_order_meta )
     {
     	global $wpdb;
 
@@ -74,6 +74,27 @@ class NVBK
     	                        , (int)$wc_order_id, (int)$booking_id );
 
     	$results = $wpdb->query( $query );
+
+
+
+
+
+    	$data = json_encode([
+    		"apartment_id" => $wc_order_meta["nvbk_booking_apartmentId"],
+			"apartment_name" => $wc_order_meta["nvbk_booking_apartmentName"],
+			"begin" => $wc_order_meta["nvbk_booking_begin"],
+			"end" => $wc_order_meta["nvbk_booking_end"],
+			"price" => $wc_order_meta["nvbk_booking_price"],
+			"guests" => $wc_order_meta["nvbk_booking_people"],
+			"booking_id" => $wc_order_meta["nvbk_booking_id"]
+    	]);
+    	do_action("qm/debug", wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6", array(
+		    'body'    => $data,
+		    'headers' => array(
+		    	'Content-Type' => 'application/json',
+		        //'Authorization' => 'Basic ' . base64_encode( "spiderweb" . ':' . "hovnokleslo" ),
+		    ),
+		) ) );
 
     	return $results;
     }
@@ -294,174 +315,3 @@ class NVBK
 }
 global $nvbk;
 $nvbk = new NVBK();
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-global $nvbk;
-$nvbk = new NV_Booking();
-
-class NV_Booking {
-
-private $NVBK_API = "NY7JGjs7qBoKQqWCM7TDngEWw8vta1cIYoQWxlvNib";
-private $NVBK_USER = 543631;
-
-public function get_date_range_array ( $first, $last, $array = [] )
-{
-    $current = strtotime($first);
-    $last = strtotime($last);
-
-    while( $current <= $last )
-    {
-        array_push($array, date("Y-m-d", $current));
-        $current = strtotime("+1 day", $current);
-    }
-
-    return $array;
-}
-
-
-public function connect ( $url, $method = "GET", $payload = "", $transientId = false, $transientLife = HOUR_IN_SECONDS, $transientOverwrite = false )
-{
-	if ( $transientId && !$transientOverwrite && !empty( get_transient( $transientId ) ) )
-	{
-		return json_decode( get_transient( $transientId ), true );
-	}
-	else
-	{
-		$response = wp_safe_remote_request( "https://login.smoobu.com/" . $url, array (
-			'headers' => array(
-				'Api-Key' => $this->NVBK_API,
-				'Cache-Control' => 'no-cache'
-			),
-			'body' => $payload,
-			'method' => $method,
-			'timeout' => 30
-		) );
-		if ( is_wp_error($response) ) 
-			return $response;
-
-		if ( $transientId ) {
-			set_transient( $transientId, $response["body"], $transientLife );
-		}
-		$return = json_decode($response["body"], true);
-		return $return;
-	}
-}
-
-
-public function confirm_reservation ($args)
-{
-	return $this->connect( "api/reservations", "POST", json_encode($args) );
-}
-
-
-public function get_new_booking_price ( $begin, $end, $apartment, $guests = 1 )
-{
-	return $this->connect( "booking/checkApartmentAvailability", "POST", json_encode( array(
-		'arrivalDate' => $begin,
-		'departureDate' => $end,
-		'apartments' => [$apartment],
-		'customerId' => $this->NVBK_USER,
-		'guests' => $guests
-	) ), false );
-}
-
-public function get_availability ( $begin, $end, $apartments = [] )
-{
-	$transientId = "nvbk_avail-" . http_build_query($apartments) . "-" . $begin . "_" . $end;
-	
-	$response = $this->connect( "booking/checkApartmentAvailability", "POST", json_encode( array(
-		'arrivalDate' => $begin,
-		'departureDate' => $end,
-		'apartments' => $apartments,
-		'customerId' => $this->NVBK_USER,
-		'guests' => 1
-	) ), $transientId, MINUTE_IN_SECONDS );
-
-	return $response;
-}
-
-public function get_apartment( $apartmentId = '' )
-{
-	if ( $apartmentId == "" ) return NULL;
-	$transientId = "nvbk_apartment-" . $apartmentId;
-
-	$response = $this->connect( "api/apartments/" . $apartmentId, "GET", "", $transientId, HOUR_IN_SECONDS * 12 );
-	return $response;
-}
-
-public function get_rates ( $begin, $end, $apartments = [1520050] )
-{
-	$transientId = "nvbk_rates-" . http_build_query($apartments) . "-" . $begin . "_" . $end;
-	$querystring = http_build_query( array(
-		'start_date' => $begin,
-		'end_date' => $end,
-		'apartments' => $apartments
-	) );
-	$response = $this->connect( "api/rates?" . $querystring, "GET", "", $transientId, HOUR_IN_SECONDS * 6);
-	
-	return $response;
-}
-
-
-public function get_disabled_days ( $propertyId )
-{	
-	return $this->sync_disabled_dates( $propertyId, false, HOUR_IN_SECONDS / 6 );
-}
-
-public function sync_disabled_dates ( $propertyId, $caching = false, $transientCache = HOUR_IN_SECONDS / 6 )
-{
-	$dates = [];
-	$transientId = "nvbk_availability_" . $propertyId;
-
-	$query =  "api/reservations?" . http_build_query( array(
-		'from' => '2023-01-01',
-		'to' => '2024-01-01',
-		'excludeBlocked' => true,
-		'showCancellation' => false,
-		'pageSize' => 100,
-		'apartmentId' => $propertyId
-	) );
-
-	$response = $this->connect( $query, "GET", "", $transientId, $transientCache, $caching ? false : true ); //last param: bypass transient
-
-	if ( is_wp_error($response) ) return $response;
-
-	if ( $response["bookings"] ) {
-		foreach ( $response["bookings"] as $booking ) {
-			$dates = $this->get_date_range_array( $booking["arrival"], $booking["departure"], $dates);
-		}
-	}
-	//echo print_r( $response["bookings"] );
-	return $dates;
-}
-public function get_apartments_array ()
-{
-	$apartamentos = get_transient("nvbk_apartamentos");
-	if(empty($apartamentos)) {
-		$query = new WP_Query(array(
-			"post_type" => "ubytovani",
-		));
-		$apartamentos = [];
-		while ($query->have_posts()) {
-			$query->the_post();
-			$cal_id = get_post_meta($query->post->ID, "calendar_id");
-			$apartamentos[ $query->post->ID ] = (int)$cal_id[0];
-		}
-		set_transient("nvbk_apartamentos", $apartamentos, DAY_IN_SECONDS );
-	}
-	return $apartamentos;
-}
-
-}
-*/

@@ -40,7 +40,8 @@ class iCal {
 	 * CLASS CONSTRUCTOR
 	 */
 	
-	public function __construct() {
+	public function __construct()
+	{
 		$this->prodid = "PHP iCal Generator";
 		$this->alarmdesc = "You gotta do what you gotta do! You have a job soon...";
 		$this->alarmtrigger = 60;
@@ -276,7 +277,6 @@ class iCal {
 			$cal .= "DTSTART:{$event['data']['begin_date']}\n";
 			$cal .= "DTEND:{$event['data']['end_date']}\n";
 			$cal .= "DTSTAMP:".date("Ymd\THis", time())."\n";
-			$cal .= "UID:".md5(uniqid("", true))."\n";
 			foreach($event['custom'] as $prop => $val) {
 				$cal .= "{$prop}:{$val}\n";
 			}
