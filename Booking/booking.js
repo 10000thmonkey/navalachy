@@ -233,7 +233,7 @@ class NV_Booking
 				alert("Chybišta se vloudila");
 				console.log(data);
 			} else {
-				location.reload("/checkout");
+				location.href = "/checkout";
 			}
 		});
 	}
