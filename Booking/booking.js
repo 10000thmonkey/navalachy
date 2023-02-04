@@ -31,13 +31,15 @@ class NV_Booking
 
 		this.hw = new HelloWeek ( {
 			format: "YYYY-MM-DD",
+			beforeCreateDay: (n) => {
+				console.log(n);
+			},
 			selector: args.selector + " #calendar",
 			todayHighlight: true,
 			disableDates: args.disabled,
 			weekStart: 1,
 			range: true,
 			disablePastDays: true,
-
 			onSelect: () => {
 				this.select();
 			}

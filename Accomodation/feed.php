@@ -16,16 +16,11 @@ function nv_template_accomodation_feed ( $VAR )
 
 	if ( !empty( $VAR["range"] ) )
 	{
-		$response = $nvbk->get_availability( $VAR['range']['begin'], $VAR['range']['end'], array_keys( $VAR["apartments"] ) );
+		$response = $nvbk->get_available_apartments( $VAR['range']['begin'], $VAR['range']['end'], $VAR["apartments"] );
 
-		if ( !empty($response["availableApartments"]) )
+		if ( !empty($response) )
 		{
-			$args['meta_query'] = array(
-				array (
-					'key' => 'calendar_id',
-					'value' => $response["availableApartments"]
-				)
-			);
+			$args['post__in'] = $response;
 		} else {
 			$emptyQuery = true;
 		}
@@ -39,8 +34,6 @@ function nv_template_accomodation_feed ( $VAR )
 
 		//get array of rates of all apartments, next monday price wont be so high
 		$remote_rates_day = date( "Y-m-d", strtotime("next Monday") );
-		//$remote_rates = $nvbk->get_rates( $remote_rates_day, $remote_rates_day, $VAR["apartments"] );	
-
 
 		while ( $query->have_posts() )
 		{ 
@@ -139,6 +132,7 @@ function nv_template_accomodation_feed ( $VAR )
 			}
 		}
 	}
+	//print_r( $response );
 
 	if ( $emptyQuery ) echo 'Pro tento termín není dostupné žádné ubytování.';
 	else echo $html;

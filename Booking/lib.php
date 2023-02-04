@@ -64,103 +64,6 @@ class NVBK
     }
 
 
-    public function confirm_booking ( $booking_id, $wc_order_id, $wc_order, $wc_order_meta )
-    {
-    	global $wpdb;
-
-    	$query = $wpdb->prepare( "UPDATE {$this->table_name}
-    							SET `order_id` = %d, `status` = 'CONFIRMED'
-    	                        WHERE `id` = %d"
-    	                        , (int)$wc_order_id, (int)$booking_id );
-
-    	$results = $wpdb->query( $query );
-
-
-
-
-
-    	$data = json_encode([
-    		"apartment_id" => $wc_order_meta["nvbk_booking_apartmentId"],
-			"apartment_name" => $wc_order_meta["nvbk_booking_apartmentName"],
-			"begin" => $wc_order_meta["nvbk_booking_begin"],
-			"end" => $wc_order_meta["nvbk_booking_end"],
-			"price" => $wc_order_meta["nvbk_booking_price"],
-			"guests" => $wc_order_meta["nvbk_booking_people"],
-			"booking_id" => $wc_order_meta["nvbk_booking_id"]
-    	]);
-
-    	$confirm_booking = wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6",
-    	    array(
-			    'body'    => $data,
-			    'headers' => array(
-			    	'Content-Type' => 'application/json'
-		    	)
-			)
-		);
-		add_action("qm/debug", $confirm_booking );
-
-    	return $results;
-    }
-
-    public function get_bookings ( $apartment_id, $begin = NULL, $end = NULL )
-    {
-    	global $wpdb;
-
-    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `start_date` <= %s";
-
-    	$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-    	                        WHERE `calendar_id` = %s
-    	                        AND `status` != 'PENDING'
-    	                        " . $range, $apartment_id );
-
-    	$results = $wpdb->get_results( $query );
-
-    	return $results;
-    }
-
-
-    public function get_confirmed_bookings ( $apartment_id, $begin = NULL, $end = NULL )
-    {
-    	global $wpdb;
-
-    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `start_date` <= %s";
-
-    	$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-    	                        WHERE `calendar_id` = %s
-    	                        AND `uid` LIKE '%navalachy.cz'
-    	                        AND `status` = 'CONFIRMED'
-    	                        " . $range, $apartment_id );
-
-    	$results = $wpdb->get_results( $query );
-
-    	return $results;
-    }
-
-    public function is_available ( $apartment_id, $begin = NULL, $end = NULL )
-	{
-		global $wpdb;
-
-		$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-		                        WHERE `calendar_id` = %d
-		                        AND `end_date` >= %s
-		                        AND `start_date` <= %s
-		                        AND `status` NOT LIKE 'PENDING'",
-		                        (int)$apartment_id, $begin." 00:00:00", $end." 00:00:00" );
-
-		$res = $wpdb->get_results($query);
-
-		return empty( $res ) ? true : false;
-	}
-
-	
-	public function get_new_booking_price ( $apartment_id, $begin = NULL, $end = NULL )
-	{
-		global $wpdb;
-
-		return 100;
-	}
-
-
 
 	public function sync ( )
 	{
@@ -228,6 +131,7 @@ class NVBK
 
 
 
+
     public function insert_booking ( $apartment_id, $start_date, $end_date, $fields = [], $order_id = 1 )
     {
     	global $wpdb;
@@ -258,34 +162,107 @@ class NVBK
 		return $wpdb->insert_id;
     }
 
+    public function confirm_booking ( $booking_id, $wc_order_id, $wc_order, $wc_order_meta )
+    {
+    	global $wpdb;
+
+    	$query = $wpdb->prepare( "UPDATE {$this->table_name}
+    							SET `order_id` = %d, `status` = 'CONFIRMED'
+    	                        WHERE `id` = %d"
+    	                        , (int)$wc_order_id, (int)$booking_id );
+
+    	$results = $wpdb->query( $query );
+
+    	$data = json_encode([
+    		"apartment_id" => $wc_order_meta["nvbk_booking_apartmentId"],
+			"apartment_name" => $wc_order_meta["nvbk_booking_apartmentName"],
+			"begin" => $wc_order_meta["nvbk_booking_begin"],
+			"end" => $wc_order_meta["nvbk_booking_end"],
+			"price" => $wc_order_meta["nvbk_booking_price"],
+			"guests" => $wc_order_meta["nvbk_booking_people"],
+			"booking_id" => $wc_order_meta["nvbk_booking_id"]
+    	]);
+
+    	$confirm_booking = wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6",
+    	    array(
+			    'body'    => $data,
+			    'headers' => array(
+			    	'Content-Type' => 'application/json'
+		    	)
+			)
+		);
+		add_action("qm/debug", $confirm_booking );
+
+    	return $results;
+    }
+
+    public function get_bookings ( $apartment_id, $begin = NULL, $end = NULL )
+    {
+    	global $wpdb;
+
+    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `start_date` <= %s";
+
+    	$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
+    	                        WHERE `calendar_id` = %s
+    	                        AND `status` != 'PENDING'
+    	                        " . $range, $apartment_id );
+
+    	$results = $wpdb->get_results( $query );
+
+    	return $results;
+    }
+
+
+    public function get_confirmed_bookings ( $apartment_id, $begin = NULL, $end = NULL )
+    {
+    	global $wpdb;
+
+    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `start_date` <= %s";
+
+    	$query = $wpdb->prepare("
+			SELECT * FROM {$this->table_name}
+			WHERE `calendar_id` = %s
+			AND `uid` LIKE '%navalachy.cz'
+			AND `status` = 'CONFIRMED'
+		" . $range, $apartment_id );
+
+    	$results = $wpdb->get_results( $query );
+
+    	return $results;
+    }
 
 
 
-	public function get_disabled_dates ( $apartmentId )
+
+	public function get_available_apartments ( $from, $to, $apartments = [] )
 	{
 		global $wpdb;
 
-		$query = $wpdb->prepare( "
+		$apartments_all = $this->get_apartments_ids();
+		$apartments_booked = [];
+
+		$apartments_sql = "";
+		if ( is_integer($apartments) ) {
+			$apartments = [$apartments];
+		}
+		if ( is_array($apartments) && !empty($apartments) ) {
+			$apartments_sql = "AND `calendar_id` IN (".implode(",", $apartments).")";
+		}
+
+		$query = $wpdb->prepare("
 			SELECT * FROM {$this->table_name}
-			WHERE `calendar_id` = %s
-			AND `end_date` >= %s
-			AND `start_date` < %s"
-		, $apartmentId, date("Y-m-d 00:00:00"), date('Y-m-d 00:00:00', strtotime("+1 year") ) );
-		$results = $wpdb->get_results( $query );
+	        WHERE `end_date` > %s
+	        AND `start_date` <= %s
+	        AND `status` NOT LIKE 'PENDING'
+		" . $apartment_sql, $from." 00:00:00", $to." 00:00:00",);
+		$results = $wpdb->get_results($query);
 
-		//return count($results);
+		foreach($results as $result) {
+			$apartments_booked[] = (int)$result->calendar_id;	
+		}
 
-		$disabledDates = [];
-
-		foreach ( $results as $result )
-	    {
-	    	$range = $this->get_date_range_array( $result->start_date, $result->end_date );
-	    	array_push( $disabledDates, ...$range );
-	    }
-	    return $disabledDates;
+		return array_diff($apartments_all, $apartments_booked);
 	}
-
-
 
 	public function get_apartments_ids ()
 	{
@@ -305,6 +282,59 @@ class NVBK
 		{
 			return false;
 		}
+	}
+
+    public function is_available ( $apartment_id, $begin = NULL, $end = NULL )
+	{
+		global $wpdb;
+
+		$query = $wpdb->prepare("
+		    SELECT * FROM {$this->table_name}
+		    WHERE `calendar_id` = %d
+		    AND `end_date` >= %s
+		    AND `start_date` <= %s
+		    AND `status` NOT LIKE 'PENDING'
+		", (int)$apartment_id, $begin." 00:00:00", $end." 00:00:00" );
+
+		$res = $wpdb->get_results($query);
+
+		return empty( $res ) ? true : false;
+	}
+
+	
+	public function get_new_booking_price ( $apartment_id, $begin = NULL, $end = NULL )
+	{
+		global $wpdb;
+
+		return 100;
+	}
+
+
+
+
+	public function get_disabled_dates ( $apartmentId )
+	{
+		global $wpdb;
+
+		$query = $wpdb->prepare( "
+			SELECT * FROM {$this->table_name}
+			WHERE `calendar_id` = %s
+			AND `end_date` >= %s
+			AND `start_date` < %s
+			AND `status` != 'PENDING'"
+		, $apartmentId, date("Y-m-d 00:00:00"), date('Y-m-d 00:00:00', strtotime("+1 year") ) );
+		$results = $wpdb->get_results( $query );
+
+		//return count($results);
+
+		$disabledDates = [];
+
+		foreach ( $results as $result )
+	    {
+	    	$range = $this->get_date_range_array( $result->start_date, $result->end_date );
+	    	array_push( $disabledDates, ...$range );
+	    }
+	    return $disabledDates;
 	}
 
 

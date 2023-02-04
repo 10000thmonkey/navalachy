@@ -397,7 +397,7 @@ h4 {margin: 5px 0;}
     	text-align: center;
     	width: 100%;
     	padding: 15px;
-    	z-index: 1;
+    	z-index: 2;
     	.contentwrap();
     }
     @media (max-width: @breakpoint-sm) {
@@ -2221,6 +2221,7 @@ nv-slider {
 	.col {
 		flex: 1;
 	}
+	&.cols-xs { @media (max-width: @breakpoint-xs) {flex-direction: column;} }
 	&.cols-sm { @media (max-width: @breakpoint-sm) {flex-direction: column;} }
 	&.cols-md { @media (max-width: @breakpoint-md) {flex-direction: column;} }
 	&.cols-lg { @media (max-width: @breakpoint-lg) {flex-direction: column;} }

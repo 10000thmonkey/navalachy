@@ -35,7 +35,7 @@ get_header();
 		<?php
 		echo nv_template_accomodation_feed( array(
 			"range" => $range,
-			"apartments" => "all"
+			"apartments" => []
 		) );
 		?>
 

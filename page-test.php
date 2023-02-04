@@ -10,26 +10,35 @@ get_header();
 
 //print_r(json_encode($nvbk->get_disabled_days(149)));
 
-$id = empty($_GET["id"]) ? 149 : $_GET['id'];
+if ($_GET['test'] == 1) {
+	$id = empty($_GET["id"]) ? 149 : $_GET['id'];
 
-$res = $nvbk->get_bookings( $id );
+	$res = $nvbk->get_bookings( $id );
 
-//print_r($res[count($res) - 1]);
-//print_r($res);
-echo "<table border=1>";
-foreach ($res as $row) {
-    ?>
-    	<tr>
-	        <td><b><?=$row->start_date?> - <?=$row->end_date?></b></td>
-		    <td><?=unserialize( $row->fields )["summary"]?></td>
-		    <td><?=unserialize( $row->fields )["description"]?></td>
-		    <td><?=$row->order_id;?></td>
-		    <td><?=$row->status;?></td>
-		    <td><?=$row->uid;?></td>
-		</tr>
-	<?php
+	//print_r($res[count($res) - 1]);
+	//print_r($res);
+	echo "<table border=1>";
+	foreach ($res as $row) {
+	    ?>
+	    	<tr>
+		        <td><b><?=$row->start_date?> - <?=$row->end_date?></b></td>
+			    <td><?=unserialize( $row->fields )["summary"]?></td>
+			    <td><?=unserialize( $row->fields )["description"]?></td>
+			    <td><?=$row->order_id;?></td>
+			    <td><?=$row->status;?></td>
+			    <td><?=$row->uid;?></td>
+			</tr>
+		<?php
+	}
+	echo "</table>";
 }
-echo "</table>";
+if ($_GET["test"] == 2)
+{
+	print_r($nvbk->get_available_apartments( "2023-05-13", "2023-05-15" ));
+}
+
+
+
 
 
 get_footer();

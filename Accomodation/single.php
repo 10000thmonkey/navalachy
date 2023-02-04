@@ -111,8 +111,8 @@ get_header();
 					<a class="btn-close" onclick="this.closestParent('aside').removeClass('slided')"></a>
 				</div>
 
-				<div class="content-on-hidden">
-					<a class="button" onclick="this.closestParent('aside').addClass('slided')">Rezervovat</a>
+				<div class="content-on-hidden rows center">
+					<a class="button center" style="max-width:300px;width: 100%;" onclick="this.closestParent('aside').addClass('slided')">Rezervovat</a>
 				</div>
 
 			</div>
@@ -205,11 +205,12 @@ get_header();
 			<div class="cols-flex" style="justify-content: center;"><a class="button button-plain openmodale" data-modale="accomodation-reviews">Všechny recenze (<?=$counter;?>)</a></div>
 		</div>
 
+
+
 		<div class="box info cols cols-md-3 cols-sm-2 padding-xl gap-lg">
 
 			<div class="col">
-				<!--h3>Hostitel</h3-->
-				<div class="cols-flex gap-hg">
+				<div class="cols-flex cols-xs gap-hg">
 					<div class="avatar avatar-big">
 						<?= nv_responsive_img( $host["profile_picture"][0], "(min-width: 1px) 64px, 64px" ); ?>
 					</div>
