@@ -8,5 +8,5 @@ $nvbk->sync();
 $logg = date("Y-m-d H:i:s") . " - sync done!\n";
 
 $log = file_get_contents("log.txt");
-$log = file_put_contents("log.txt", $log + $logg);
+file_put_contents("log.txt", $log . $logg);
 ?>
