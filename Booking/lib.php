@@ -107,6 +107,7 @@ class NVBK
 
     	$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
     	                        WHERE `calendar_id` = %s
+    	                        AND `status` != 'PENDING'
     	                        " . $range, $apartment_id );
 
     	$results = $wpdb->get_results( $query );
@@ -314,3 +315,21 @@ class NVBK
 }
 global $nvbk;
 $nvbk = new NVBK();
+
+
+
+function nvbk_ajax_show_rates ()
+{
+	global $nvbk;
+	header("Content-Type: application/json; charset=UTF-8");
+
+	$apartmentId = $_POST["apartmentId"];
+
+	$response = $nvbk->get_disabled_days( (int)$apartmentId );
+
+	echo json_encode( $response );
+	die();
+}
+
+add_action("wp_ajax_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
+add_action("wp_ajax_nopriv_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");

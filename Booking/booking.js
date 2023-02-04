@@ -254,3 +254,28 @@ class NV_Booking
 
 	isSelected () { return !! ( this.begin && this.end); }
 }
+
+function loadDatePicker ( c )
+{
+	cal = new NV_Booking({
+		peopleLimit: c.capacity,
+		selector: "#booking-form",
+		disabled: c.disabledDays,
+		iss: c.iss,
+		apartmentId: c.apartmentId,
+		apartmentName: c.apartmentName
+	});
+	cal.el.spinner.hide();
+
+	
+	var URLParams = new URLSearchParams(location.search);
+
+	if ( URLParams.get("begin") && URLParams.get("end") )
+		cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
+
+	document.body.on( "click", (e) => {
+		if ( e.path.indexOf( cal.form[0] ) == -1 ) {
+			if (cal.shown) cal.show();
+		}
+	} );
+}

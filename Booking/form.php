@@ -80,49 +80,35 @@ ob_start();
 <script type="text/javascript" src="/wp-content/themes/navalachy/Booking/booking.js"></script>
 <script type="text/javascript">
 	q( () => {
+
 		var c = {};
 		<?php
-		if ($iss) :
+		if ($iss) : //will be loading async
+		?>
+			
+			jax.post( "/wp-admin/admin-ajax.php", { action: "nvbk_get_disabled_days", apartmentId: nv_vars.apartmentId }, (data) =>
+			{
+				c.iss = true;
+				c.apartmentId = nv_vars.apartmentId;
+				c.apartmentName = nv_vars.apartmentName;
+				c.capacity = nv_vars.apartmentCapacity;
 
-			echo "c.iss = true;";
-			$disabledDays = $nvbk->get_disabled_days( (int)$_VAR["apartmentId"] );
-
-			echo "c.disabledDays = ". json_encode( $disabledDays ) . ";"; 
-			echo "c.apartmentId = nv_vars.apartmentId;";
-			echo "c.apartmentName = nv_vars.apartmentName;";
-			echo "c.capacity = nv_vars.apartmentCapacity;";
-
+				loadDatePicker(c);
+			});
+		<?php
 		else:
+		?>
+			c.iss = false;
+			c.capacity = 1;
+			c.disabledDays = [];
+			c.apartmentId = 0;
+			c.apartmentName = "";
 
-			echo "c.iss = false;";
-			echo "c.disabledDays = [];";
-			echo "c.capacity = 1;";
+			loadDatePicker(c);
 
+		<?php
 		endif;
 		?>
-
-		cal = new NV_Booking({
-			peopleLimit: c.capacity,
-			selector: "#booking-form",
-			disabled: c.disabledDays,
-			iss: c.iss,
-			apartmentId: c.apartmentId,
-			apartmentName: c.apartmentName
-		});
-		cal.el.spinner.hide();
-
-
-		var URLParams = new URLSearchParams(location.search);
-
-		if ( URLParams.get("begin") && URLParams.get("end") )
-			cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
-
-
-		document.body.on( "click", (e) => {
-			if ( e.path.indexOf( cal.form[0] ) == -1 ) {
-				if (cal.shown) cal.show();
-			}
-		} );
 
 	} );
 </script>
