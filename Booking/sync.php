@@ -5,5 +5,8 @@ require_once("lib.php");
 $nvbk = new NVBK();
 $nvbk->sync();
 
-echo "done";
+$logg = date("Y-m-d H:i:s") . " - sync done!\n";
+
+$log = file_get_contents("log.txt");
+$log = file_put_contents("log.txt", $log + $logg);
 ?>

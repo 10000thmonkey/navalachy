@@ -10,7 +10,9 @@ $nvbk->sync();
 
 //print_r(json_encode($nvbk->get_disabled_days(149)));
 
-$res = $nvbk->get_bookings( 149 );
+$id = empty($_GET["id"]) ? 149 : $_GET['id'];
+
+$res = $nvbk->get_bookings( $id );
 
 //print_r($res[count($res) - 1]);
 //print_r($res);

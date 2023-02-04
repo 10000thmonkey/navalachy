@@ -26,7 +26,7 @@ class NVBK
 		if ( $nvbk_table_exists === false )
 		{
 			$this->create_table();
-			//$this->sync();
+			$this->sync();
 
 			update_option("nvbk_table_exists", true);
 		}
@@ -217,7 +217,6 @@ class NVBK
 
 				$query = $wpdb->prepare( $sql, array_values( $values ) );
 
-				//echo var_dump( $query );
 				echo $wpdb->query( $query );
 			}
 		}
