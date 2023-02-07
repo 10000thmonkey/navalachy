@@ -35,7 +35,7 @@ add_action( "enqueue_block_assets", "nv_disable_wc_block_styles", 999 );
 
 /*
 set custom product price in cart item
-*/.
+*/
 
 function nv_woo_custom_price_to_cart_item( $cart_object ) {  
     //if( !WC()->session->__isset( "reload_checkout" )) {

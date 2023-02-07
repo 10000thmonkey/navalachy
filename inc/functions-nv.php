@@ -42,7 +42,7 @@ function navalachy_modules()
     $templ_dir = get_template_directory_uri();
     global $NV_MODULES;
 
-    include "UI/cover-image.php";
+    include_once get_template_directory() . "/UI/cover-image.php";
 
     //wp_enqueue_style( 'navalachy', $templ_dir."/assets/style.css" );
     wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css" );
@@ -55,7 +55,7 @@ function navalachy_modules()
     {
         foreach ( $NV_MODULES as $M )
         {
-            include_once("$M.php");
+            include_once get_template_directory() . "/$M.php";
         }
     }
 

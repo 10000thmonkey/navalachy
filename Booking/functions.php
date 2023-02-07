@@ -124,7 +124,8 @@ add_action("wp_ajax_nopriv_nvbk_to_checkout", "nvbk_ajax_to_checkout");
 
 
 
-function nv_order_received_redirect(){
+function nv_order_received_redirect()
+{
     
     // do nothing if we are not on the order received page
     if( ! is_wc_endpoint_url( 'order-received' ) || empty( $_GET[ 'key' ] ) ) {
@@ -138,18 +139,20 @@ function nv_order_received_redirect(){
     $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
+    $order_meta["_order_id"] = $order_id;
    
     $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
 
+    $mail = nv_send_mail (array(
+		"to" => $order_meta["_billing_email"][0], 
+		"subject" => "Rezervace přijata - NaValachy.cz",
+		"body" => nvbk_email_order_complete( $order_meta ),
+		"headers" => array(
+			"From: info@navalachy.cz",
+			'Content-Type: text/html; charset=UTF-8'
+		)
+	));
 
-    global $nv_vars;
-    
-
-
-    // $mail = nv_send_mail (
-    // 	"to" => 
-    // );
-
-    //wp_safe_redirect( get_site_url()."/thankyou?key=" . $_GET['key'] );
+    //wp_safe_redirect( get_site_url()."/thankyou?mail=".$order_meta["_billing_email"][0]."&key=" . $_GET['key'] );
 }
 add_action( 'template_redirect', 'nv_order_received_redirect');
