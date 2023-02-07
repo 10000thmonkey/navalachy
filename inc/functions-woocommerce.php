@@ -1,5 +1,127 @@
 <?php
 /**
+ * Remove Woo Styles and Scripts from non-Woo Pages
+ * @link https://gist.github.com/DevinWalker/7621777#gistcomment-1980453
+ * @since 1.7.0
+ */
+function nv_remove_woocommerce_styles_scripts() {
+
+	// Skip Woo Pages
+	if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
+		return;
+	}
+	// Otherwise...
+	remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
+	remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
+	remove_action('wp_print_footer_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
+
+	wp_dequeue_script( "woocommerce" );
+	wp_dequeue_script( "wc-add-to-cart" );
+	wp_dequeue_script( "wc-cart-fragments-js-extra" );
+
+	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
+}
+
+add_action( 'template_redirect', 'nv_remove_woocommerce_styles_scripts', 999 );
+
+function nv_disable_wc_block_styles () {
+	wp_dequeue_style( "wc-blocks-style" );
+	wp_dequeue_style( "wc-blocks-vendors-style" );
+}
+add_action( "enqueue_block_assets", "nv_disable_wc_block_styles", 999 );
+
+
+
+
+/*
+set custom product price in cart item
+*/.
+
+function nv_woo_custom_price_to_cart_item( $cart_object ) {  
+    //if( !WC()->session->__isset( "reload_checkout" )) {
+        foreach ( $cart_object->get_cart() as $item ) {
+            if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
+                $item['data']->set_price( $item["nvbk_booking_price"]);
+            }
+        }  
+    //}
+}
+add_action( 'woocommerce_before_calculate_totals', 'nv_woo_custom_price_to_cart_item', 99 );
+
+
+/*
+set custom product title in cart item
+*/
+
+function nvbk_cart_product_title( $title, $cart_item, $cart_item_key ) {
+	//@session_start();
+	$name = $cart_item["nvbk_booking_apartmentName"];
+	if (!empty($name))
+		return $name;
+	else
+		return $title;
+}
+add_filter( "woocommerce_cart_item_name", "nvbk_cart_product_title", 99, 3);
+
+
+
+
+
+
+add_action( 'woocommerce_thankyou', 'custom_woocommerce_auto_complete_order' );
+function custom_woocommerce_auto_complete_order( $order_id ) { 
+    if ( ! $order_id ) {
+        return;
+    }
+
+    $order = wc_get_order( $order_id );
+    $order->update_status( 'completed' );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
+{
+    $cart = WC()->cart;
+	
+	foreach ( $cart->get_cart() as $cart_item )
+	{
+		$values = [
+			"nvbk_booking_apartmentId",
+			"nvbk_booking_apartmentName",
+			"nvbk_booking_begin",
+			"nvbk_booking_end",
+			"nvbk_booking_price",
+			"nvbk_booking_people",
+			"nvbk_booking_id"
+		];
+		foreach ( $values as $value ) {
+			update_post_meta( $order_id, $value, $cart_item[$value] );
+		}
+	} 
+}
+add_action( 'woocommerce_checkout_update_order_meta', "nvbk_cartmeta_to_ordermeta", 10, 2);
+
+
+
+
+
+
+
+
+
+
+
+/**
  * WooCommerce Compatibility File
  *
  * @link https://woocommerce.com/

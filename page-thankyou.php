@@ -1,12 +1,16 @@
 <?php
+
+$order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
+ 
+ //Get an instance of the WC_Order object
+$order = wc_get_order( $order_id );
+$order_meta = get_post_meta( $order_id );
+
+$nv_vars = [$order, $order_meta];
+
 get_header();
 
-   $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
-    
-    //Get an instance of the WC_Order object
-   $order = wc_get_order( $order_id );
-   
-   echo "<pre>".var_dump($order)."</pre>";
+
 ?>
 
 	<main id="primary" class="site-main">

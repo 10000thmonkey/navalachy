@@ -1,123 +1,11 @@
 <?php
-require_once("inc/lib-nv.php");
+require_once "inc/functions-nv.php";
+require_once "inc/functions-email.php";
 
-/*
-INCLUDE JS & CSS LIBRARIES
-available modules:
-	lightbox - lightbox gallery
-	datepicker - for reservation functionality
-*/
+require_once "Booking/functions.php";
 
-
-
-$NV_MODULES = array();
-
-function nv_use_modules ( $modules ) {
-	global $NV_MODULES;
-	$NV_MODULES = $modules;
-}
-
-function navalachy_modules()
-{
-	$templ_dir = get_template_directory_uri();
-	global $NV_MODULES;
-
-	include "UI/cover-image.php";
-
-	//wp_enqueue_style( 'navalachy', $templ_dir."/assets/style.css" );
-	wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css" );
-	wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/assets/legacy.css" );
-	wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
-
-	wp_enqueue_script( "domster", $templ_dir. "/assets/domster.js" );
-	
-	if ( !empty( $NV_MODULES ) )
-	{
-		foreach ( $NV_MODULES as $M )
-		{
-			include_once("$M.php");
-		}
-	}
-
-	do_action( "nv_load_modules" );
-
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
-}
-add_action( 'wp_enqueue_scripts', 'navalachy_modules' );
-
-
-function nv_register_vars ( ) {
-	global $nv_vars;
-	if ( empty( $nv_vars ) ) return;
-	wp_register_script( "nv_vars", "" );
-	wp_enqueue_script( "nv_vars" );
-	wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
-}
-add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
-
-
-
-/**
- * Remove Woo Styles and Scripts from non-Woo Pages
- * @link https://gist.github.com/DevinWalker/7621777#gistcomment-1980453
- * @since 1.7.0
- */
-function nv_remove_woocommerce_styles_scripts() {
-
-	// Skip Woo Pages
-	if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
-		return;
-	}
-	// Otherwise...
-	remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
-	remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
-	remove_action('wp_print_footer_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
-
-	wp_dequeue_script( "woocommerce" );
-	wp_dequeue_script( "wc-add-to-cart" );
-	wp_dequeue_script( "wc-cart-fragments-js-extra" );
-
-	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
-}
-
-add_action( 'template_redirect', 'nv_remove_woocommerce_styles_scripts', 999 );
-
-function nv_disable_wc_block_styles () {
-	wp_dequeue_style( "wc-blocks-style" );
-	wp_dequeue_style( "wc-blocks-vendors-style" );
-}
-add_action( "enqueue_block_assets", "nv_disable_wc_block_styles", 999 );
-
-
-
-
-
-
-
-function nv_send_mail ($args = []) {
-	if (!isset($args) || $args == [] ) return "fuckoff. dej mi kurva aspon jeden argument";
-	$body = isset($args->body) ? $args->body : "";
-
-	return wp_mail( $args["to"], $args["subject"], $args["body"], $args["headers"] );
-
-}
-
-function debug_wpmail( $result = false ) {
-
-	if ( $result )
-		return;
-
-	global $ts_mail_errors, $phpmailer;
-
-	if ( ! isset($ts_mail_errors) )
-		$ts_mail_errors = array();
-
-	if ( isset($phpmailer) )
-		$ts_mail_errors[] = $phpmailer->ErrorInfo;
-
-	print_r($ts_mail_errors);
+if ( class_exists( 'WooCommerce' ) ) {
+	require_once get_template_directory() . '/inc/functions-woocommerce.php';
 }
 
 
@@ -126,214 +14,16 @@ function debug_wpmail( $result = false ) {
 
 
 
-add_filter( 'http_request_timeout', 'my_custom_timeout' );
-function my_custom_timeout( $timeout_value ) {
-    return 30; // Change the timeout value to 60 seconds
+
+
+
+
+
+
+function custom_http_request_timeout( $timeout_value ) {
+    return 30;
 }
-
-
-
-function nvbk_ajax_get_disabled_dates ()
-{
-	include_once("Booking/lib.php");
-	header("Content-Type: application/json; charset=UTF-8");
-
-	$apartmentId = $_POST["apartmentId"];
-
-	echo json_encode( $nvbk->get_disabled_dates( (int)$apartmentId ) );
-	die();
-}
-
-add_action("wp_ajax_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
-add_action("wp_ajax_nopriv_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dates");
-
-
-
-
-function nvbk_ajax_ubytovani_contact_form ()
-{
-	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
-	$from = $_POST["name"] ? $_POST['name'] : "";
-	$headers = 
-	
-	$res = nv_send_mail (array(
-		"to" => $_POST["host_email"], 
-		"subject" => "Nový dotaz z Valach od " . $_POST['name'] . " (" . $_POST['email'] . ")",
-		"body" => $_POST['message'],
-		"headers" => array(
-			"From: Na Valachy kontaktní formulář <info@navalachy.cz>",
-			'Content-Type: text/html; charset=UTF-8',
-			'Reply-To: '.$_POST["name"].' <'.$_POST['email'].'>',
-		)
-	));	
-
-	$res = nv_send_mail (array(
-		"to" => $_POST["email"], 
-		"subject" => "NaValachy.cz: Dotaz jsme majiteli odeslali.",
-		"body" => "Váš dotaz na e-mail ".$_POST["host_email"]." byl úspěšně zaslán.",
-		"headers" => array(
-			"From: NaValachy.cz <info@navalachy.cz>",
-			'Content-Type: text/html; charset=UTF-8'
-		)
-	));
-	//echo debug_wpmail($res);
-	wp_die();
-}
-add_action("wp_ajax_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
-add_action("wp_ajax_nopriv_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
-
-
-
-
-
-function nvbk_ajax_to_checkout ()
-{
-	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
-	include_once("Booking/lib.php");
-
-	$nvbk = new NVBK();
-	$cart = WC()->cart;
-	$cart_cache = DAY_IN_SECONDS * 2;
-
-	$return = array(
-		"success" => false,
-		"body" => "",
-	);
-
-
-	//CHECK IF DATE IS AVAILABLE, IF NOT, RETURN ERROR IN MESSAGE BODY
-	if ( ! $nvbk->is_available( $_POST['apartmentId'], $_POST['begin'], $_POST['end'] ) )
-	{
-		$return["body"] = "Termín je obsazený.";
-		
-		echo json_encode($return);
-		wp_die();
-	}
-
-
-	//GET PRICE AND SEND IN MESSAGE BODY
-	$price = $nvbk->get_new_booking_price( $_POST['apartmentId'], $_POST['begin'], $_POST['end'] );
-	
-
-	//IF OK, SEND PRICE TO MESSAGE BODY
-	if ( isset($_POST['preCheckout']) && $_POST['preCheckout'] == "yes" )
-	{	
-		$return["price"] = $price;
-		$return["success"] = true;
-	}
-	else
-	{	
-		$booking_id = $nvbk->insert_booking ( (int)$_POST['apartmentId'], $_POST["begin"], $_POST["end"] );
-
-		$args = array(
-			"nvbk_booking_apartmentId" => $_POST["apartmentId"],
-			"nvbk_booking_apartmentName" => $_POST["apartmentName"],
-			"nvbk_booking_begin" => $_POST["begin"],
-			"nvbk_booking_end" => $_POST["end"],
-			"nvbk_booking_price" => (int)$price,
-			"nvbk_booking_people" => $_POST["people"],
-			"nvbk_booking_id" => (int)$booking_id,
-		);
-
-		if ( !$cart->is_empty() ) $cart->empty_cart();
-	
-		$cart->add_to_cart( 1084, 1, NULL, NULL, $args );
-		$cart->calculate_totals();
-		WC()->session->set('cart', $cart->cart_content);
-		$cart->set_session();
-		$cart->maybe_set_cart_cookies();
-
-
-
-		$return["success"] = true;
-	}
-	
-	echo json_encode($return);
-	wp_die ();
-}
-add_action("wp_ajax_nvbk_to_checkout", "nvbk_ajax_to_checkout");
-add_action("wp_ajax_nopriv_nvbk_to_checkout", "nvbk_ajax_to_checkout");
-
-function nv_woo_custom_price_to_cart_item( $cart_object ) {  
-    //if( !WC()->session->__isset( "reload_checkout" )) {
-        foreach ( $cart_object->get_cart() as $item ) {
-            if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
-                $item['data']->set_price( $item["nvbk_booking_price"]);
-            }
-        }  
-    //}
-}
-add_action( 'woocommerce_before_calculate_totals', 'nv_woo_custom_price_to_cart_item', 99 );
-
-
-function nvbk_cart_product_title( $title, $cart_item, $cart_item_key ) {
-	//@session_start();
-	$name = $cart_item["nvbk_booking_apartmentName"];
-	if (!empty($name))
-		return $name;
-	else
-		return $title;
-}
-add_filter( "woocommerce_cart_item_name", "nvbk_cart_product_title", 99, 3);
-
-
-
-
-
-
-///rezervace zaplacena
-
-
-function nv_order_received_redirect(){
-    
-    // do nothing if we are not on the order received page
-    if( ! is_wc_endpoint_url( 'order-received' ) || empty( $_GET[ 'key' ] ) ) {
-        return; 
-    }
-
-    include_once("Booking/lib.php");
-    $nvbk = new NVBK();
-
-
-    $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
-    $order = wc_get_order( $order_id );
-    $order_meta = get_post_meta( $order_id );
-   
-    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
-
-    //wp_safe_redirect( get_site_url()."/thankyou?key=" . $_GET['key'] );
-}
-add_action( 'template_redirect', 'nv_order_received_redirect');
-
-
-
-function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
-{
-    $cart = WC()->cart;
-	
-	foreach ( $cart->get_cart() as $cart_item )
-	{
-		$values = [
-			"nvbk_booking_apartmentId",
-			"nvbk_booking_apartmentName",
-			"nvbk_booking_begin",
-			"nvbk_booking_end",
-			"nvbk_booking_price",
-			"nvbk_booking_people",
-			"nvbk_booking_id"
-		];
-		foreach ( $values as $value ) {
-			update_post_meta( $order_id, $value, $cart_item[$value] );
-		}
-	} 
-}
-add_action( 'woocommerce_checkout_update_order_meta', "nvbk_cartmeta_to_ordermeta", 10, 2);
-//add_action('woocommerce_add_order_item_meta','nvbk_add_values_to_order_item_meta',1,2);
-
-
-
-
-
+add_filter( 'http_request_timeout', 'custom_http_request_timeout' );
 
 
 
@@ -468,24 +158,6 @@ add_filter('woocommerce_defer_transactional_emails', '__return_true' );
 
 
 
-//RESPONSIVE IMG FUNCTION
-
-function nv_responsive_img ( $attachment_id, $sizes = "(max-width: 600px) 100vw, 25vw", $alt = "") {
-	$src = wp_get_attachment_image_url( $attachment_id, "medium");
-	$srcfull = wp_get_attachment_image_url( $attachment_id, "full");
-	$srcset = wp_get_attachment_image_srcset( $attachment_id, "large" );
-	$attalt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true);
-	if ($attalt != "") $alt = $attalt;
-
-	return '<img src="'.esc_attr( $src ).'"
-			srcset="'.esc_attr( $srcset ).'"
-			sizes="'.esc_attr( $sizes ).'"
-			alt="'.esc_attr( $alt ).'"
-			loading="lazy"/>';
-}
-
-
-
 
 
 //ALLOW SVG UPLOADS
@@ -495,62 +167,6 @@ function cc_mime_types($mimes) {
   $mimes['svg'] = 'image/svg+xml';
   return $mimes;
 }
-
-
-
-
-
-
-
-
-
-// FILTROVANI ZAZITKU
-
-add_action('wp_ajax_nv_filter_experiences', 'nv_filter_experiences_function', 1, 1); 
-add_action('wp_ajax_nopriv_nv_filter_experiences', 'nv_filter_experiences_function', 1, 1);
-
-function nv_filter_experiences_function( $args )
-{
-	require_once("Experiences/feed.php");
-
-	if ( !is_array ($args) ) {
-		$args = array (
-			"tagfilter" => $_POST['tagfilter'],
-			"orderby" => "date",
-			"paged" => $_POST['paged'],
-		);
-	}
-	//echo var_dump($_POST['tagfilter']);
-	echo json_encode(nv_template_experiences_feed( $args ));
-
-	//echo nv_template_experiences_feed( $args )["args"];
-	die();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -625,6 +241,3 @@ add_action( 'after_setup_theme', 'navalachy_setup' );
 /*
  * Load WooCommerce compatibility file.
  */
-if ( class_exists( 'WooCommerce' ) ) {
-	require get_template_directory() . '/inc/woocommerce.php';
-}
