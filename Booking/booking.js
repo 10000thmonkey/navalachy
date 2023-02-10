@@ -23,8 +23,7 @@ class NV_Booking
 			beginValue: this.form.q("#field-begin .field-value"),
 			endValue: this.form.q("#field-end .field-value"),
 			peopleValue: this.form.q("#field-people .field-value"),
-			priceField: this.form.q("#field-price"),
-			priceValue: this.form.q("#field-price .field-value"),
+			priceFieldSet: this.form.q("#fieldset-price")[0],
 
 			messageBox: this.form.q(".messagebox")
 		}
@@ -152,8 +151,36 @@ class NV_Booking
 				this.preCheckout("yes", (data) => {
 					var data = JSON.parse(data);
 					
-					this.el.priceField.show();
-					this.el.priceValue.content(data["price"] + " Kč");
+					this.el.priceFieldSet.removeClass("nodisplay").content("");
+
+					if (data.price.costs.length != 0) {
+						for (let cost of data.price.costs) {
+							this.el.priceFieldSet
+								.insert(createNode("div").addClass(["field", "field-price-costs"])
+							    	.insert(createNode("div").addClass("field-label").content(cost.label))
+							    	.insert(createNode("div").addClass("field-value").content(cost.value)));
+						}
+					}
+					if (data.price.cleaning.length != 0) {
+						this.el.priceFieldSet
+							.insert(createNode("div").addClass(["field", "field-price-cleaning"])
+						    	.insert(createNode("div").addClass("field-label").content("Úklid"))
+						    	.insert(createNode("div").addClass("field-value").content(data.price.cleaning[0])));
+					}
+					if (data.price.discounts.length != 0) {
+						for (let discount of data.price.discounts) {
+							this.el.priceFieldSet
+								.insert(createNode("div").addClass(["field","field-price-discounts"])
+							    	.insert(createNode("div").addClass("field-label").content(discount.label))
+							    	.insert(createNode("div").addClass("field-value").content(discount.value)));
+						}
+					}
+					this.el.priceFieldSet
+						.insert(createNode("div").addClass(["field","field-price-final"]) //celkova cena
+					        .insert(createNode("div").addClass("field-label").content("Cena"))
+					        .insert(createNode("div").addClass("field-value").content(data.price.price_final)));
+
+
 					this.el.spinner.hide();
 				});	
 			}

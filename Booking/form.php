@@ -43,7 +43,7 @@ ob_start();
 	
 	<?php if($iss) : ?>
 
-	<div class="fieldgroup">
+	<div class="fieldgroup ">
 		<div class="field" id="field-people">	
 			<div style="display:flex">
 				<div style="flex:1">
@@ -57,11 +57,7 @@ ob_start();
 			</div>
 		</div>
 	</div>
-	<div class="fieldgroup">
-		<div class="field hidden" id="field-price">
-			<div class="field-label">Celkem</div>
-			<div class="field-value"></div>
-		</div>
+	<div class="row space-around-md nodisplay" id="fieldset-price">
 	</div>
 	<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
 

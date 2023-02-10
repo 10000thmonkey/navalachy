@@ -126,7 +126,16 @@ NodeList.prototype.remove = function () {
 
 Node.prototype.toggleClass = function (name) {this.classList.toggle(name);return this;};
 Node.prototype.removeClass = function (name) {this.classList.remove(name);return this;};
-Node.prototype.addClass = function (name) {this.classList.add(name);return this;};
+Node.prototype.addClass = function (name) {
+	if(typeof name == "object" || typeof name == "array") {
+		for(let c of name) {
+			this.classList.add(c);
+		}
+	} else {
+		this.classList.add(name);
+	}
+	return this;
+}
 Node.prototype.hasClass = function (name) {return this.classList.contains(name);};
 NodeList.prototype.toggleClass = function (c) {
 	return this.each( function () { this.toggleClass(c) } ); }
@@ -142,7 +151,7 @@ NodeList.prototype.on = function (n, c) {
 	return this.each( function () { this.on(n, c) } ); }
 
 Node.prototype.content = function (text) {
-	if (text) {
+	if (text !== undefined) {
 		this.innerHTML = text;
 		return this;
 	} else {

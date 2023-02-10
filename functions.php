@@ -3,14 +3,29 @@ require_once "inc/functions-nv.php";
 require_once "inc/functions-email.php";
 
 require_once "Booking/functions.php";
+require_once "Experiences/functions.php";
+
+require_once "dashboard/functions.php";
 
 if ( class_exists( 'WooCommerce' ) ) {
 	require_once get_template_directory() . '/inc/functions-woocommerce.php';
 }
 
+add_role(
+  'accomodation_host',
+  'Accomodation Host'
+);
 
+add_filter( 'login_redirect', 'nv_login_redirect', 10, 3 );
 
-
+function nv_login_redirect( $redirect_to, $request, $user ) {
+    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+        if ( !in_array( 'administrator', $user->roles )) {
+             $redirect_to = home_url();
+        }
+    }
+    return $redirect_to;
+}
 
 
 

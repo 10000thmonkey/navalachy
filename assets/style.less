@@ -412,6 +412,17 @@ h4 {margin: 5px 0;}
 }
 
 
+.dashboard-header {
+	background: var(--primary);
+	.button.button-plain {color: white;}
+	.button.button-plain:hover {background: rgba(255, 255, 255, .1);}
+}
+.dashboard-settings-section {
+	display: grid; grid-template-columns: 300px auto;
+}
+.dashboard-menu-left {
+	.button {border-radius: 0; &.selected {background: transparent;} }
+}
 
 
 
@@ -750,6 +761,7 @@ body.page-template-Experiencesarchive-php {
 		input:checked + .tag {
 			background: var(--primary);
 			border-color: var(--primary);
+			color: white;
 			.filter-tag-name, .filter-tag-icon {color: white;}
 		}
 		input {display: none;}
@@ -930,12 +942,7 @@ body.single-accomodation {
 			align-items: center;
 		}
 	}
-	aside.reservation {
-		position: sticky;
-		bottom: 50px;
-		max-width: 400px;
-		flex: 1;
-	}
+
 	.reviews {
 		.reviews-container {
 			display: flex;
@@ -1107,7 +1114,14 @@ body.post-type-archive-product, body.single-product, body.tax-product_cat {
 
 body.woocommerce-checkout {
 	.site-header {box-shadow: none;position: static; & > div {grid-template-columns: unset; justify-content: center;} a {cursor: default;}}
-	.site-header .header-right, #site-navigation, #site-navigation-mobile, #wc-stripe-payment-request-wrapper, #wc-stripe-payment-request-button-separator {display: none;}
+	.woocommerce-form-coupon-toggle,
+	.site-header .header-right,
+	#site-navigation,
+	#site-navigation-mobile,
+	#wc-stripe-payment-request-wrapper,
+	#wc-stripe-payment-request-button-separator,
+	#billing_address_2_field {display: none;}
+
 	.site-main {.contentwrap();}
 	.woocommerce {
 		.box();
@@ -1116,7 +1130,6 @@ body.woocommerce-checkout {
 		padding: 0;
 		overflow: hidden;
 	}
-	.woocommerce-form-coupon-toggle {display: none;}
 
 	form.woocommerce-checkout {
 		display: flex;
@@ -1267,6 +1280,18 @@ body.woocommerce-checkout {
 			border: 2px solid var(--primary);
 		}
 	}
+	#fieldset-price {
+		.field {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items:center;
+
+			.field-label {}
+			.field-value {width: auto;}
+		}
+		.field-price-final * {font-size: var(--font-md);}
+	}
 	#field-price {
 		display: flex;
 		flex-direction: row;
@@ -1367,7 +1392,12 @@ body.woocommerce-checkout {
 }
 
 body.single-accomodation {
-
+	aside.reservation {
+		position: sticky;
+		bottom: 50px;
+		max-width: 400px;
+		flex: 1;
+	}
 	#booking-form {
 		flex-direction: column;
 		.box();
@@ -1398,7 +1428,7 @@ body.single-accomodation {
 	.mobile-sliding-footer {
 		display: none;
 	}
-	@media (max-width: @breakpoint-md) {
+	//@media (max-width: @breakpoint-md) {
 		aside.reservation {
 			width: 100vw;
 		    max-width: unset;
@@ -1456,7 +1486,7 @@ body.single-accomodation {
 			    }
 		    }
 		}
-	}
+	//}
 }
 
 
@@ -1751,6 +1781,52 @@ nv-slider {
 	.slider-next { right: 0; }
 }
 
+.dropdown-nav {
+
+	& > ul {
+		list-style: none;
+		margin: 0;
+		padding-left: 0;
+
+		& > li {
+			//color: #fff;
+			//background: darkorange;
+			display: block;
+			//float: left;
+			//padding: 1rem;
+			position: relative;
+			text-decoration: none;
+			transition-duration: 0.5s;
+
+			ul.dropdown {
+				.white-bg-backdrop();
+				.box();
+				visibility: hidden;
+				opacity: 0;
+				min-width: 5rem;
+				position: absolute;
+				transition: all 0.5s ease;
+				left: 0;
+				display: none;
+				width: 100%;
+
+				li {
+					clear: both;
+					width: 100%;
+				}
+			}
+
+			&:focus-within > ul /* this is the line we add */
+			{
+				visibility: visible;
+				opacity: 1;
+				display: block;
+			}
+
+		}
+	}
+}
+
 .box {
 	.white-bg-backdrop();
 	box-shadow: var(--shadow-lg);
@@ -1763,6 +1839,7 @@ nv-slider {
 	width: 64px;
 	height: 64px;
 	img {width: 100%;height: 100%; object-fit: cover;}
+	&.avatar-small {width: 32px;height: 32px;}
 	&.avatar-big {width: 100px;height: 100px;}
 	&.avatar-xxxl {width: var(--space-xxxl); height: var(--space-xxxl)}
 }
@@ -1941,6 +2018,7 @@ nv-slider {
 	display: inline-block;
 	position: absolute;
 }
+
 
 
 

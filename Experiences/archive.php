@@ -179,7 +179,7 @@ get_header();
 					nv_urlparams.get("tags").split(",");
 
 				for(let tag of nv_filter_tags)
-					q(".filter-tags input[type=checkbox][value="+tag+"]").checked = true;
+					q(".filter-tags input[type=checkbox][value="+tag+"]").attr("checked", "checked");
 			}
 			
 		} else { //form changed, write to URL

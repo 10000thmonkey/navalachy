@@ -6,7 +6,7 @@ VOUCHERY!!!!!!!!!!!
 
 @woocommerce checkout detail rezervace a chaty
 
-projit emailing - zatim bez manualu
+--projit emailing - zatim bez manualu
 
 --related items v ubytovani a zazitcich - podle gps??
 	pridat ikonky

@@ -97,7 +97,7 @@ function nvbk_ajax_to_checkout ()
 			"nvbk_booking_apartmentName" => $_POST["apartmentName"],
 			"nvbk_booking_begin" => $_POST["begin"],
 			"nvbk_booking_end" => $_POST["end"],
-			"nvbk_booking_price" => (int)$price,
+			"nvbk_booking_price" => $price,
 			"nvbk_booking_people" => $_POST["people"],
 			"nvbk_booking_id" => (int)$booking_id,
 		);

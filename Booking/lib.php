@@ -306,7 +306,57 @@ class NVBK
 	{
 		global $wpdb;
 
-		return 100;
+		$currency = "EUR";
+		$currency_appendix = " €";
+		$apartment = new WP_Query(["post_type" => "accomodation", "post__in" => [$apartment_id]] );
+		$meta = get_post_meta($apartment_id);
+
+		$booking_array = $this->get_date_range_array( $begin, $end );
+		$nights = count( $booking_array ) - 1;
+
+
+		$price_base = ( $nights * (int)$meta["price"][0] ) . $currency_appendix;
+
+
+		$discounts = [];
+		if ($nights >= 7 && $nights < 30) {
+			$discounts = ["label" => "Sleva na týden", "value" => "-" . $meta["discount_week"][0] . "%"];
+			$price_final = $price_base * ( (int)$meta["discount_week"][0] / 100 );
+		}
+		else if ($nights >= 30) {
+			$discounts = ["label" => "Sleva na měsíc", "value" => "-" . $meta["discount_month"][0] . "%"];
+			$price_final = $price_base * ( (int)$meta["discount_month"][0] / 100 );
+		}
+		else {
+			$price_final = $price_base;
+		}
+
+
+		$price_host = $price_final;
+
+
+		$costs = [];
+		$costs_arr = explode(",", $meta["costs"][0]);
+		for ($i = 0; $i < count($costs_arr); $i = $i + 2)
+		{
+			$costs[] = ["label" => $costs_arr[$i], "value" => "- " . ( $costs_arr[$i + 1] ) . $currency_appendix ];
+			$price_host = ( $price_host - (int)$costs_arr[$i + 1] );
+		}
+
+
+		$cleaning = [];
+		if (!empty($meta["cleaning"][0])) {
+			$cleaning[] = $meta["cleaning"][0] . $currency_appendix;
+		}
+
+		return [
+			"price_final" => $price_final . $currency_appendix,
+			"price_host" => $price_host . $currency_appendix,
+			"discounts" => $discounts,
+			"costs" => $costs,
+			"cleaning" => $cleaning,
+			"nights" => $nights
+		];
 	}
 
 

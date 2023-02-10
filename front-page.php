@@ -86,7 +86,7 @@ get_header();
 					?>
 				</nv-slider>
 
-				<a class="self-end button button-icon" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+				<a class="self-end button button-icon" href="/tipy">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
@@ -106,7 +106,11 @@ get_header();
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
 						<div class="content">
-							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
+							<?php
+							$match = [];
+							preg_match( "/.*[a-z]\. /U", $post_1->post_content, $match );
+							echo force_balance_tags( $match[0] );
+							?>
 						</div>
 						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">
 							Více<i class="nvicon nvicon-arrow-right"></i>
@@ -151,7 +155,7 @@ get_header();
 					}
 					?>
 				</nv-slider>
-				<a class="button button-icon self-end" href="/experiences">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+				<a class="button button-icon self-end" href="/tipy">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
@@ -170,7 +174,11 @@ get_header();
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
 						<div class="content">
-							<?= force_balance_tags( explode( ". ", $post_1->post_content )[0] );?>
+							<?php
+							$match = [];
+							preg_match( "/.*[a-z]\. /U", $post_1->post_content, $match );
+							echo force_balance_tags( $match[0] );
+							?>
 						</div>
 				
 						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>

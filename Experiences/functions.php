@@ -8,7 +8,7 @@ add_action('wp_ajax_nopriv_nv_filter_experiences', 'nv_filter_experiences_functi
 
 function nv_filter_experiences_function( $args )
 {
-	require_once("Experiences/feed.php");
+	require_once("feed.php");
 
 	if ( !is_array ($args) ) {
 		$args = array (

@@ -37,8 +37,23 @@ if ($_GET["test"] == 2)
 	print_r($nvbk->get_available_apartments( "2023-05-13", "2023-05-15" ));
 }
 
+if ($_GET['test'] == 3)
+{
+	$booking = $nvbk->get_new_booking_price( 149, "2023-05-13", "2023-05-15" );
 
+	print_r($booking);
+}
+if ($_GET["test"] == 4)
+{
+	print_r(wp_get_current_user());
+	//print_r(get_user_meta( wp_get_current_user() ));
+}
+if ($_GET["test"] == 5)
+{
+	$pod = pods("accomodation", 149);
 
+	echo $pod->form();
+}
 
 
 get_footer();
