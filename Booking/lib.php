@@ -315,7 +315,7 @@ class NVBK
 		$nights = count( $booking_array ) - 1;
 
 
-		$price_base = ( $nights * (int)$meta["price"][0] ) . $currency_appendix;
+		$price_base = ( $nights * (int)$meta["price"][0] );
 
 
 		$discounts = [];
@@ -335,12 +335,11 @@ class NVBK
 		$price_host = $price_final;
 
 
-		$costs = [];
-		$costs_arr = explode(",", $meta["costs"][0]);
-		for ($i = 0; $i < count($costs_arr); $i = $i + 2)
+		$costs = json_decode($meta["costs"][0]);
+		for ($i = 0; $i < count($costs); $i++)
 		{
-			$costs[] = ["label" => $costs_arr[$i], "value" => "- " . ( $costs_arr[$i + 1] ) . $currency_appendix ];
-			$price_host = ( $price_host - (int)$costs_arr[$i + 1] );
+			$costs[$i][1] = $costs[$i][1] . $currency_appendix;
+			$price_host = ( (int)$price_host - (int)$costs[$i][1] );
 		}
 
 
@@ -354,7 +353,6 @@ class NVBK
 			"price_host" => $price_host . $currency_appendix,
 			"discounts" => $discounts,
 			"costs" => $costs,
-			"cleaning" => $cleaning,
 			"nights" => $nights
 		];
 	}

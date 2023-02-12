@@ -165,7 +165,7 @@
 .nopadding {padding: 0 !important;}
 .hidden {opacity: 0 !important; pointer-events: none !important;}
 .hiding {opacity: 1; pointer-events: auto; .transition-fast();}
-.nodisplay {display: none;}
+.nodisplay {display: none !important;}
 .menu_selected {a {font-weight: 600}}
 .layer (@zindex: -1) {position: absolute;width: 100%;height: 100%;left: 0;top: 0;z-index: @zindex;}
 
@@ -254,7 +254,15 @@ h4 {margin: 5px 0;}
 
 		img {height: 50px; width: 100%; object-fit:contain;}
 	}
-	.header-right {display: flex; justify-content: right;}
+	.header-right {
+		display: flex;
+		justify-content: right;
+		.button {
+			color: transparent;
+    		width: 43px;
+    		overflow: hidden;
+    	}
+	}
 
 	.main-navigation {
 		justify-content: center;
@@ -584,8 +592,7 @@ body.home {
 			background: var(--primary);
 			h3 {color: var(--text-paragraph-color);}
 			.info {
-				h2 {color: var(--secondary-light);}
-				p, .content {color: white;}
+				h2, p, .content {color: var(--secondary-light);}
 			}
 		}
 		@media (max-width: @breakpoint-md) {
@@ -1153,6 +1160,10 @@ body.woocommerce-checkout {
 			flex: 1;
 			background: var(--color-ui-grey);
 			padding: 50px;
+
+			.woocommerce-billing-fields__field-wrapper {
+				margin: 20px 0;
+			}
 		}
 		#order_review {
 			width: 100% !important;
@@ -1225,14 +1236,16 @@ body.woocommerce-checkout {
 
 
 /*FORMULARE*/
+body {
 
-#booking-form {
+	#booking-form {
 
-	display: flex;
-	justify-content: center;
-	position: relative;
-	gap: 15px;
+		display: flex;
+		justify-content: center;
+		position: relative;
+		gap: 15px;
 
+	}
 	.fieldgroup {
 		border-radius: var(--radius-md);
 	    display: flex;
@@ -1290,7 +1303,7 @@ body.woocommerce-checkout {
 			.field-label {}
 			.field-value {width: auto;}
 		}
-		.field-price-final * {font-size: var(--font-md);}
+		.field-price-final * {font-size: var(--font-hg);}
 	}
 	#field-price {
 		display: flex;
@@ -1391,13 +1404,9 @@ body.woocommerce-checkout {
 	}
 }
 
+
 body.single-accomodation {
-	aside.reservation {
-		position: sticky;
-		bottom: 50px;
-		max-width: 400px;
-		flex: 1;
-	}
+
 	#booking-form {
 		flex-direction: column;
 		.box();
@@ -1411,11 +1420,30 @@ body.single-accomodation {
 		    padding: 14px;
 		    font-size: 24px;
 		}
+	}
+
+	@media (min-width: @breakpoint-md) {
+		aside.reservation.reallyaside {
+			position: sticky;
+			bottom: 50px;
+			max-width: 400px;
+			flex: 1;
+			height: auto;
+			width: auto;
+			box-shadow:none;
+			background: none;
+			top: unset;
+			z-index: 1;
+
+			.mobile-sliding-footer {display: none;}
+			.reservation-form-popup {display: none;}
+
+		    .fieldgroup.fieldgroup-price, .continuebutton {display: flex;}
+		}
+
 		.datepicker {
 			top: 80px;
-		}
-		@media (min-width: @breakpoint-md) {
-			.datepicker {
+			@media (min-width: @breakpoint-md) {
 				left: unset;
 				right: 100%;
 				bottom: 0px;
@@ -1425,68 +1453,69 @@ body.single-accomodation {
 			}
 		}
 	}
-	.mobile-sliding-footer {
-		display: none;
+	aside.reservation {
+		width: 100vw;
+	    max-width: unset;
+	    height: 100vh;
+	    max-height: unset;
+	    position: fixed;
+	    background: white;
+	    .transition();
+	    box-shadow: var(--shadow-md);
+	    top: calc(100vh - 100px); 
+	    left: 0;
+	    z-index: 10;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+
+	    #booking-form {
+		    /* padding: var(--space-hg); */
+		    max-width: 400px;
+		    background: none;
+		    backdrop-filter: none;
+	    }
+	    .mobile-sliding-footer {
+	    	display: flex;
+	    	height: 100px;
+	    	position: relative;
+	    	width: 100%;
+	    	margin-bottom: 100px;
+	    	.transition();
+	    	.content-on-shown, .content-on-hidden {
+	    		.layer(1);
+	    	}
+	    	.content-on-shown {
+	    		opacity: 0;
+	    		pointer-events: none;
+	    		width: auto;
+			    right: 0;
+			    left: unset;
+			    height: 100%;
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
+	    	}
+	    	.content-on-hidden {
+	    		opacity: 1;
+	    		pointer-events: auto;
+	    		padding: 20px;
+	    	}
+	    }
+
+	    &.slided {
+	    	top: 0;
+	    	.mobile-sliding-footer {
+		    	.content-on-shown {opacity: 1;pointer-events: auto;}
+		    	.content-on-hidden {opacity: 0;pointer-events: none;}
+		    }
+	    }
+	    .fieldgroup.fieldgroup-price, .continuebutton {display: none;}
+	    .reservation-form-popup {
+	    	width: 100%;
+	    	max-width: 400px;
+	    }
 	}
-	//@media (max-width: @breakpoint-md) {
-		aside.reservation {
-			width: 100vw;
-		    max-width: unset;
-		    height: 100vh;
-		    max-height: unset;
-		    position: fixed;
-		    background: white;
-		    .transition();
-		    box-shadow: var(--shadow-md);
-		    top: calc(100vh - 100px); 
-		    left: 0;
-		    z-index: 10;
-		    display: flex;
-		    flex-direction: column;
-		    align-items: center;
-
-		    #booking-form {
-			    /* padding: var(--space-hg); */
-			    max-width: 400px;
-			    background: none;
-			    backdrop-filter: none;
-		    }
-		    .mobile-sliding-footer {
-		    	display: flex;
-		    	height: 100px;
-		    	position: relative;
-		    	width: 100%;
-		    	.transition();
-		    	.content-on-shown, .content-on-hidden {
-		    		.layer(1);
-		    	}
-		    	.content-on-shown {
-		    		opacity: 0;
-		    		pointer-events: none;
-		    		width: auto;
-				    right: 0;
-				    left: unset;
-				    height: 100%;
-				    display: flex;
-				    align-items: center;
-				    justify-content: center;
-		    	}
-		    	.content-on-hidden {
-		    		opacity: 1;
-		    		pointer-events: auto;
-		    		padding: 20px;
-		    	}
-		    }
-
-		    &.slided {
-		    	top: 0;
-		    	.mobile-sliding-footer {
-			    	.content-on-shown {opacity: 1;pointer-events: auto;}
-			    	.content-on-hidden {opacity: 0;pointer-events: none;}
-			    }
-		    }
-		}
-	//}
 }
 
 
@@ -2188,6 +2217,23 @@ nv-slider {
     //height: 60px;
     color: var(--primary);
     &:before {content: "×";}
+    &.btn {
+    	top: 50px;
+	    right: 50px;
+	    bottom: unset;
+	    left: unset;
+	    position: absolute;
+	    transition: all 1s ease;
+	    line-height: 2.5;
+	    font-size: var(--font-hg);
+	    background: white;
+	    width: var(--font-xxl);
+	    height: var(--font-xxl);
+	    padding: 0;
+	    border-radius: 50%;
+	    box-shadow: var(--shadow-md);
+	    text-align: center;
+    }
 }
 .input {
 	padding: 15px;

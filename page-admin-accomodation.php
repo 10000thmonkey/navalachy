@@ -1,6 +1,9 @@
 <?php
+if (!$user) wp_redirect(home_url());
 
 get_header();
+
+
 $pages = [
 	"listings" => ["Ubytování", "beds"],
 	"calendar" => ["Kalendář", "calendar"],

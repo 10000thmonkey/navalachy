@@ -31,7 +31,6 @@ if ($apartments->have_posts())
 		$img = nv_responsive_img( get_post_thumbnail_id($apartments->post->ID) );
 
 		$meta = get_post_meta( $apartments->post->ID );
-print_r($meta);
 
 		$pod = pods("accomodation", (int)$_GET['listing']);
 		?>
@@ -100,10 +99,17 @@ print_r($meta);
 							<h3>Náklady</h3>
 							<template id="template-fields-costs">
 								<?php
+								$options = ["once", "daily"];
+								$options_html = "";
+								foreach ($options as $option)
+									$options_html .= '<option value="'.$option.'">'.$option.'</option>';
+
 								$template = <<<HTML
 								<li class="cols-flex space-between">
 									<div><input data-cost value=""></div>
-									<div><input data-cost value="" type="number"><a onclick="this.closestParent('li').remove()" style="font-size: 200%;color: red;">×</a></div>
+									<div><input data-cost value="" type="number"></div>
+									<div><select>{$options_html}</select></div>
+									<div><a onclick="this.closestParent('li').remove()" style="font-size: 200%;color: red;">×</a></div>
 								</li>
 								HTML;
 								echo $template;
@@ -117,10 +123,17 @@ print_r($meta);
 								else:
 									$costs = json_decode($meta["costs"][0]);
 									foreach ( $costs as $cost ):
+										$options = ["once", "daily"];
+										$options_html = "";
+										foreach ($options as $option)
+											$options_html .= '<option value="'.$option.'" '.($option == $cost[2] ? "selected" : "").'>'.$option.'</option>';
+
 										echo <<<HTML
 											<li class="cols-flex space-between">
-												<div><input data-cost value="<?=$cost->label?>" required></div>
-												<div><input data-cost type="number" value="<?=$cost->value?>" required><a onclick="this.closestParent('li').remove()" style="font-size: 200%;color: red;">×</a></div>
+												<div><input data-cost value="{$cost[0]}" required></div>
+												<div><input data-cost type="number" value="{$cost[1]}" required></div>
+												<div><select>{$options_html}</select></div>
+												<div><a onclick="this.closestParent('li').remove()" style="font-size: 200%;color: red;">×</a></div>
 											</li>
 										HTML;
 									endforeach;
@@ -131,14 +144,16 @@ print_r($meta);
 							<input name="costs" type="hidden">
 							<script>
 							function setCostsField () {
-								var fields = q(".fields-costs input");
+								var fields = q(".fields-costs input, .fields-costs select");
 								var input = q("input[name=costs]");
 								var res = [];
 
-								for (let i = 0; i < fields.length; i = i + 2) {
-									res.push( [ fields[i].value, fields[i+1].value ] );
+								for (let i = 0; i < (fields.length / 3); i++) {
+									if (fields[i*3].value || fields[i*3].value || fields[i*3].value) {
+										res.push( [ fields[i * 3].value, fields[i * 3 + 1].value, fields[i * 3 + 2].value ] );
+									}
 								}
-								input.attr("value", res);
+								input.attr("value", JSON.stringify(res));
 							}	
 
 							</script>

@@ -1,5 +1,4 @@
 <?php
-
 if ( empty( $_GET["listing"] ) )
 {
 	$apartments = new WP_Query([

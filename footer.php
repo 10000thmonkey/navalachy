@@ -149,6 +149,9 @@ q(function(){
 </script>
 
 <?php wp_footer(); ?>
-
+<STYLE>
+	#wpadminbar {display: none;}
+html {margin-top: 0 !important;}
+</STYLE>
 </body>
 </html>

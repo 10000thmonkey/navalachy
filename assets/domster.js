@@ -124,6 +124,7 @@ Node.prototype.remove = function () {return this.parentElement.removeChild(this)
 NodeList.prototype.remove = function () {
 	return this.each( function () { this.remove() } ); }
 
+
 Node.prototype.toggleClass = function (name) {this.classList.toggle(name);return this;};
 Node.prototype.removeClass = function (name) {this.classList.remove(name);return this;};
 Node.prototype.addClass = function (name) {
@@ -146,9 +147,11 @@ NodeList.prototype.addClass = function (c) {
 NodeList.prototype.hasClass = function (c) {
 	return this.each( function () { this.hasClass(c) } ); }
 
+
 Node.prototype.on = function (name,callback) {this.addEventListener(name,callback);return this;};
 NodeList.prototype.on = function (n, c) {
 	return this.each( function () { this.on(n, c) } ); }
+
 
 Node.prototype.content = function (text) {
 	if (text !== undefined) {
@@ -170,10 +173,16 @@ Node.prototype.attr = function(name,value) {if(value === undefined){return this.
 NodeList.prototype.attr = function (c, v) {
 	return this.each( function () { this.attr(c, v) } ); }
 
+
 Node.prototype.hide = function() {this.addClass("hidden");return this;}
 Node.prototype.show = function() {this.removeClass("hidden");return this;}
 NodeList.prototype.hide = function() {return this.each(function(){this.hide();})}
 NodeList.prototype.show = function() {return this.each(function(){this.show();})}
+
+Node.prototype.noDisplay = function() {this.addClass("nodisplay");return this;}
+Node.prototype.display = function() {this.removeClass("nodisplay");return this;}
+NodeList.prototype.noDisplay = function() {return this.each(function(){this.nodisplay();})}
+NodeList.prototype.display = function() {return this.each(function(){this.display();})}
 
 
 

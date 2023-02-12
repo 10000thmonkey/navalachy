@@ -8,8 +8,7 @@
  *
  * @package navalachy
  */
-
-$user = wp_get_current_user();
+global $user;
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -60,22 +59,20 @@ $user = wp_get_current_user();
     		</nav>
     		<div class="header-right">
     			<?php 
-    			if (is_user_logged_in() )
+    			if ( $user )
     			{
-    				$current_user = wp_get_current_user();
-    				$current_user_meta = get_user_meta( $current_user->data->ID );
-					?>
+    				?>
     					<nav role="navigation" class="dropdown-nav">
 							<ul>
 							    <li>
 							    	<a href="#" class="button button-plain">
-							    		<?=$current_user->data->display_name;?>
+							    		<?=$user->data->display_name;?>
 										<div class="avatar avatar-small">
 											<?= nv_responsive_img( 1404, "(min-width: 1px) 32px, 32px" ); ?>
 										</div>
 							    	</a>
 									<ul class="dropdown padding-md">
-										<?php if( in_array( "accomodation_host", $current_user->roles ) || in_array( "administrator", $current_user->roles ) ): ?>
+										<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
 											<li><a href="/admin-accomodation">Ubytování</a></li>
 										<?php endif; ?>
 									</ul>

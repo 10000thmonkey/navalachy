@@ -16,6 +16,9 @@ add_role(
   'Accomodation Host'
 );
 
+$user = (is_user_logged_in()) ? wp_get_current_user() : false;
+
+
 add_filter( 'login_redirect', 'nv_login_redirect', 10, 3 );
 
 function nv_login_redirect( $redirect_to, $request, $user ) {

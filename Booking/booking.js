@@ -23,7 +23,8 @@ class NV_Booking
 			beginValue: this.form.q("#field-begin .field-value"),
 			endValue: this.form.q("#field-end .field-value"),
 			peopleValue: this.form.q("#field-people .field-value"),
-			priceFieldSet: this.form.q("#fieldset-price")[0],
+			priceField: this.form.q("#field-price"),
+			priceFieldSet: q("aside.reservation #fieldset-price")[0],
 
 			messageBox: this.form.q(".messagebox")
 		}
@@ -59,6 +60,8 @@ class NV_Booking
 			} else {
 				this.focusfield( "end" );
 			}
+			if (this.iss)
+				window.scrollTo(0, q(".main.columns")[0].offsetTop + q(".main.columns")[0].offsetHeight - window.innerHeight);
 
 			this.el.datepicker.show();
 			this.shown = true;
@@ -151,21 +154,21 @@ class NV_Booking
 				this.preCheckout("yes", (data) => {
 					var data = JSON.parse(data);
 					
+					this.el.priceField.removeClass("nodisplay").q(".field-value").content(data.price.price_final);
+
 					this.el.priceFieldSet.removeClass("nodisplay").content("");
 
 					if (data.price.costs.length != 0) {
+						this.el.priceFieldSet
+							.insert(createNode("div").addClass(["field", "field-price-costs"])
+							    .insert(createNode("div").addClass("field-label").content("Pronájem"))
+							    .insert(createNode("div").addClass("field-value").content(data.price.price_host)))
 						for (let cost of data.price.costs) {
 							this.el.priceFieldSet
 								.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    	.insert(createNode("div").addClass("field-label").content(cost.label))
-							    	.insert(createNode("div").addClass("field-value").content(cost.value)));
+							    	.insert(createNode("div").addClass("field-label").content(cost[0]))
+							    	.insert(createNode("div").addClass("field-value").content(cost[1])));
 						}
-					}
-					if (data.price.cleaning.length != 0) {
-						this.el.priceFieldSet
-							.insert(createNode("div").addClass(["field", "field-price-cleaning"])
-						    	.insert(createNode("div").addClass("field-label").content("Úklid"))
-						    	.insert(createNode("div").addClass("field-value").content(data.price.cleaning[0])));
 					}
 					if (data.price.discounts.length != 0) {
 						for (let discount of data.price.discounts) {
@@ -177,7 +180,7 @@ class NV_Booking
 					}
 					this.el.priceFieldSet
 						.insert(createNode("div").addClass(["field","field-price-final"]) //celkova cena
-					        .insert(createNode("div").addClass("field-label").content("Cena"))
+					        .insert(createNode("div").addClass("field-label").content("Celkem"))
 					        .insert(createNode("div").addClass("field-value").content(data.price.price_final)));
 
 
@@ -270,7 +273,7 @@ class NV_Booking
 			"Termíny jsou obsazené",
 			"Vyberte prosím alespoň dvě noci"
 		];
-		this.el.messageBox.content( "<i class='nvicon nvicon-calendar-error'></i>" + codes[code] ).show();
+		this.el.messageBox.content( "<i class='nvicon nvicon-calendar-error'></i>" + codes[code] ).display();
 	}
 	search ()
 	{

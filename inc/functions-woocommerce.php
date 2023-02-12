@@ -79,10 +79,14 @@ function custom_woocommerce_auto_complete_order( $order_id ) {
 }
 
 
-
-
-
-
+add_filter( 'woocommerce_default_address_fields' , 'optional_default_address_fields' );
+function optional_default_address_fields( $address_fields ) {
+	$address_fields['company']['required'] = false;
+	$address_fields['postcode']['required'] = false;
+	$address_fields['city']['required'] = false;
+	$address_fields['state']['required'] = false;
+	return $address_fields;
+ }
 
 
 
@@ -105,7 +109,10 @@ function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
 			"nvbk_booking_id"
 		];
 		foreach ( $values as $value ) {
-			update_post_meta( $order_id, $value, $cart_item[$value] );
+			if (is_array($cart_item[value]))
+				update_post_meta( $order_id, $value, json_encode($cart_item[$value]) );
+			else
+				update_post_meta( $order_id, $value, $cart_item[$value] );
 		}
 	} 
 }

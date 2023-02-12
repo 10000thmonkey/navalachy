@@ -55,7 +55,7 @@ get_header();
 		<div class="section-block">
 			<div class="contentwrap box padding-xl rows gap-lg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
-					<a href="experiences"><h2>Do přírody</h2></a>
+					<a href="/tipy"><h2>Do přírody</h2></a>
 					<p class="text-primary">Objevujte Valašskou krajinu a místní zajímavosti!</p>
 				</div>
 
@@ -127,7 +127,7 @@ get_header();
 		<div class="section-block">
 			<div class="contentwrap box padding-xl rows gap-lg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
-					<a href="/experiences"><h2>Za zážitky</h2></a>
+					<a href="/tipy"><h2>Za zážitky</h2></a>
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
 				</div>
 

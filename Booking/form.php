@@ -23,7 +23,7 @@ ob_start();
 				<a class="button button-plain cancel" onclick="cal.reset()">Zrušit</a>
 				<a class="button ok" onclick="cal.set()">OK</a>
 			</div--->*/ ?>
-			<div class="messagebox hidden"></div>
+			<div class="messagebox nodisplay"></div>
 		</div>
 
 	<?= !$iss ? "" : '<div class="fieldgroup hovering">'; ?>
@@ -57,9 +57,13 @@ ob_start();
 			</div>
 		</div>
 	</div>
-	<div class="row space-around-md nodisplay" id="fieldset-price">
+	<div class="fieldgroup fieldgroup-price">
+		<div class="field nodisplay" id="field-price">
+			<div class="field-label">Celkem</div>
+			<div class="field-value"></div>
+		</div>
 	</div>
-	<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
+	<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');body.css('overflow','hidden')">Pokračovat</a>
 
 	<?php else: ?>
 		

@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
 
 	<?php else : ?>
 
-		<h3><?php esc_html_e( 'Billing details', 'woocommerce' ); ?></h3>
+		<h3><?php /*esc_html_e( 'Billing details', 'woocommerce' ); */?></h3>
 
 	<?php endif; ?>
 
@@ -34,12 +34,35 @@ defined( 'ABSPATH' ) || exit;
 	<div class="woocommerce-billing-fields__field-wrapper">
 
 		<?php
-		$fields = $checkout->get_checkout_fields( 'billing' );
+		$checkoutfields = $checkout->get_checkout_fields( 'billing' );
 
-		foreach ( $fields as $key => $field ) {
-			woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
-		}
+		woocommerce_form_field( "billing_first_name", $checkoutfields["billing_first_name"], $checkout->get_value( "billing_first_name" ) );
+		woocommerce_form_field( "billing_last_name", $checkoutfields["billing_last_name"], $checkout->get_value( "billing_last_name" ) );
+		woocommerce_form_field( "billing_email", $checkoutfields["billing_email"], $checkout->get_value( "billing_email" ) );
+		woocommerce_form_field( "billing_phone", $checkoutfields["billing_phone"], $checkout->get_value( "billing_phone" ) );
+		unset($checkoutfields["billing_first_name"]);
+		unset($checkoutfields["billing_last_name"]);
+		unset($checkoutfields["billing_email"]);
+		unset($checkoutfields["billing_phone"]);
 		?>
+
+	</div>
+
+	<style>
+		.billing_fields_toggle_fields {max-height: 0; overflow: hidden; transition: ease 200ms all;}
+		#billing_fields_toggle:checked ~ .billing_fields_toggle_fields {max-height: 2000px;}
+	</style>
+		<input type="checkbox" id="billing_fields_toggle">
+		<label for="billing_fields_toggle">Fakturační údaje</label>
+	
+	<div class="woocommerce-billing-fields__field-wrapper billing_fields_toggle_fields">
+		<div class="optional-form-fields"> 
+			<?php
+				foreach ( $checkoutfields as $key => $field ) {
+					woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+				}
+			?>
+		</div>
 	</div>
 
 	<?php do_action( 'woocommerce_after_checkout_billing_form', $checkout ); ?>
@@ -68,7 +91,9 @@ if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) : ?>
 
 			<div class="create-account">
 				<?php foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) : ?>
-					<?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
+					<?php
+					woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+					?>
 				<?php endforeach; ?>
 				<div class="clear"></div>
 			</div>
