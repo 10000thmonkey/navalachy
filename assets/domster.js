@@ -227,3 +227,10 @@ HTMLFormElement.prototype.serialize = function () {
 	for (e of this.elements) r[e.name] = e.value;
 	return r;
 }
+
+Node.prototype.messagebox = function (msg, type = "", icon = "") {
+	if (type === "") type = "info";
+	if (icon !== "") icon = "<i class='nvicon nvicon-"+icon+"'></i>"; 
+	this.q(".messagebox").remove();
+	this.insert(createNode("div").addClass(["messagebox",type]).content(icon + msg));
+}

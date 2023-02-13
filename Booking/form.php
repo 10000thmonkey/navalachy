@@ -14,12 +14,16 @@ ob_start();
 ?>
 
 <form id="booking-form">
+
+	<?php if($iss) : ?>
+		<h3>Vyberte termín</h3>
+	<?php endif; ?>
 	
-	<div class="fieldgroup hovering">
+	<div class="fieldgroup hovering space-around-md">
 
 		<div class="datepicker hidden hiding padding-sm" aria-hidden="true" id="datepicker">
 			<div id="calendar"></div>
-			<div class="messagebox nodisplay"></div>
+			<div class="messages nodisplay"></div>
 		</div>
 
 		<div class="field" id="field-begin" onclick="cal.show()">
@@ -40,8 +44,8 @@ ob_start();
 	
 	<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');document.body.css('overflow','hidden')">Pokračovat</a>
 
-	<div class="reservation-form-popup rows gap-md space-around-md">
-		<div class="fieldgroup rows">
+	<div class="reservation-form-popup rows gap-md">
+		<div class="fieldgroup rows" id="fieldgroup-people">
 			<div class="field" id="field-adults">	
 				<div style="display:flex">
 					<div style="flex:1">
@@ -75,6 +79,9 @@ ob_start();
 		</div>
 
 		<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
+		
+		<div class="messages nodisplay"></div>
+
 	</div>
 
 	<?php else: ?>

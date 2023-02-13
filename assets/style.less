@@ -1240,12 +1240,9 @@ body.woocommerce-checkout {
 body {
 
 	#booking-form {
-
 		display: flex;
 		justify-content: center;
 		position: relative;
-		gap: 15px;
-
 	}
 	.fieldgroup {
 		border-radius: var(--radius-md);
@@ -1413,6 +1410,8 @@ body.single-accomodation {
 		.box();
 		backdrop-filter: none !important;
 		.padding-hg();
+
+		& > h3 {display: none;}
 		.fieldgroup {box-shadow: none;}
 		.reservation-people a.button {
 			justify-content: center;
@@ -1437,26 +1436,18 @@ body.single-accomodation {
 			z-index: 1;
 			align-self: flex-start;
 
+			#booking-form > h3 {display: block;}
+
 			.mobile-sliding-footer {display: none;}
 			.reservation-form-popup {display: none;}
 
 		    .fieldgroup.fieldgroup-price, .continuebutton {display: flex;}
-		}
-
-		.datepicker {
-			left: unset;
-			right: 100%;
-			bottom: unset;
-			top: 0px;
-			transform: scale(1);
-			&.hidden {transform: scale(.8);}
 		}
 	}
 	aside.reservation {
 		width: 100vw;
 	    max-width: unset;
 	    height: 100vh;
-	    overflow: auto;
 	    max-height: unset;
 	    position: fixed;
 	    background: white;
@@ -1479,6 +1470,7 @@ body.single-accomodation {
 	    	height: 100px;
 	    	position: relative;
 	    	width: 100%;
+	    	flex:none;
 	    	.transition();
 	    	.content-on-shown, .content-on-hidden {
 	    		.layer(1);
@@ -1487,6 +1479,7 @@ body.single-accomodation {
 	    		opacity: 0;
 	    		pointer-events: none;
 	    		width: auto;
+	    		height:100px;
 			    right: 0;
 			    left: unset;
 			    height: 100%;
@@ -1509,6 +1502,10 @@ body.single-accomodation {
 
 	    &.slided {
 	    	top: 0;
+		    overflow: auto;
+
+		    #booking-form {margin: 30px 0;}
+	
 	    	.mobile-sliding-footer {
 		    	.content-on-shown {opacity: 1;pointer-events: auto;}
 		    	.content-on-hidden {opacity: 0;pointer-events: none;}
@@ -1877,13 +1874,15 @@ nv-slider {
 	&.avatar-xxxl {width: var(--space-xxxl); height: var(--space-xxxl)}
 }
 
-.messagebox {
+.messagebox {display: flex;
+    gap: 15px;
+    align-items: center;
 	.padding-sm();
-	.space-around-md();
+	.space-around-sm();
 	border-radius: var(--radius-sm);
-	&.error {background: rgba(255, 155, 155, 1.0);}
-	&.info {background: rgba(155, 155, 255, 1.0);}
-	&.success {background: rgba(155, 255, 155, 1.0);}
+	&.error {background: rgba(255, 155, 155, .1);}
+	&.info {background: rgba(155, 155, 255, .1);}
+	&.success {background: rgba(155, 255, 155, .1);}
 }
 .tag {
 

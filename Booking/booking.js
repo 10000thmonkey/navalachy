@@ -30,7 +30,8 @@ class NV_Booking
 			priceField: this.form.q("#field-price"),
 			priceFieldSet: q("aside.reservation #fieldset-price")[0],
 
-			messageBox: this.form.q(".messagebox")
+			messageBoxDatepicker: this.form.q(".datepicker .messagebox"),
+			messageBox: this.form.q(".reservation-form-popup .messagebox")
 		}
 
 		this.hw = new HelloWeek ( {
@@ -122,14 +123,20 @@ class NV_Booking
 			{
 			 	//reset calendar
 				let currentMonth = this.hw.getMonth();
-				let d = new Date(  );
+				let d = new Date();
 				d.setMonth( currentMonth - 1 );
 				this.hw.intervalRange = {};
 				this.hw.reset();
 				this.hw.goToDate( this.dateToString( d ) );
 
+
+				this.el.beginValue.content("-");
+				this.el.endValue.content("-");
+				this.begin = [];
+				this.end = [];
+				
 				//display the error
-				this.showError( errorcode );
+				this.showErrorDatepicker( errorcode );
 
 				this.focusfield("begin");
 			} else {
@@ -232,7 +239,10 @@ class NV_Booking
 			var newValue = parseInt(this.adults) + parseInt(num);
 
 			if (newValue < 1) newValue = 1;
-			if ((newValue + this.kids) > cal.peopleLimit) newValue = newValue - num;
+			if ((newValue + this.kids) > cal.peopleLimit) {
+				newValue = newValue - num;
+				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.peopleLimit);
+			}
 		
 			this.adults = newValue;
 			this.el.adultsValue.content(newValue);
@@ -242,7 +252,10 @@ class NV_Booking
 			var newValue = parseInt(this.kids) + parseInt(num);
 
 			if (newValue < 1) newValue = 1;
-			if ((newValue + this.adults) > cal.peopleLimit) newValue = newValue - num;
+			if ((newValue + this.adults) > cal.peopleLimit) {
+				newValue = newValue - num;
+				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.peopleLimit);
+			}
 		
 			this.kids = newValue;
 			this.el.kidsValue.content(newValue);
@@ -274,7 +287,7 @@ class NV_Booking
 	sendToCheckout ()
 	{
 		if ( !this.isSelected() )
-			return alert("Vyberte prosím datum příjezdu i odjezdu");
+			return this.form.q(".reservation-form-popup > .messages")[0].display().messagebox("Vyberte prosím datum příjezdu a odjezdu", "error", "calendar-error");
 
 		this.el.spinner.show();
 		this.el.datepicker.hide();
@@ -282,20 +295,20 @@ class NV_Booking
 		this.preCheckout( "no", (data) => {
 			var data = JSON.parse(data);
 			if(!data.success) {
-				alert("Chybišta se vloudila");
+				this.form.q(".reservation-form-popup > .messages")[0].display().messagebox("Vyskytla se chyba", "error", "error");
 				console.log(data);
 			} else {
 				location.href = "/checkout";
 			}
 		});
 	}
-	showError ( code )
+	showErrorDatepicker ( code )
 	{
 		let codes = [
 			"Termíny jsou obsazené",
 			"Vyberte prosím alespoň dvě noci"
 		];
-		this.el.messageBox.content( "<i class='nvicon nvicon-calendar-error'></i>" + codes[code] ).display();
+		this.el.datepicker.q(".messages")[0].display().messagebox( codes[code], "info", "calendar-error" );
 	}
 	search ()
 	{
@@ -306,7 +319,7 @@ class NV_Booking
 	}
 
 
-	isSelected () { return !! ( this.begin && this.end); }
+	isSelected () { return ( this.begin.length !== 0 && this.end.length !== 0 ); }
 }
 
 

@@ -2,7 +2,8 @@
 
 function nvbk_email_order_complete ( $VAR )
 {
-	$featured_img = wp_get_attachment_image_url( get_post_thumbnail_id( (int)$VAR["nvbk_booking_apartmentId"] ), "small");
+	$featured_img = wp_get_attachment_image_url( get_post_thumbnail_id( (int)$VAR["nvbk_booking_apartmentId"][0] ), "medium");
+	$dates = date("j. n. Y", strtotime($VAR["nvbk_booking_begin"][0]) ) . " - " . date("j. n. Y", strtotime($VAR["nvbk_booking_end"][0]) );
 
 	$output = <<<HTML
 		
@@ -22,10 +23,10 @@ function nvbk_email_order_complete ( $VAR )
 								<p style="margin:0 0 16px">Dobrý den {$VAR["_billing_first_name"][0]},</p>
 								<p style="margin:0 0 16px">Vaši rezervaci č. {$VAR["_order_id"]} jsme úspěšně zpracovali!</p>
 
-								<div style="padding: 20px; border-radius: 30px; background-color: #ffe4b3; margin: 15px 0; border-radius: 30px;">
-									<p style="">{$VAR["nvbk_booking_apartmentName"]}</p>
+								<div style="text-align:center;padding: 20px; border-radius: 30px; background-color: #ffe4b3; margin: 15px 0; border-radius: 30px;">
+									<p style="">{$VAR["nvbk_booking_apartmentName"][0]}</p>
 									<img src="{$featured_img}" style="width:100%; border-radius: 30px;">
-									<h2 style="color:#232f5b;">{$VAR["nvbk_booking_begin"][0]} - {$VAR["nvbk_booking_end"][0]}</h2>
+									<h2 style="color:#232f5b;">{$dates}</h2>
 								</div>
 
 								<div style="margin-bottom:40px">
