@@ -56,7 +56,7 @@ get_header();
 			<div class="contentwrap box padding-xl rows gap-lg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Do přírody</h2></a>
-					<p class="text-primary">Objevujte Valašskou krajinu a místní zajímavosti!</p>
+					<p class="text-primary">Výlet na Valachy potěší každého, od horolezce po běžkaře</p>
 				</div>
 
 				<nv-slider class="hovercards">

@@ -10,9 +10,18 @@ function nv_filter_experiences_function( $args )
 {
 	require_once("feed.php");
 
+	if ( !empty( $_POST['tagfilter'] ) ) {
+		if (strpos( $_POST["tagfilter"], ","))
+				$tags = explode(",", $_POST["tagfilter"]);
+		else
+			$tags = array($_POST["tagfilter"]);
+	}
+	else
+		$tags = [];
+
 	if ( !is_array ($args) ) {
 		$args = array (
-			"tagfilter" => $_POST['tagfilter'],
+			"tagfilter" => $tags,
 			"orderby" => "date",
 			"paged" => $_POST['paged'],
 		);

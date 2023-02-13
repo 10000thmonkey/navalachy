@@ -29,7 +29,7 @@ get_header();
 							$nv_tags = get_terms(
 								array(
 									'taxonomy'   => 'experiences_tags',
-									'hide_empty' => false,
+									'hide_empty' => true,
 								)
 							);
 							foreach ( $nv_tags as $nv_tag ) {
@@ -70,9 +70,9 @@ get_header();
 					"orderby" => "date",
 					"paged" => false
 				);
-				if (isset( $_GET["tags"] )){
+				if ( !empty( $_GET["tags"] ) ) {
 					if (strpos( $_GET["tags"], ","))
-						$args["tagfilter"] = explode($_GET["tags"], ",");
+						$args["tagfilter"] = explode(",", $_GET["tags"] );
 					else
 						$args["tagfilter"] = array($_GET["tags"]);
 				}
@@ -86,11 +86,13 @@ get_header();
 					$args["orderby"] = $_GET["orderby"];
 				}
 				
-				echo nv_template_experiences_feed ( $args ) ["data"];
+				$feed = nv_template_experiences_feed ( $args );
+				echo $feed["data"];
+				echo var_dump($feed["page"]);
 				?>
 			</div>
 			<div style="display:flex;justify-content: center;">
-				<a id="button-loadmore" onclick="loadMore()"  class="button button-primary<?php if($query["page"] == 1) echo ' hidden';?>">Další</a>
+				<a id="button-loadmore" onclick="loadMore()"  class="button button-primary<?php if( (int)$feed["page"] === 0 ) echo ' nodisplay';?>">Další</a>
 			</div>
 
 			<div class="spinner-wrapper hidden"><div class="spinner"></div></div>
@@ -126,8 +128,10 @@ get_header();
 				data = JSON.parse(data);
 				feed.content( feed.content() + data["data"] ); // insert data
 
-				if (counter == parseInt(data["page"]) )
-					loadMoreBtn.addClass("hidden");
+				if ( parseInt(data["page"]) == 0 )
+					loadMoreBtn.noDisplay();
+				else
+					loadMoreBtn.display();
 			}
 		);
 	}
@@ -140,7 +144,7 @@ get_header();
 
 		feed.removeClass("show");
 		spinner.addClass("show");
-		console.log(filterform.serialize());
+		//console.log(filterform.serialize());
 
 		jax.post( filterform.attr('action'),
 		{
@@ -156,13 +160,13 @@ get_header();
 			feed.content( data["data"] ); // insert data
 			feed.addClass("show");
 
-			if (parseInt(data["page"]) == 1) {
-				loadMoreBtn.addClass("hidden");
+			if ( parseInt(data["page"]) == 0 ) {
+				loadMoreBtn.noDisplay();
 			}
 			else {
-				loadMoreBtn.removeClass("hidden");
-				spinner.removeClass("show");
+				loadMoreBtn.display();
 			}
+			spinner.removeClass("show");
 		});
 	}
 	function updateFilter ( fromURL, form )

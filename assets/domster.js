@@ -181,7 +181,7 @@ NodeList.prototype.show = function() {return this.each(function(){this.show();})
 
 Node.prototype.noDisplay = function() {this.addClass("nodisplay");return this;}
 Node.prototype.display = function() {this.removeClass("nodisplay");return this;}
-NodeList.prototype.noDisplay = function() {return this.each(function(){this.nodisplay();})}
+NodeList.prototype.noDisplay = function() {return this.each(function(){this.noDisplay();})}
 NodeList.prototype.display = function() {return this.each(function(){this.display();})}
 
 

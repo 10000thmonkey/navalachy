@@ -3,27 +3,31 @@
 class NVBK
 {
 	protected $columns = array(
-        'calendar_id' => '%d',
+		'booking_key' => '%s',
+        'apartment_id' => '%d',
         'uid' => '%s',
-        'order_id' => '%d',
-        'start_date' => '%s',
+        'order' => '%d',
+        'begin_date' => '%s',
         'end_date' => '%s',
-        'fields' => '%s',
+        'data' => '%s',
         'status' => '%s',
         'is_read' => '%d',
         'date_created' => '%s',
-        'date_modified' => '%s'
+        'date_synced' => '%s'
     );
 	public $table_name = "nvbk_booking";
+	public $debug = false;
 
+//	public function ()
 
-
-	public function __construct()
+	public function __construct( $debug = false )
 	{
+		if ($debug) $this->debug = true;
+
 		//check if table is created
 		$nvbk_table_exists = get_option("nvbk_table_exists");
 
-		if ( $nvbk_table_exists === false )
+		if ( $nvbk_table_exists === false || $this->debug )
 		{
 			$this->create_table();
 			$this->sync();
@@ -43,24 +47,25 @@ class NVBK
         $wpdb->query("DROP TABLE {$this->table_name}");
 
         $query = "CREATE TABLE {$this->table_name} (
-			id bigint(10) NOT NULL AUTO_INCREMENT,
-			calendar_id bigint(10) NOT NULL,
-			uid tinytext NOT NULL,
-			order_id int NOT NULL,
-            start_date datetime NOT NULL,
+			id int NOT NULL AUTO_INCREMENT, // 
+			booking_key tinytext UNIQUE PRIMARY KEY NOT NULL, // prim. key in format: {aptId}{beg.date timestmp}{end.date timestamp}
+			apartment_id int NOT NULL, // apartment id
+			uid tinytext NOT NULL, // iCal event uid
+			order int NOT NULL, // wc order id
+            begin_date datetime NOT NULL,
 			end_date datetime NOT NULL,
-			fields text NOT NULL,
-			status text NOT NULL,
-            is_read tinyint(1) NOT NULL,
-			date_created datetime NOT NULL,
-			date_modified datetime NOT NULL,
-			PRIMARY KEY  id (id)
+			data text NOT NULL, // json-formated data about reservation
+			status text NOT NULL, // for iCal: SYNCED, for NV: BLOCKED / PENDING / CONFIRMED
+            is_read tinyint(1) NOT NULL, // for notifications
+			date_created datetime NOT NULL, // never changes, initial datetime 
+			date_synced datetime NOT NULL, // update on sync
+			PRIMARY KEY (apartment_id, begin_date, end_date)
 		) {$charset_collate};";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta($query);
+        return dbDelta($query);
 
-        $wpdb->query("CREATE UNIQUE INDEX uid_idx ON {$this->table_name} (uid(50))");
+        //$wpdb->query("CREATE UNIQUE INDEX key_idx ON {$this->table_name} (booking_key(50))");
     }
 
 
@@ -95,32 +100,34 @@ class NVBK
 
 					foreach ( $events as $event )
 					{
-						$status = 
-							empty( $event["STATUS"] ) ?
-								"unknown" :
-								strtolower($event["STATUS"]);
-						$fields = ["summary" => $event["SUMMARY"], "description" => $event["DESCRIPTION"]];
+						$data = ["summary" => $event["SUMMARY"], "description" => $event["DESCRIPTION"]];
+						$begin = date('Y-m-d 00:00:00', strtotime($event["DTSTART"]));
+						$end = date('Y-m-d 00:00:00', strtotime($event["DTEND"]));
+						$key = absint($apartment) . "_" . $begin . "_" . $end;
 
 				    	array_push($values, ...array_values( [
-				            'calendar_id' => absint($apartment),
+				    		'booking_key' => $key,
+				            'apartment_id' => absint($apartment),
 				            'uid' => $event["UID"],
-				            'order_id' => "1",
-				            'start_date' => date('Y-m-d 00:00:00', strtotime($event["DTSTART"])),
-				            'end_date' => date('Y-m-d 00:00:00', strtotime($event["DTEND"])),
-				            'fields' => serialize($fields),
-				            'status' => $status,
+				            'order' => 0,
+				            'begin_date' => $begin,
+				            'end_date' => $end,
+				            'fields' => json_encode($data),
+				            'status' => 'SYNCED',
 				            'is_read' => '0',
 				            'date_created' => current_time('Y-m-d H:i:s'),
-				            'date_modified' => current_time('Y-m-d H:i:s'),
+				            'date_synced' => current_time('Y-m-d H:i:s'),
 				        ] ) );
 				        $formats[] = $format;
 					}
 				}
+				unset($ical);
+		
 				$sql_formats = implode(", ", $formats);
 
 				$sql = "INSERT INTO {$this->table_name} ({$keys})
 						VALUES {$sql_formats}
-						ON DUPLICATE KEY UPDATE `date_modified` = '" . current_time('Y-m-d H:i:s')."'";
+						ON DUPLICATE KEY UPDATE `date_synced` = '" . current_time('Y-m-d H:i:s') . "'";
 
 				$query = $wpdb->prepare( $sql, array_values( $values ) );
 

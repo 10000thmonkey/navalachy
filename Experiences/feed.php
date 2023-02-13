@@ -13,7 +13,7 @@ function nv_template_experiences_feed ( $VAR = [] )
 		$wpargs["posts_per_page"] = $VAR["limit"];
 
 	if ( !empty($VAR["tagfilter"]) )
-		$wpargs['tax_query'][] = array( array(
+		$wpargs['tax_query'] = array( array(
 			'taxonomy' => 'experiences_tags',
 			'field' => 'slug',
 			'terms' => $VAR["tagfilter"]
@@ -64,13 +64,15 @@ function nv_template_experiences_feed ( $VAR = [] )
 		wp_reset_postdata();
 
 		return [
-			"page" => $query->max_num_pages,
+			"page" => ((int)$query->max_num_pages >= (int)$VAR["paged"]) ? 0 : 1,
+			"args" => $wpargs,
 			"data" => $html
 		];
 
 	} else {
 		return [
-			"page" => 1,
+			"page" => 0,
+			"args" => $wpargs,
 			"data" => "No posts found"
 		];
 	}

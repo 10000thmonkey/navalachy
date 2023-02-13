@@ -5,15 +5,17 @@ $NV_MODULES = [
 
 get_header();
 
-//$nvbk->sync();
+//
+
+if ($_GET["test"] == 0)
+{
+	echo $nvbk->create_table();
+	echo $nvbk->sync();
+}
+
 //$insert = $nvbk->insert_booking ( 149, "2023-07-01", "2023-07-05", ["name"=>"voja"], 2 );
 
 //print_r(json_encode($nvbk->get_disabled_days(149)));
-
-echo count([]);
-for ($i=0; $i < count([]); $i++) { 
-	echo "jhbj";
-}
 
 if ($_GET['test'] == 1) {
 	$id = empty($_GET["id"]) ? 149 : $_GET['id'];
