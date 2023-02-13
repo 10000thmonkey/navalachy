@@ -105,6 +105,8 @@ get_header();
 
 
 		<aside class="col reservation reallyaside">
+
+
 			<div class="mobile-sliding-footer">
 				
 				<div class="content-on-shown space-between">
@@ -124,17 +126,7 @@ get_header();
 				"capacity" => (int)$meta_fields["capacity"][0],
 				"ical" => $meta_fields["ical_url"][0]
 			)); ?>
-
-			<div class="reservation-form-popup rows gap-md space-around-md">
-
-				<div class="rows space-around-md nodisplay" id="fieldset-price"></div>
-
-				<div style="padding: 5px 30px">
-					<p>Energie a dřevo navíc jednoduše doplatíte při odjezdu dle spotřeby. (postup bude zaslán v manuálu)</p>
-				</div>
-
-				<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
-			</div>
+ 
 		</aside>
 
 

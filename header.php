@@ -9,6 +9,8 @@
  * @package navalachy
  */
 global $user;
+global $isAdmin;
+$isAdmin = $user ? array_key_exists("administrator", $user->roles) : false;
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>
@@ -19,7 +21,7 @@ global $user;
 
 
 	<?php wp_head(); ?>
-	<?php if (!WP_DEBUG && !array_key_exists("administrator", $user->roles)): ?>
+	<?php if (!WP_DEBUG && !$isAdmin): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];

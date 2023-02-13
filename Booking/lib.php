@@ -173,25 +173,25 @@ class NVBK
 
     	$results = $wpdb->query( $query );
 
-    	$data = json_encode([
-    		"apartment_id" => $wc_order_meta["nvbk_booking_apartmentId"],
-			"apartment_name" => $wc_order_meta["nvbk_booking_apartmentName"],
-			"begin" => $wc_order_meta["nvbk_booking_begin"],
-			"end" => $wc_order_meta["nvbk_booking_end"],
-			"price" => $wc_order_meta["nvbk_booking_price"],
-			"guests" => $wc_order_meta["nvbk_booking_people"],
-			"booking_id" => $wc_order_meta["nvbk_booking_id"]
-    	]);
+    	// $data = json_encode([
+    	// 	"apartment_id" => $wc_order_meta["nvbk_booking_apartmentId"],
+		// 	"apartment_name" => $wc_order_meta["nvbk_booking_apartmentName"],
+		// 	"begin" => $wc_order_meta["nvbk_booking_begin"],
+		// 	"end" => $wc_order_meta["nvbk_booking_end"],
+		// 	"price" => $wc_order_meta["nvbk_booking_price"],
+		// 	"guests" => $wc_order_meta["nvbk_booking_people"],
+		// 	"booking_id" => $wc_order_meta["nvbk_booking_id"]
+    	// ]);
 
-    	$confirm_booking = wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6",
-    	    array(
-			    'body'    => $data,
-			    'headers' => array(
-			    	'Content-Type' => 'application/json'
-		    	)
-			)
-		);
-		add_action("qm/debug", $confirm_booking );
+    	// $confirm_booking = wp_remote_post( "http://142.93.157.222:5678/webhook-test/69ae1463-85a5-4497-8694-aed4fb067fa6",
+    	//     array(
+		// 	    'body'    => $data,
+		// 	    'headers' => array(
+		// 	    	'Content-Type' => 'application/json'
+		//     	)
+		// 	)
+		// );
+		//add_action("qm/debug", $confirm_booking );
 
     	return $results;
     }
@@ -352,7 +352,7 @@ class NVBK
 			"price_final" => $price_final . $currency_appendix,
 			"price_host" => $price_host . $currency_appendix,
 			"discounts" => $discounts,
-			"costs" => $costs,
+			"costs" => $costs ? $costs : [],
 			"nights" => $nights
 		];
 	}

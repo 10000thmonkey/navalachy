@@ -15,18 +15,12 @@ ob_start();
 
 <form id="booking-form">
 	
-	<?= $iss ? "" : '<div class="fieldgroup hovering">'; ?>
+	<div class="fieldgroup hovering">
 
 		<div class="datepicker hidden hiding padding-sm" aria-hidden="true" id="datepicker">
-			<div id="calendar"></div><? /*
-			<!--div class="datepicker-footer">
-				<a class="button button-plain cancel" onclick="cal.reset()">Zrušit</a>
-				<a class="button ok" onclick="cal.set()">OK</a>
-			</div--->*/ ?>
+			<div id="calendar"></div>
 			<div class="messagebox nodisplay"></div>
 		</div>
-
-	<?= !$iss ? "" : '<div class="fieldgroup hovering">'; ?>
 
 		<div class="field" id="field-begin" onclick="cal.show()">
 			<div class="field-label">Od</div>
@@ -39,31 +33,49 @@ ob_start();
 			<div class="field-value">-</div>
 			<input type="hidden" name="end">
 		</div>
+
 	</div>
 	
 	<?php if($iss) : ?>
+	
+	<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');document.body.css('overflow','hidden')">Pokračovat</a>
 
-	<div class="fieldgroup ">
-		<div class="field" id="field-people">	
-			<div style="display:flex">
-				<div style="flex:1">
-					<div class="field-label">Osoby</div>
-					<div class="field-value">1</div>
+	<div class="reservation-form-popup rows gap-md space-around-md">
+		<div class="fieldgroup rows">
+			<div class="field" id="field-adults">	
+				<div style="display:flex">
+					<div style="flex:1">
+						<div class="field-label">Dospělí</div>
+						<div class="field-value">1</div>
+					</div>
+					<div style="display: flex;">
+						<a class="button button-plain button-icon-only" onclick="cal.setPeople(-1, 'adults')"><i class="nvicon nvicon-minus"></i></a>
+						<a class="button button-plain button-icon-only" onclick="cal.setPeople(+1, 'adults')"><i class="nvicon nvicon-plus"></i></a>
+					</div>
 				</div>
-				<div style="display: flex;">
-					<a class="button button-plain button-icon-only" onclick="cal.setPeople(-1)"><i class="nvicon nvicon-minus"></i></a>
-					<a class="button button-plain button-icon-only" onclick="cal.setPeople(+1)"><i class="nvicon nvicon-plus"></i></a>
+			</div>
+			<div class="field" id="field-kids">	
+				<div style="display:flex">
+					<div style="flex:1">
+						<div class="field-label">Děti</div>
+						<div class="field-value">0</div>
+					</div>
+					<div style="display: flex;">
+						<a class="button button-plain button-icon-only" onclick="cal.setPeople(-1, 'kids')"><i class="nvicon nvicon-minus"></i></a>
+						<a class="button button-plain button-icon-only" onclick="cal.setPeople(+1, 'kids')"><i class="nvicon nvicon-plus"></i></a>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="fieldgroup fieldgroup-price">
-		<div class="field nodisplay" id="field-price">
-			<div class="field-label">Celkem</div>
-			<div class="field-value"></div>
+
+		<div class="fieldgroup rows space-around-md nodisplay" id="fieldset-price"></div>
+
+		<div style="padding: 5px 30px">
+			<p>Energie a dřevo navíc jednoduše doplatíte při odjezdu dle spotřeby. (postup bude zaslán v manuálu)</p>
 		</div>
+
+		<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
 	</div>
-	<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');body.css('overflow','hidden')">Pokračovat</a>
 
 	<?php else: ?>
 		

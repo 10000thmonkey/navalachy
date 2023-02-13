@@ -210,7 +210,7 @@ h4 {margin: 5px 0;}
 	min-height: 100vh;
 }
 .site-header {
-	position: sticky;
+	//position: sticky;
 	top: 0;
 	z-index: 10;
 	height: 80px;
@@ -439,6 +439,7 @@ h4 {margin: 5px 0;}
 
 body.home {
 	.site-header {
+		position: sticky;
 		background: transparent; 
 		backdrop-filter: none;
 		position: fixed;
@@ -1159,7 +1160,7 @@ body.woocommerce-checkout {
 		#customer_details {
 			flex: 1;
 			background: var(--color-ui-grey);
-			padding: 50px;
+			.padding-lg();
 
 			.woocommerce-billing-fields__field-wrapper {
 				margin: 20px 0;
@@ -1168,7 +1169,7 @@ body.woocommerce-checkout {
 		#order_review {
 			width: 100% !important;
 			margin: 0 !important;
-			padding: 50px;
+			.padding-lg();
 			flex: 1;
 			display: flex;
 			flex-direction: column;
@@ -1425,15 +1426,16 @@ body.single-accomodation {
 	@media (min-width: @breakpoint-md) {
 		aside.reservation.reallyaside {
 			position: sticky;
-			bottom: 50px;
+			top: 50px;
 			max-width: 400px;
 			flex: 1;
 			height: auto;
 			width: auto;
+			overflow: visible;
 			box-shadow:none;
 			background: none;
-			top: unset;
 			z-index: 1;
+			align-self: flex-start;
 
 			.mobile-sliding-footer {display: none;}
 			.reservation-form-popup {display: none;}
@@ -1442,21 +1444,19 @@ body.single-accomodation {
 		}
 
 		.datepicker {
-			top: 80px;
-			@media (min-width: @breakpoint-md) {
-				left: unset;
-				right: 100%;
-				bottom: 0px;
-				top: unset;
-				transform: scale(1);
-				&.hidden {transform: scale(.8);}
-			}
+			left: unset;
+			right: 100%;
+			bottom: unset;
+			top: 0px;
+			transform: scale(1);
+			&.hidden {transform: scale(.8);}
 		}
 	}
 	aside.reservation {
 		width: 100vw;
 	    max-width: unset;
 	    height: 100vh;
+	    overflow: auto;
 	    max-height: unset;
 	    position: fixed;
 	    background: white;
@@ -1470,8 +1470,7 @@ body.single-accomodation {
 	    align-items: center;
 
 	    #booking-form {
-		    /* padding: var(--space-hg); */
-		    max-width: 400px;
+		    max-width: 600px;
 		    background: none;
 		    backdrop-filter: none;
 	    }
@@ -1480,7 +1479,6 @@ body.single-accomodation {
 	    	height: 100px;
 	    	position: relative;
 	    	width: 100%;
-	    	margin-bottom: 100px;
 	    	.transition();
 	    	.content-on-shown, .content-on-hidden {
 	    		.layer(1);
@@ -1495,6 +1493,12 @@ body.single-accomodation {
 			    display: flex;
 			    align-items: center;
 			    justify-content: center;
+			    @media (max-width: @breakpoint-sm) {
+			    	.btn-close {
+			    		top: 20px;
+			    		right: 20px;
+			    	}
+			    }
 	    	}
 	    	.content-on-hidden {
 	    		opacity: 1;
@@ -2233,6 +2237,7 @@ nv-slider {
 	    border-radius: 50%;
 	    box-shadow: var(--shadow-md);
 	    text-align: center;
+	    cursor: pointer;
     }
 }
 .input {

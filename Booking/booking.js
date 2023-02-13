@@ -5,7 +5,8 @@ class NV_Booking
 		Date.prototype.shift = function (by) { this.setDate(this.getDate() + by); return this; };
 		this.iss = args.iss;
 		this.shown = false;
-		this.people = 1;
+		this.adults = 1;
+		this.kids = 0;
 		this.peopleLimit = args.peopleLimit;
 		this.begin = [];
 		this.end = [];
@@ -22,7 +23,10 @@ class NV_Booking
 
 			beginValue: this.form.q("#field-begin .field-value"),
 			endValue: this.form.q("#field-end .field-value"),
-			peopleValue: this.form.q("#field-people .field-value"),
+
+			adultsValue: this.form.q("#field-adults .field-value"),
+			kidsValue: this.form.q("#field-kids .field-value"),
+
 			priceField: this.form.q("#field-price"),
 			priceFieldSet: q("aside.reservation #fieldset-price")[0],
 
@@ -60,7 +64,7 @@ class NV_Booking
 			} else {
 				this.focusfield( "end" );
 			}
-			if (this.iss)
+			if (this.iss && this.el.datepicker[0].getBoundingClientRect().top < 80)
 				window.scrollTo(0, q(".main.columns")[0].offsetTop + q(".main.columns")[0].offsetHeight - window.innerHeight);
 
 			this.el.datepicker.show();
@@ -118,7 +122,7 @@ class NV_Booking
 			{
 			 	//reset calendar
 				let currentMonth = this.hw.getMonth();
-				let d = new Date();
+				let d = new Date(  );
 				d.setMonth( currentMonth - 1 );
 				this.hw.intervalRange = {};
 				this.hw.reset();
@@ -142,6 +146,9 @@ class NV_Booking
 				this.focusfield();
 				this.set();
 				this.shown = false;
+
+				q('aside.reservation').removeClass('reallyaside').addClass('slided');
+				document.body.css('overflow','hidden');
 			}
 		}
 	}
@@ -218,14 +225,28 @@ class NV_Booking
 		this.shown = false;
 	}
 
-	setPeople (num) {
-		var newValue = parseInt(this.people) + parseInt(num);
+	setPeople (num, kind)
+	{
+		if (kind == "adults")
+		{
+			var newValue = parseInt(this.adults) + parseInt(num);
 
-		if (newValue < 1) newValue = 1;
-		if (newValue > cal.peopleLimit) newValue = newValue - num;
+			if (newValue < 1) newValue = 1;
+			if ((newValue + this.kids) > cal.peopleLimit) newValue = newValue - num;
 		
-		this.people = newValue;
-		q("#field-people .field-value").content(newValue);
+			this.adults = newValue;
+			this.el.adultsValue.content(newValue);
+		}
+		else
+		{
+			var newValue = parseInt(this.kids) + parseInt(num);
+
+			if (newValue < 1) newValue = 1;
+			if ((newValue + this.adults) > cal.peopleLimit) newValue = newValue - num;
+		
+			this.kids = newValue;
+			this.el.kidsValue.content(newValue);
+		}
 	}
 	dateToString ( date )
 	{
@@ -241,7 +262,8 @@ class NV_Booking
 				"preCheckout" : isPrecheckout,
 				"begin": this.begin,
 				"end": this.end,
-				"people" : this.people,
+				"adults" : this.adults,
+				"kids" : this.kids,
 				"apartmentId" : this.apartmentId,
 				"apartmentName" : this.apartmentName
 			},

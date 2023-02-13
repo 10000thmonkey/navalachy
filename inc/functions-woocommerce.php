@@ -85,38 +85,13 @@ function optional_default_address_fields( $address_fields ) {
 	$address_fields['postcode']['required'] = false;
 	$address_fields['city']['required'] = false;
 	$address_fields['state']['required'] = false;
+	$address_fields['country']['required'] = false;
+	$address_fields['address_1']['required'] = false;
 	return $address_fields;
  }
 
 
 
-
-
-
-function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
-{
-    $cart = WC()->cart;
-	
-	foreach ( $cart->get_cart() as $cart_item )
-	{
-		$values = [
-			"nvbk_booking_apartmentId",
-			"nvbk_booking_apartmentName",
-			"nvbk_booking_begin",
-			"nvbk_booking_end",
-			"nvbk_booking_price",
-			"nvbk_booking_people",
-			"nvbk_booking_id"
-		];
-		foreach ( $values as $value ) {
-			if (is_array($cart_item[value]))
-				update_post_meta( $order_id, $value, json_encode($cart_item[$value]) );
-			else
-				update_post_meta( $order_id, $value, $cart_item[$value] );
-		}
-	} 
-}
-add_action( 'woocommerce_checkout_update_order_meta', "nvbk_cartmeta_to_ordermeta", 10, 2);
 
 
 

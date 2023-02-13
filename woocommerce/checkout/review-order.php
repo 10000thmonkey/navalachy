@@ -40,7 +40,7 @@ defined( 'ABSPATH' ) || exit;
 						if (!empty($cart_item["nvbk_booking_apartmentId"])):
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $cart_item["nvbk_booking_apartmentName"], $cart_item, $cart_item_key ) ) . '&nbsp;';
 							echo "<br>" . date( "d. m. Y", strtotime( $cart_item["nvbk_booking_begin"] ) ) . " - " . date( "d. m. Y", strtotime( $cart_item["nvbk_booking_end"] ) );
-							echo "<br>" . $cart_item["nvbk_booking_people"] . " osob";// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							echo "<br>" . ($cart_item["nvbk_booking_adults"] + $cart_item["nvbk_booking_kids"]) . " osob";// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 						else:
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) ) . '&nbsp;';
 							echo apply_filters( 'woocommerce_checkout_cart_item_quantity', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $cart_item['quantity'] ) . '</strong>', $cart_item, $cart_item_key ); 

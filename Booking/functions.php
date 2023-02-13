@@ -98,7 +98,8 @@ function nvbk_ajax_to_checkout ()
 			"nvbk_booking_begin" => $_POST["begin"],
 			"nvbk_booking_end" => $_POST["end"],
 			"nvbk_booking_price" => $price["price_final"],
-			"nvbk_booking_people" => $_POST["people"],
+			"nvbk_booking_adults" => $_POST["adults"],
+			"nvbk_booking_kids" => $_POST["kids"],
 			"nvbk_booking_id" => (int)$booking_id,
 		);
 
@@ -156,3 +157,33 @@ function nv_order_received_redirect()
     //wp_safe_redirect( get_site_url()."/thankyou?mail=".$order_meta["_billing_email"][0]."&key=" . $_GET['key'] );
 }
 add_action( 'template_redirect', 'nv_order_received_redirect');
+
+
+
+
+
+function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
+{
+    $cart = WC()->cart;
+	
+	foreach ( $cart->get_cart() as $cart_item )
+	{
+		$values = [
+			"nvbk_booking_apartmentId",
+			"nvbk_booking_apartmentName",
+			"nvbk_booking_begin",
+			"nvbk_booking_end",
+			"nvbk_booking_price",
+			"nvbk_booking_adults",
+			"nvbk_booking_kids",
+			"nvbk_booking_id"
+		];
+		foreach ( $values as $value ) {
+			if (is_array($cart_item[value]))
+				update_post_meta( $order_id, $value, json_encode($cart_item[$value]) );
+			else
+				update_post_meta( $order_id, $value, $cart_item[$value] );
+		}
+	} 
+}
+add_action( 'woocommerce_checkout_update_order_meta', "nvbk_cartmeta_to_ordermeta", 10, 2);

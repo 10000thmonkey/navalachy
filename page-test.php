@@ -10,6 +10,11 @@ get_header();
 
 //print_r(json_encode($nvbk->get_disabled_days(149)));
 
+echo count([]);
+for ($i=0; $i < count([]); $i++) { 
+	echo "jhbj";
+}
+
 if ($_GET['test'] == 1) {
 	$id = empty($_GET["id"]) ? 149 : $_GET['id'];
 
@@ -39,7 +44,7 @@ if ($_GET["test"] == 2)
 
 if ($_GET['test'] == 3)
 {
-	$booking = $nvbk->get_new_booking_price( 149, "2023-05-13", "2023-05-15" );
+	$booking = $nvbk->get_new_booking_price( 170, "2023-05-13", "2023-05-15" );
 
 	print_r($booking);
 }
