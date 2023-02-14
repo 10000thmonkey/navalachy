@@ -33,7 +33,7 @@ $page = empty($_GET["show"]) ? "listings" : $_GET['show'];
 
 	
 	<?php
-	$page_file = get_template_directory() . "/dashboard/accomodation/page-$page.php";
+	$page_file = "page-$page.php";
 	if ( file_exists( $page_file ) )
 	{
 		include $page_file;

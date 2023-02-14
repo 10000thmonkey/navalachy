@@ -93,7 +93,7 @@ function nv_template_accomodation_feed ( $VAR )
 				$pricing = $nvbk->get_new_booking_price( $id );
 
 				$rate = <<<HTML
-				od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$pricing["price_final"]},-</span>&nbsp;/ noc
+				od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$pricing["price_final"]},-</span>/&nbsp; noc
 				HTML;
 
 				$html .= <<<HTML
@@ -121,7 +121,7 @@ function nv_template_accomodation_feed ( $VAR )
 					</section>
 					<footer class="padding-lg">
 						<div class="price">$rate</div>
-						<a class="button nomargin" href="$link#booking-form">Rezervovat</a>
+						<a class="button nomargin" href="$link?show=reservation">Rezervovat</a>
 					</footer>
 				</article>
 

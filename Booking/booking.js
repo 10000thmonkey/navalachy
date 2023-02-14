@@ -343,6 +343,12 @@ function loadDatePicker ( c )
 	if ( URLParams.get("begin") && URLParams.get("end") )
 		cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
 
+	if ( URLParams.get("show") == "reservation" ) {
+		q('aside.reservation').removeClass('reallyaside').addClass('slided');
+		document.body.css('overflow','hidden');
+	}
+
+
 	document.body.on( "click", (e) => {
 		if ( e.path.indexOf( cal.form[0] ) == -1 ) {
 			if (cal.shown) cal.show();
