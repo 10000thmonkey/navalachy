@@ -6,7 +6,7 @@ if ( empty( $_GET["listing"] ) )
 		"meta_query" => [
 			[
 				"key" => "host",
-				"value" => $current_user->data->ID
+				"value" => 2//$current_user->data->ID
 			]
 		]
 	]);

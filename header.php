@@ -8,9 +8,7 @@
  *
  * @package navalachy
  */
-global $user;
-global $isAdmin;
-$isAdmin = $user ? array_key_exists("administrator", $user->roles) : false;
+
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>

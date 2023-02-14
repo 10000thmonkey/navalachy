@@ -33,7 +33,7 @@ function nv_template_accomodation_feed ( $VAR )
 	{
 
 		//get array of rates of all apartments, next monday price wont be so high
-		$remote_rates_day = date( "Y-m-d", strtotime("next Monday") );
+		//$remote_rates_day = date( "Y-m-d", strtotime("next Monday") );
 
 		while ( $query->have_posts() )
 		{ 
@@ -90,14 +90,21 @@ function nv_template_accomodation_feed ( $VAR )
 					HTML;
 				}
 
-
-				$rate = "";
-				$cal_in_response = @array_key_exists( (int)$meta["calendar_id"][0], $remote_rates["data"] );
-				if ( $cal_in_response ) {
-					$rate = <<<HTML
-					od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$remote_rates["data"][$meta["calendar_id"][0]][$remote_rates_day]["price"]},-&nbsp;</span> Kč / noc
-					HTML;
+				$eur_to_czk = get_option("nvbk_exchange_EUR_CZK");
+				//convert apartment currency to EUR
+				if ( $meta["currency"][0] == "CZK" )
+					$meta["price"][0] = $meta["price"][0] * $eur_to_czk;
+				//convert price to CZK
+				if ( $_SESSION['currency'] == "CZK" ) {
+					$price = $meta["price"][0] * $eur_to_czk;
+					$currency = "Kč";
+				} else {
+					$currency = "€";
 				}
+
+				$rate = <<<HTML
+				od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$price},-</span>&nbsp;{$currency} / noc
+				HTML;
 
 				$html .= <<<HTML
 

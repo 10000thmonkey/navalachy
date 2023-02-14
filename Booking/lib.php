@@ -2,11 +2,10 @@
 
 class NVBK
 {
-	protected $columns = array(
-		'booking_key' => '%s',
+	protected $columns = [
         'apartment_id' => '%d',
         'uid' => '%s',
-        'order' => '%d',
+        'order_id' => '%d',
         'begin_date' => '%s',
         'end_date' => '%s',
         'data' => '%s',
@@ -14,14 +13,37 @@ class NVBK
         'is_read' => '%d',
         'date_created' => '%s',
         'date_synced' => '%s'
-    );
+    ];
+    protected $data = [
+    	'source' => '',
+    	'adults' => 1,
+    	'kids' => 0,
+    	'currency' => 'EUR',
+    	'events' => [
+    		'deposit' => [],
+    		'cleaning' => [],
+    		'provision' => [],
+    		'payment' => []
+    	],
+    	'customer' => [
+    		'name' => '',
+    		'email' => '',
+    		'phone' => '',
+    		'address' => '',
+    		'ip' => '',
+    		'notes' => ''
+    	],
+    	'customer_note' => '',
+    	'host_note' => ''
+    ];
 	public $table_name = "nvbk_booking";
 	public $debug = false;
 
-//	public function ()
 
 	public function __construct( $debug = false )
 	{
+		$this->rate_eur_czk = get_option("nvbk_exchange_EUR_CZK");
+
 		if ($debug) $this->debug = true;
 
 		//check if table is created
@@ -47,25 +69,22 @@ class NVBK
         $wpdb->query("DROP TABLE {$this->table_name}");
 
         $query = "CREATE TABLE {$this->table_name} (
-			id int NOT NULL AUTO_INCREMENT, // 
-			booking_key tinytext UNIQUE PRIMARY KEY NOT NULL, // prim. key in format: {aptId}{beg.date timestmp}{end.date timestamp}
-			apartment_id int NOT NULL, // apartment id
-			uid tinytext NOT NULL, // iCal event uid
-			order int NOT NULL, // wc order id
+			id int PRIMARY KEY AUTO_INCREMENT, 
+			apartment_id int NOT NULL, 
+			uid tinytext NOT NULL,
+			order_id int NOT NULL,
             begin_date datetime NOT NULL,
 			end_date datetime NOT NULL,
-			data text NOT NULL, // json-formated data about reservation
-			status text NOT NULL, // for iCal: SYNCED, for NV: BLOCKED / PENDING / CONFIRMED
-            is_read tinyint(1) NOT NULL, // for notifications
-			date_created datetime NOT NULL, // never changes, initial datetime 
-			date_synced datetime NOT NULL, // update on sync
-			PRIMARY KEY (apartment_id, begin_date, end_date)
+			data text NOT NULL,
+			status text NOT NULL,
+            is_read tinyint(1) NOT NULL,
+			date_created datetime NOT NULL, 
+			date_synced datetime NOT NULL,
+			UNIQUE KEY (apartment_id, begin_date, end_date)
 		) {$charset_collate};";
 
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        return dbDelta($query);
-
-        //$wpdb->query("CREATE UNIQUE INDEX key_idx ON {$this->table_name} (booking_key(50))");
+        return $wpdb->query($query);
     }
 
 
@@ -75,12 +94,14 @@ class NVBK
 		global $wpdb;
 		require_once("lib-ical.php");
 
-		$wpdb->query("DELETE FROM {$this->table_name} WHERE `uid` NOT LIKE '%navalachy%'");
+		$current_time = date('Y-m-d 00:00:00');
+		$current_sync_time = date('Y-m-d H:i:s');
+		update_option("nvbk_last_synced", $current_time);
 
 		$apartments = $this->get_apartments_ids();
 
-		$keys = implode(", ", array_keys( $this->columns ) );
-		$format = "(" . implode(", ", array_values( $this->columns ) ) . ")";
+		$table_keys = implode(", ", array_keys( $this->columns ) );
+		$table_format = "(" . implode(", ", array_values( $this->columns ) ) . ")";
 
 		foreach ( $apartments as $apartment )
 		{
@@ -106,34 +127,44 @@ class NVBK
 						$key = absint($apartment) . "_" . $begin . "_" . $end;
 
 				    	array_push($values, ...array_values( [
-				    		'booking_key' => $key,
 				            'apartment_id' => absint($apartment),
 				            'uid' => $event["UID"],
-				            'order' => 0,
+				            'order_id' => 0,
 				            'begin_date' => $begin,
 				            'end_date' => $end,
-				            'fields' => json_encode($data),
+				            'data' => json_encode($data),
 				            'status' => 'SYNCED',
 				            'is_read' => '0',
-				            'date_created' => current_time('Y-m-d H:i:s'),
-				            'date_synced' => current_time('Y-m-d H:i:s'),
+				            'date_created' => $current_time,
+				            'date_synced' => $current_time,
 				        ] ) );
-				        $formats[] = $format;
+				        $formats[] = $table_format;
 					}
 				}
 				unset($ical);
 		
 				$sql_formats = implode(", ", $formats);
 
-				$sql = "INSERT INTO {$this->table_name} ({$keys})
+				$sql = "INSERT INTO {$this->table_name} ({$table_keys})
 						VALUES {$sql_formats}
-						ON DUPLICATE KEY UPDATE `date_synced` = '" . current_time('Y-m-d H:i:s') . "'";
+						ON DUPLICATE KEY UPDATE `date_synced` = '" . $current_time . "'";
 
 				$query = $wpdb->prepare( $sql, array_values( $values ) );
 
-				echo $wpdb->query( $query );
+				print_r( $wpdb->query( $query ) );
+				$wpdb->print_error();
 			}
 		}
+
+		$sql = "UPDATE {$this->table_name}
+				SET `status` = 'UNSYNCED'
+				WHERE `date_synced` < '{$current_time}'";
+		$wpdb->query($sql);
+
+
+		$exchangeUrl = 'https://api.exchangerate.host/latest?base=EUR&symbols=CZK';
+		$exchangeData = json_decode(file_get_contents($exchangeUrl));
+		update_option("nvbk_exchange_EUR_CZK", $exchangeData->rates->CZK);
 	}
 
 
@@ -207,12 +238,16 @@ class NVBK
     {
     	global $wpdb;
 
-    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `start_date` <= %s";
+    	$range = ( $begin == NULL || $end == NULL ) ? "" : "AND `end_date` >= %s AND `begin_date` <= %s";
 
-    	$query = $wpdb->prepare( "SELECT * FROM {$this->table_name}
-    	                        WHERE `calendar_id` = %s
-    	                        AND `status` != 'PENDING'
-    	                        " . $range, $apartment_id );
+    	return $wpdb->get_results(
+    		$wpdb->prepare(
+	    		"SELECT * FROM {$this->table_name}
+	            WHERE `status` IN ('CONFIRMED', 'PENDING', 'SYNCED', 'CLOSED')
+	            AND `apartment_id` = %s
+	            " . $range, $apartment_id, $begin, $end
+	        )
+    	);
 
     	$results = $wpdb->get_results( $query );
 
@@ -313,25 +348,54 @@ class NVBK
 	{
 		global $wpdb;
 
-		$currency = "EUR";
-		$currency_appendix = " €";
+
 		$apartment = new WP_Query(["post_type" => "accomodation", "post__in" => [$apartment_id]] );
 		$meta = get_post_meta($apartment_id);
 
 		$booking_array = $this->get_date_range_array( $begin, $end );
 		$nights = count( $booking_array ) - 1;
+		
+
+
+		$user_currency = $_SESSION['currency'];
+
+		if ($user_currency == "CZK") { 
+			$user_currency_coef = $currencies[$user_currency][1];
+			$user_currency_appendix = $currencies[$user_currency][0]; // str "e"
+		} else {
+			$user_currency_coef = $currencies["EUR"][1];
+			$user_currency_appendix = $currencies["EUR"][0];
+		}
+
+		if ($meta["currency"][0] == "CZK") { 
+			$aparment_currency_coef = $currencies[$meta["currency"][0]][1];
+			$aparment_currency_appendix = $currencies[$meta["currency"][0]][0]; // str "e"
+		} else {
+			$aparment_currency_coef = $currencies["EUR"][1];
+			$aparment_currency_appendix = $currencies["EUR"][0];
+		}
+		$currency_coef = $user_currency_coef * $apartment_currency_coef;
+
 
 
 		$price_base = ( $nights * (int)$meta["price"][0] );
 
 
+
 		$discounts = [];
+
 		if ($nights >= 7 && $nights < 30) {
-			$discounts = ["label" => "Sleva na týden", "value" => "-" . $meta["discount_week"][0] . "%"];
+			$discounts = [
+				"label" => "Sleva na týden",
+				"value" => "-" . $meta["discount_week"][0] . "%"
+			];
 			$price_final = $price_base * ( (int)$meta["discount_week"][0] / 100 );
 		}
 		else if ($nights >= 30) {
-			$discounts = ["label" => "Sleva na měsíc", "value" => "-" . $meta["discount_month"][0] . "%"];
+			$discounts = [
+				"label" => "Sleva na měsíc",
+				"value" => "-" . $meta["discount_month"][0] . "%"
+			];
 			$price_final = $price_base * ( (int)$meta["discount_month"][0] / 100 );
 		}
 		else {
@@ -342,22 +406,19 @@ class NVBK
 		$price_host = $price_final;
 
 
+
 		$costs = json_decode($meta["costs"][0]);
+
 		for ($i = 0; $i < count($costs); $i++)
 		{
-			$costs[$i][1] = $costs[$i][1] . $currency_appendix;
 			$price_host = ( (int)$price_host - (int)$costs[$i][1] );
+			$costs[$i][1] = ( $costs[$i][1] * $currency_coef ) . $user_currency_appendix;
 		}
 
-
-		$cleaning = [];
-		if (!empty($meta["cleaning"][0])) {
-			$cleaning[] = $meta["cleaning"][0] . $currency_appendix;
-		}
 
 		return [
-			"price_final" => $price_final . $currency_appendix,
-			"price_host" => $price_host . $currency_appendix,
+			"price_final" => ($price_final * $currency_coef) . $user_currency_appendix,
+			"price_host" => ($price_host * $currency_coef) . $user_currency_appendix,
 			"discounts" => $discounts,
 			"costs" => $costs ? $costs : [],
 			"nights" => $nights
@@ -387,6 +448,8 @@ class NVBK
 		foreach ( $results as $result )
 	    {
 	    	$range = $this->get_date_range_array( $result->start_date, $result->end_date );
+	    	array_pop($range);
+	    	array_shift($range);
 	    	array_push( $disabledDates, ...$range );
 	    }
 	    return $disabledDates;

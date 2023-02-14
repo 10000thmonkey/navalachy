@@ -1,6 +1,9 @@
 <?php
 if (!$user) wp_redirect(home_url());
 
+$NV_MODULES = [
+	"Booking/lib"
+];
 get_header();
 
 

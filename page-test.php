@@ -5,11 +5,11 @@ $NV_MODULES = [
 
 get_header();
 
-//
 
 if ($_GET["test"] == 0)
 {
 	echo $nvbk->create_table();
+	$wpdb->print_error();
 	echo $nvbk->sync();
 }
 
