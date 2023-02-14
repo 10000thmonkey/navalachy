@@ -148,10 +148,14 @@ q(function(){
 
 </script>
 
-<?php wp_footer(); ?>
+<?php
+wp_footer();
+if (!$isAdmin):
+?>
 <STYLE>
 	#wpadminbar {display: none;}
 html {margin-top: 0 !important;}
 </STYLE>
+<?php endif; ?>
 </body>
 </html>

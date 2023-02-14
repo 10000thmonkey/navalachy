@@ -288,19 +288,21 @@ class NVBK
 			$apartments = [$apartments];
 		}
 		if ( is_array($apartments) && !empty($apartments) ) {
-			$apartments_sql = "AND `calendar_id` IN (".implode(",", $apartments).")";
+			$apartments_sql = "AND `apartment_id` IN (".implode(",", $apartments).")";
 		}
 
 		$query = $wpdb->prepare("
 			SELECT * FROM {$this->table_name}
 	        WHERE `end_date` > %s
-	        AND `start_date` <= %s
-	        AND `status` NOT LIKE 'PENDING'
-		" . $apartment_sql, $from." 00:00:00", $to." 00:00:00",);
+	        AND `begin_date` <= %s
+	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')
+		" . $apartment_sql,
+			$from." 00:00:00", $to." 00:00:00"
+		);
 		$results = $wpdb->get_results($query);
 
 		foreach($results as $result) {
-			$apartments_booked[] = (int)$result->calendar_id;	
+			$apartments_booked[] = (int)$result->apartment_id;	
 		}
 
 		return array_diff($apartments_all, $apartments_booked);
@@ -362,6 +364,9 @@ class NVBK
 		}
 
 
+
+
+		//user currency only changes output prices
 		$user_currency = $_SESSION['currency'];
 
 		if ($user_currency == "CZK") { 
@@ -372,14 +377,16 @@ class NVBK
 			$user_currency_appendix = " ".$currencies["EUR"][0];
 		}
 
+
+		//set currency coefficient, convert to EURO if other currency is set
 		if ($meta["currency"][0] == "CZK") { 
-			$apartment_currency_coef = $currencies[$meta["currency"][0]][1];
+			$currency_coef = $currencies[$meta["currency"][0]][1];
 		} else {
-			$apartment_currency_coef = $currencies["EUR"][1];
+			$currency_coef = $currencies["EUR"][1];
 		}
-		$currency_coef = $user_currency_coef * $apartment_currency_coef;
 
 		$price_base = ( $nights * (int)$meta["price"][0] );
+
 
 
 
@@ -406,20 +413,20 @@ class NVBK
 
 		$price_host = $price_final;
 
-
+		//parse array of costs
 		$costs = json_decode($meta["costs"][0]);
 
-		for ($i = 0; $i < count($costs); $i++)
+		if ( is_array($costs) ) for ($i = 0; $i < count($costs); $i++)
 		{
 			$price_host = ( (int)$price_host - (int)$costs[$i][1] );
-			$costs[$i][1] = intval( $costs[$i][1] * $currency_coef ) . $user_currency_appendix;
+			$costs[$i][1] = intval( $costs[$i][1] / $currency_coef * $user_currency_coef ) . $user_currency_appendix;
 		}
 
 
 		return [
-			"price_base" => intval($price_base * $currency_coef) . $user_currency_appendix,
-			"price_final" => intval($price_final * $currency_coef) . $user_currency_appendix,
-			"price_host" => intval($price_host * $currency_coef) . $user_currency_appendix,
+			"price_base" => intval($price_base / $currency_coef * $user_currency_coef) . $user_currency_appendix,
+			"price_final" => intval($price_final / $currency_coef * $user_currency_coef) . $user_currency_appendix,
+			"price_host" => intval($price_host / $currency_coef * $user_currency_coef) . $user_currency_appendix,
 			"discounts" => $discounts,
 			"costs" => $costs ? $costs : [],
 			"nights" => $nights

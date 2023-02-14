@@ -63,15 +63,15 @@ function nv_template_accomodation_feed ( $VAR )
 			}
 			else
 			{
+				$link_params = [];
 				if ( !empty( $VAR["range"] ) ) 
 				{
-					$link .= "?" . http_build_query( array(
-						"begin" => $VAR["begin"],
-						"end" => $VAR["end"]
-					) );
+					$link_params["begin"] = $VAR["range"]["begin"];
+					$link_params["end"] = $VAR["range"]["end"];
 				}
-
-
+				$link_params["show"] = "reservation";
+				$link = $link . "?" . http_build_query( $link_params );
+				
 				$info = [];
 				if ( isset($meta["wifi"][0]) && $meta["wifi"][0] == 1)
 					$info["wifi"] = "Wi-fi";
@@ -121,7 +121,7 @@ function nv_template_accomodation_feed ( $VAR )
 					</section>
 					<footer class="padding-lg">
 						<div class="price">$rate</div>
-						<a class="button nomargin" href="$link?show=reservation">Rezervovat</a>
+						<a class="button nomargin" href="$link">Rezervovat</a>
 					</footer>
 				</article>
 

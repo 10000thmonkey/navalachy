@@ -215,6 +215,8 @@ class NV_Booking
 		let endDay = new Date( end );
 	 	this.el.endValue.content( endDay.getDate() + ". " + (endDay.getMonth() + 1) + ". " + endDay.getFullYear() );
 	 	this.end = end;
+
+	 	this.set();
 	}
 
 	reset ()
@@ -340,12 +342,14 @@ function loadDatePicker ( c )
 
 	let URLParams = new URLSearchParams(location.search);
 
-	if ( URLParams.get("begin") && URLParams.get("end") )
+	if ( URLParams.get("begin") && URLParams.get("end") ) {
 		cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
+	}
 
 	if ( URLParams.get("show") == "reservation" ) {
 		q('aside.reservation').removeClass('reallyaside').addClass('slided');
 		document.body.css('overflow','hidden');
+		cal.preCheckout();
 	}
 
 

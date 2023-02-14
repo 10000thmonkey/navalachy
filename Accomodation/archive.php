@@ -33,7 +33,6 @@ get_header();
 	<div class="accomodation-feed contentwrap space-around-lg padding-lg gap-hg">
 		
 		<?php
-		
 		echo nv_template_accomodation_feed( array(
 			"range" => $range,
 			"apartments" => []
