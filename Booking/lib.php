@@ -347,36 +347,37 @@ class NVBK
 	public function get_new_booking_price ( $apartment_id, $begin = NULL, $end = NULL )
 	{
 		global $wpdb;
+		global $currencies;
 
 
 		$apartment = new WP_Query(["post_type" => "accomodation", "post__in" => [$apartment_id]] );
 		$meta = get_post_meta($apartment_id);
 
-		$booking_array = $this->get_date_range_array( $begin, $end );
-		$nights = count( $booking_array ) - 1;
-		
+		if ( empty($begin) || empty($end) ) {
+			$nights = 1;
+		}
+		else {
+			$booking_array = $this->get_date_range_array( $begin, $end );
+			$nights = count( $booking_array ) - 1;
+		}
 
 
 		$user_currency = $_SESSION['currency'];
 
 		if ($user_currency == "CZK") { 
 			$user_currency_coef = $currencies[$user_currency][1];
-			$user_currency_appendix = $currencies[$user_currency][0]; // str "e"
+			$user_currency_appendix = " ".$currencies[$user_currency][0]; // str "e"
 		} else {
 			$user_currency_coef = $currencies["EUR"][1];
-			$user_currency_appendix = $currencies["EUR"][0];
+			$user_currency_appendix = " ".$currencies["EUR"][0];
 		}
 
 		if ($meta["currency"][0] == "CZK") { 
-			$aparment_currency_coef = $currencies[$meta["currency"][0]][1];
-			$aparment_currency_appendix = $currencies[$meta["currency"][0]][0]; // str "e"
+			$apartment_currency_coef = $currencies[$meta["currency"][0]][1];
 		} else {
-			$aparment_currency_coef = $currencies["EUR"][1];
-			$aparment_currency_appendix = $currencies["EUR"][0];
+			$apartment_currency_coef = $currencies["EUR"][1];
 		}
 		$currency_coef = $user_currency_coef * $apartment_currency_coef;
-
-
 
 		$price_base = ( $nights * (int)$meta["price"][0] );
 
@@ -406,19 +407,19 @@ class NVBK
 		$price_host = $price_final;
 
 
-
 		$costs = json_decode($meta["costs"][0]);
 
 		for ($i = 0; $i < count($costs); $i++)
 		{
 			$price_host = ( (int)$price_host - (int)$costs[$i][1] );
-			$costs[$i][1] = ( $costs[$i][1] * $currency_coef ) . $user_currency_appendix;
+			$costs[$i][1] = intval( $costs[$i][1] * $currency_coef ) . $user_currency_appendix;
 		}
 
 
 		return [
-			"price_final" => ($price_final * $currency_coef) . $user_currency_appendix,
-			"price_host" => ($price_host * $currency_coef) . $user_currency_appendix,
+			"price_base" => intval($price_base * $currency_coef) . $user_currency_appendix,
+			"price_final" => intval($price_final * $currency_coef) . $user_currency_appendix,
+			"price_host" => intval($price_host * $currency_coef) . $user_currency_appendix,
 			"discounts" => $discounts,
 			"costs" => $costs ? $costs : [],
 			"nights" => $nights
@@ -434,20 +435,18 @@ class NVBK
 
 		$query = $wpdb->prepare( "
 			SELECT * FROM {$this->table_name}
-			WHERE `calendar_id` = %s
+			WHERE `apartment_id` = %s
 			AND `end_date` >= %s
-			AND `start_date` < %s
-			AND `status` != 'PENDING'"
+			AND `begin_date` < %s
+			AND `status` IN ('SYNCED', 'CLOSED', 'PENDING', 'CONFIRMED')"
 		, $apartmentId, date("Y-m-d 00:00:00"), date('Y-m-d 00:00:00', strtotime("+1 year") ) );
 		$results = $wpdb->get_results( $query );
-
-		//return count($results);
 
 		$disabledDates = [];
 
 		foreach ( $results as $result )
 	    {
-	    	$range = $this->get_date_range_array( $result->start_date, $result->end_date );
+	    	$range = $this->get_date_range_array( $result->begin_date, $result->end_date );
 	    	array_pop($range);
 	    	array_shift($range);
 	    	array_push( $disabledDates, ...$range );

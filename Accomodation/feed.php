@@ -90,20 +90,10 @@ function nv_template_accomodation_feed ( $VAR )
 					HTML;
 				}
 
-				$eur_to_czk = get_option("nvbk_exchange_EUR_CZK");
-				//convert apartment currency to EUR
-				if ( $meta["currency"][0] == "CZK" )
-					$meta["price"][0] = $meta["price"][0] * $eur_to_czk;
-				//convert price to CZK
-				if ( $_SESSION['currency'] == "CZK" ) {
-					$price = $meta["price"][0] * $eur_to_czk;
-					$currency = "Kč";
-				} else {
-					$currency = "€";
-				}
+				$pricing = $nvbk->get_new_booking_price( $id );
 
 				$rate = <<<HTML
-				od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$price},-</span>&nbsp;{$currency} / noc
+				od<span style="font-size: var(--font-hg);color:var(--primary);">&nbsp;{$pricing["price_final"]},-</span>&nbsp;/ noc
 				HTML;
 
 				$html .= <<<HTML

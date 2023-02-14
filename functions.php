@@ -5,8 +5,8 @@ global $isAdmin;
 $isAdmin = $user ? array_key_exists("administrator", $user->roles) : false;
 
 session_start();
-$_SESSION['currency'] = empty($_SESSION['currency']) ? "CZK" : "EUR";
-$currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", get_option("nvbk_exchange_EUR_CZK")]];
+$_SESSION['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
+$currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
 
 require_once "inc/functions-nv.php";
 require_once "inc/functions-email.php";

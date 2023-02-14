@@ -433,11 +433,11 @@ p.stars.selected a:not(.active)::before {
  * Forms
  */
 .form-row.woocommerce-validated input.input-text {
-	box-shadow: inset 2px 0 0 #0f834d;
+	box-shadow: 0 2px 0 0 #0f834d;
 }
 
 .form-row.woocommerce-invalid input.input-text {
-	box-shadow: inset 2px 0 0 #e2401c;
+	box-shadow: 0 2px 0 0 #e2401c;
 }
 
 .required {

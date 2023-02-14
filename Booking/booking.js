@@ -175,7 +175,7 @@ class NV_Booking
 					if (data.price.costs.length != 0) {
 						this.el.priceFieldSet
 							.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    .insert(createNode("div").addClass("field-label").content("Pronájem"))
+							    .insert(createNode("div").addClass("field-label").content("Pronájem × " +data.price.nights+ " noci"))
 							    .insert(createNode("div").addClass("field-value").content(data.price.price_host)))
 						for (let cost of data.price.costs) {
 							this.el.priceFieldSet

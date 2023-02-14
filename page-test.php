@@ -28,7 +28,7 @@ if ($_GET['test'] == 1) {
 	foreach ($res as $row) {
 	    ?>
 	    	<tr>
-		        <td><b><?=$row->start_date?> - <?=$row->end_date?></b></td>
+		        <td><b><?=$row->begin_date?> - <?=$row->end_date?></b></td>
 			    <td><?=unserialize( $row->fields )["summary"]?></td>
 			    <td><?=unserialize( $row->fields )["description"]?></td>
 			    <td><?=$row->order_id;?></td>
@@ -46,7 +46,7 @@ if ($_GET["test"] == 2)
 
 if ($_GET['test'] == 3)
 {
-	$booking = $nvbk->get_new_booking_price( 170, "2023-05-13", "2023-05-15" );
+	$booking = $nvbk->get_new_booking_price( 149 );
 
 	print_r($booking);
 }
@@ -60,6 +60,10 @@ if ($_GET["test"] == 5)
 	$pod = pods("accomodation", 149);
 
 	echo $pod->form();
+}
+if ($_GET["test"] == 6)
+{
+	echo var_dump( $nvbk->get_disabled_dates(149) );
 }
 
 
