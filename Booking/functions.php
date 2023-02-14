@@ -17,7 +17,7 @@ add_action("wp_ajax_nopriv_nvbk_get_disabled_dates", "nvbk_ajax_get_disabled_dat
 
 
 
-function nvbk_ajax_ubytovani_contact_form ()
+function nvbk_ajax_accomodation_contact_form ()
 {
 	if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 	$from = $_POST["name"] ? $_POST['name'] : "";
@@ -46,8 +46,8 @@ function nvbk_ajax_ubytovani_contact_form ()
 	//echo debug_wpmail($res);
 	wp_die();
 }
-add_action("wp_ajax_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
-add_action("wp_ajax_nopriv_nvbk_ubytovani_contact_form", "nvbk_ajax_ubytovani_contact_form");
+add_action("wp_ajax_nvbk_accomodation_contact_form", "nvbk_ajax_accomodation_contact_form");
+add_action("wp_ajax_nopriv_nvbk_accomodation_contact_form", "nvbk_ajax_accomodation_contact_form");
 
 
 

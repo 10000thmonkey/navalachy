@@ -422,8 +422,8 @@ get_header();
 				<h2>Kontaktovat hostitele</h2>
 				<a href="#" class="btn-close closemodale" aria-hidden="true"></a>
 			</div>
-			<div class="modal-body padding-lg">
-				<div class="messagebox hidden"></div>
+			<div class="modal-body padding-hg">
+				<div class="messages nodisplay"></div>
 				<form id="accomodation-contact-form" style="display: flex; flex-direction: column; gap: 15px">
 					<label style="">
 						<div>Jméno:</div>
@@ -461,7 +461,7 @@ get_header();
 
 <script>
 	function nvbk_accomodation_contact_form () {
-		let messagebox = q(".modale[data-modale=accomodation-contact] .messagebox")[0];
+		let messages = q(".modale[data-modale=accomodation-contact] .messages")[0];
 
 		var form = q("form#accomodation-contact-form");
 		jax.post( "/wp-admin/admin-ajax.php", {
@@ -472,7 +472,11 @@ get_header();
 			"host_email" : nv_vars.host_email
 		},
 		(e) => {
-			messagebox.show().content("Zpráva úspěšně odeslána");
+			messages.display().messagebox("Zpráva úspěšně odeslána", "success", "success");
+		},
+		(e) => {
+			messages.display().messagebox("Vyskytla se chyba", "error", "error");
+			console.log(e);
 		}
 		);
 	}

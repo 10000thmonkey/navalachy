@@ -1722,7 +1722,7 @@ body.single-accomodation {
     		position: sticky;
     		z-index: 15;
     		top: 0px;
-    		padding: 15px 30px;
+    		padding: 0;
 
     		&.only-close-button {
 				width: 0;
@@ -1890,15 +1890,16 @@ nv-slider {
 	&.avatar-xxxl {width: var(--space-xxxl); height: var(--space-xxxl)}
 }
 
-.messagebox {display: flex;
+.messagebox {
+	display: flex;
     gap: 15px;
     align-items: center;
 	.padding-sm();
 	.space-around-sm();
 	border-radius: var(--radius-sm);
-	&.error {background: rgba(255, 155, 155, .1);}
-	&.info {background: rgba(155, 155, 255, .1);}
-	&.success {background: rgba(155, 255, 155, .1);}
+	&.error {background: rgba(255, 155, 155, .4);}
+	&.info {background: rgba(155, 155, 255, .4);}
+	&.success {background: rgba(155, 255, 155, .4);}
 }
 .tag {
 
