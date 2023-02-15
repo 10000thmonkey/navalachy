@@ -8,7 +8,7 @@ $ical = new ICal();
 
 global $wpdb;
 
-$query = $wpdb->prepare("SELECT * FROM nvbk_booking WHERE `calendar_id` = %d AND `status` = 'CONFIRMED' AND `uid` LIKE '%navalachy%' ", $_GET['id'] );
+$query = $wpdb->prepare("SELECT * FROM nvbk_booking WHERE `apartment_id` = %d AND `status` IN ('CONFIRMED', 'CLOSED', 'PENDING')", $_GET['id'] );
 $result = $wpdb->get_results($query);
 
 foreach ( $result as $row )

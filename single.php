@@ -43,7 +43,6 @@ get_header();
 						?>
 					</header><!-- .entry-header -->
 				 
-					<?php navalachy_post_thumbnail(); ?>
 
 					<div class="entry-content">
 						<?php

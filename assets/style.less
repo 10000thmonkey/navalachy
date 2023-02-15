@@ -1184,9 +1184,13 @@ body.woocommerce-checkout {
 				border-radius: var(--radius-sm);
 				border: 2px solid var(--color-ui-grey);
 				.cart-subtotal, .shipping {display: none;}
-				td:not(:last-child) {
-					border-bottom: 2px solid var(--color-ui-grey);
-					border-right: 2px solid var(--color-ui-grey);
+				tr {
+					:not(:last-child) {
+						border-bottom: 2px solid var(--color-ui-grey);
+					}
+					:is(td, th):not(:last-child) {
+						border-right: 2px solid var(--color-ui-grey);
+					}
 				}
 			}
 

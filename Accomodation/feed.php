@@ -44,14 +44,14 @@ function nv_template_accomodation_feed ( $VAR )
 
 			$img = nv_responsive_img( get_post_thumbnail_id( $id ) );
 
-			$link = get_permalink( $query->post );
+			$permalink = get_permalink( $query->post );
 
 
 			if ( !empty( $VAR["hovercards"] ) )
 			{
 				$html .= <<<HTML
 
-				<a class="hovercard" href="$link">
+				<a class="hovercard" href="$permalink">
 					<!--div class="icon nvicon"></div-->
 					$img
 					<div class="label">
@@ -69,8 +69,8 @@ function nv_template_accomodation_feed ( $VAR )
 					$link_params["begin"] = $VAR["range"]["begin"];
 					$link_params["end"] = $VAR["range"]["end"];
 				}
-				$link_params["show"] = "reservation";
-				$link = $link . "?" . http_build_query( $link_params );
+				$link = $permalink . "?" . http_build_query( $link_params );
+				$link_reserv = $permalink . "?" . http_build_query( array_merge( $link_params, ["show" => "reservation"] ) );
 				
 				$info = [];
 				if ( isset($meta["wifi"][0]) && $meta["wifi"][0] == 1)
@@ -121,7 +121,7 @@ function nv_template_accomodation_feed ( $VAR )
 					</section>
 					<footer class="padding-lg">
 						<div class="price">$rate</div>
-						<a class="button nomargin" href="$link">Rezervovat</a>
+						<a class="button nomargin" href="$link_reserv">Rezervovat</a>
 					</footer>
 				</article>
 

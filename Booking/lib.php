@@ -283,6 +283,9 @@ class NVBK
 		$apartments_all = $this->get_apartments_ids();
 		$apartments_booked = [];
 
+		$from .= " 00:00:00";
+		$to .= " 00:00:00";
+
 		$apartments_sql = "";
 		if ( is_integer($apartments) ) {
 			$apartments = [$apartments];
@@ -293,11 +296,16 @@ class NVBK
 
 		$query = $wpdb->prepare("
 			SELECT * FROM {$this->table_name}
-	        WHERE `end_date` > %s
-	        AND `begin_date` <= %s
-	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')
-		" . $apartment_sql,
-			$from." 00:00:00", $to." 00:00:00"
+	        WHERE
+	        (
+	        	( `begin_date` BETWEEN %s AND %s )
+	        	OR ( `end_date` BETWEEN %s AND %s )
+	        )
+	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartment_sql,
+			$from,
+			date( "Y-m-d H:i:s", strtotime( $to . " -1 day" ) ), // reservations with arrival on end date can be skipped
+			date( "Y-m-d H:i:s", strtotime( $from . " +1 day" ) ), // reservations with departure on the same day as begin skipped
+			$to
 		);
 		$results = $wpdb->get_results($query);
 
