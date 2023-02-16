@@ -4,7 +4,11 @@
  * @link https://gist.github.com/DevinWalker/7621777#gistcomment-1980453
  * @since 1.7.0
  */
-function nv_remove_woocommerce_styles_scripts() {
+
+//FASTEN UP WOOO CHECKOUT
+add_filter('woocommerce_defer_transactional_emails', '__return_true' );
+
+function nv_wc_remove_styles_scripts() {
 
 	// Skip Woo Pages
 	if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
@@ -22,22 +26,32 @@ function nv_remove_woocommerce_styles_scripts() {
 	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 }
 
-add_action( 'template_redirect', 'nv_remove_woocommerce_styles_scripts', 999 );
+add_action( 'template_redirect', 'nv_wc_remove_styles_scripts', 999 );
 
-function nv_disable_wc_block_styles () {
+function nv_wc_disable_block_styles () {
 	wp_dequeue_style( "wc-blocks-style" );
 	wp_dequeue_style( "wc-blocks-vendors-style" );
 }
-add_action( "enqueue_block_assets", "nv_disable_wc_block_styles", 999 );
+add_action( "enqueue_block_assets", "nv_wc_disable_block_styles", 999 );
 
 
+/*
+disable cart
+*/
+function nv_wc_disable_cart () {
+	if (is_page("cart"))
+	{
+		wp_redirect(home_url());
+	}
+}
+add_action( "template_redirect", 'nv_wc_disable_cart' );
 
 
 /*
 set custom product price in cart item
 */
 
-function nv_woo_custom_price_to_cart_item( $cart_object ) {  
+function nv_wc_custom_price_to_cart_item( $cart_object ) {  
     //if( !WC()->session->__isset( "reload_checkout" )) {
         foreach ( $cart_object->get_cart() as $item ) {
             if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
@@ -46,14 +60,14 @@ function nv_woo_custom_price_to_cart_item( $cart_object ) {
         }  
     //}
 }
-add_action( 'woocommerce_before_calculate_totals', 'nv_woo_custom_price_to_cart_item', 99 );
+add_action( 'woocommerce_before_calculate_totals', 'nv_wc_custom_price_to_cart_item', 99 );
 
 
 /*
 set custom product title in cart item
 */
 
-function nvbk_cart_product_title( $title, $cart_item, $cart_item_key ) {
+function nv_wc_cart_booking_product_title( $title, $cart_item, $cart_item_key ) {
 	//@session_start();
 	$name = $cart_item["nvbk_booking_apartmentName"];
 	if (!empty($name))
@@ -61,15 +75,14 @@ function nvbk_cart_product_title( $title, $cart_item, $cart_item_key ) {
 	else
 		return $title;
 }
-add_filter( "woocommerce_cart_item_name", "nvbk_cart_product_title", 99, 3);
+add_filter( "woocommerce_cart_item_name", "nv_wc_cart_booking_product_title", 99, 3);
 
 
 
 
 
 
-add_action( 'woocommerce_thankyou', 'custom_woocommerce_auto_complete_order' );
-function custom_woocommerce_auto_complete_order( $order_id ) { 
+function nv_wc_auto_complete_order( $order_id ) { 
     if ( ! $order_id ) {
         return;
     }
@@ -77,10 +90,10 @@ function custom_woocommerce_auto_complete_order( $order_id ) {
     $order = wc_get_order( $order_id );
     $order->update_status( 'completed' );
 }
+add_action( 'woocommerce_thankyou', 'nv_wc_auto_complete_order' );
 
 
-add_filter( 'woocommerce_default_address_fields' , 'optional_default_address_fields' );
-function optional_default_address_fields( $address_fields ) {
+function nv_wc_optional_default_address_fields( $address_fields ) {
 	$address_fields['company']['required'] = false;
 	$address_fields['postcode']['required'] = false;
 	$address_fields['city']['required'] = false;
@@ -89,6 +102,7 @@ function optional_default_address_fields( $address_fields ) {
 	$address_fields['address_1']['required'] = false;
 	return $address_fields;
  }
+add_filter( 'woocommerce_default_address_fields' , 'nv_wc_optional_default_address_fields' );
 
 
 

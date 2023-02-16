@@ -150,6 +150,7 @@ q(function(){
 
 <?php
 wp_footer();
+global $isAdmin;
 if (!$isAdmin):
 ?>
 <STYLE>

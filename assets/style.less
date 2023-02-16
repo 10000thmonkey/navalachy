@@ -1119,9 +1119,10 @@ body.post-type-archive-product, body.single-product, body.tax-product_cat {
 }
 
 /*WOOCOMMERCE CHECKOUT*/
+.woocommerce-message {padding: 15px; margin: 15px; border-radius: 15px; color: white;}
 .woocommerce-NoticeGroup, .woocommerce-notices-wrapper, .stripe-source-errors {
 	width: 100%;
-	ul {padding: 15px; margin: 15px; border-radius: 15px; color: white;}
+	ul {.woocommerce-message();}
 	ul.woocommerce-error {}
 }
 body.woocommerce-checkout {

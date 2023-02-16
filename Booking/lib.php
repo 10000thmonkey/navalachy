@@ -301,7 +301,7 @@ class NVBK
 	        	( `begin_date` BETWEEN %s AND %s )
 	        	OR ( `end_date` BETWEEN %s AND %s )
 	        )
-	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartment_sql,
+	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartments_sql,
 			$from,
 			date( "Y-m-d H:i:s", strtotime( $to . " -1 day" ) ), // reservations with arrival on end date can be skipped
 			date( "Y-m-d H:i:s", strtotime( $from . " +1 day" ) ), // reservations with departure on the same day as begin skipped
@@ -387,13 +387,13 @@ class NVBK
 
 
 		//set currency coefficient, convert to EURO if other currency is set
-		if ($meta["currency"][0] == "CZK") { 
-			$currency_coef = $currencies[$meta["currency"][0]][1];
+		if ( !empty($meta["currency"]) && $meta["currency"][0] == "CZK") { 
+			$currency_coef = $currencies["CZK"][1];
 		} else {
 			$currency_coef = $currencies["EUR"][1];
 		}
 
-		$price_base = ( $nights * (int)$meta["price"][0] );
+		$price_base = ( $nights * ( empty($meta["price"]) ? 1 : (int)$meta["price"][0] ) );
 
 
 
@@ -421,15 +421,17 @@ class NVBK
 
 		$price_host = $price_final;
 
+		$costs = [];
 		//parse array of costs
-		$costs = json_decode($meta["costs"][0]);
-
-		if ( is_array($costs) ) for ($i = 0; $i < count($costs); $i++)
+		if( !empty($meta["costs"]) )
 		{
-			$price_host = ( (int)$price_host - (int)$costs[$i][1] );
-			$costs[$i][1] = intval( $costs[$i][1] / $currency_coef * $user_currency_coef ) . $user_currency_appendix;
+			$costs = json_decode($meta["costs"][0]);
+			if ( is_array($costs) ) for ($i = 0; $i < count($costs); $i++)
+			{
+				$price_host = ( (int)$price_host - (int)$costs[$i][1] );
+				$costs[$i][1] = intval( $costs[$i][1] / $currency_coef * $user_currency_coef ) . $user_currency_appendix;
+			}
 		}
-
 
 		return [
 			"price_base" => intval($price_base / $currency_coef * $user_currency_coef) . $user_currency_appendix,

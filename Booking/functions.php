@@ -137,14 +137,15 @@ function nv_order_received_redirect()
 
     $nvbk = new NVBK();
 
-    $apartment_meta = get_post_meta( $ID );
-    $host_meta = get_user_meta( $apartment_meta["host"][0] );
 
     $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
     $order_meta["_order_id"] = $order_id;
    
+    $apartment_meta = get_post_meta( $order_meta["nvbk_booking_apartmentId"][0] );
+    $host_meta = get_user_meta( $apartment_meta["host"][0] );
+
     $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
 
     $mail = nv_send_mail (array(

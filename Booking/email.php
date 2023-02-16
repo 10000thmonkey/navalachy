@@ -2,55 +2,58 @@
 
 function nvbk_email_order_complete ( $VAR )
 {
-	echo var_dump($VAR);
-	$featured_img = wp_get_attachment_image_url( get_post_thumbnail_id( (int)$VAR["apartment"]["ID"][0] ), "medium");
-	$dates = date("j. n. Y", strtotime($VAR["nvbk_booking_begin"][0]) ) . " - " . date("j. n. Y", strtotime($VAR["nvbk_booking_end"][0]) );
-
+	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0], "small" );
+	$avatar = nv_responsive_img( $var["host"]["profile_picture"][0], "(min-width: 1px) 64px, 64px" );
+	$host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
+	$begin = date("j. n. Y", strtotime($VAR["order"]["nvbk_booking_begin"][0]) );
+	$end = date("j. n. Y", strtotime($VAR["order"]["nvbk_booking_end"][0]) );
+	$people = intval($VAR["order"]["nvbk_booking_adults"][0]) + intval($VAR["order"]["nvbk_booking_kids"][0]);
+	$checkin = date("H:m", strtotime($VAR["apartment"]["checkin"][0]));
+	$checkout = date("H:m", strtotime($VAR["apartment"]["checkout"][0]));
 	$output = <<<HTML
 		
 	<div style="text-align:center;">
-		<img src="https://navalachy.cz/wp-content/uploads/logo-do-rohu.svg" height="50" style="margin: 20px 0">
+		<img src="https://navalachy.cz/wp-content/uploads/Logo-navalachy-Modre@2x.png" height="50" style="margin: 20px 0">
 	</div>
-	<div style="font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; margin:0 auto; width:100%; max-width: 500px; border-radius: 30px; box-shadow: 0px 5px 40px rgba(0, 0, 0, 0.08),0px 3px 5px 3px rgba(0,0,0,0.05);" width="100%">
+	<div style="font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif; margin:0 auto; width:100%; max-width: 500px; border-radius: 30px; border: 1px solid rgba(0,0,0,0.05);" width="100%">
 		<div style="padding: 30px">
-			<h1 style="color:#232f5b;font-size:30px; line-height:150%;margin:0 0 20px 0;text-align:left;">Rezervace potvrzena</h1>
+			<h1 style="text-align:center;color:#232f5b;font-size:30px; line-height:150%;margin:0 0 20px 0;">Rezervace potvrzena</h1>
 		</div>
 
 		<div style="padding: 30px; background-color: #ffe4b3;">
-			<p style="margin:10px 0">{$VAR["nvbk_booking_apartmentName"][0]}</p>
-			<img src="{$featured_img}" style="width:100%; border-radius: 30px; margin: 30px 0;object-fit: cover;">
+			<h2 style="margin:10px 0">{$VAR["order"]["nvbk_booking_apartmentName"][0]}</h2>
+			<img src="{$featured_img}" style="width:100%; border-radius: 15px; margin: 30px 0;object-fit: cover;">
 
-			<h2 style="color:#232f5b;">Rezervace č. {$VAR["_order_id"]}</h2>
+			<h2 style="color:#232f5b;">Rezervace č. {$VAR["order"]["_order_id"][0]}</h2>
 
 			<h3 style="color:#232f5b;">Příjezd</h3>
-			<p style="margin:10px 0">{$dates}</p>
+			<p style="margin:10px 0">{$begin}</p>
 			<p style="margin:10px 0">Check-in: {$checkin}</p>
 
 			<h3 style="color:#232f5b;">Odjezd</h3>
-			<p style="margin:10px 0">{$dates}</p>
-			<p style="margin:10px 0">Check-out: {$checkin}</p>
+			<p style="margin:10px 0">{$end}</p>
+			<p style="margin:10px 0">Check-out: {$checkout}</p>
 
 			<h3 style="color:#232f5b;">Počet osob</h3>
-			<p style="margin:10px 0">{$dates}</p>
+			<p style="margin:10px 0">{$people}</p>
 
 		</div>
 
 		<div style="padding: 30px;">
 
 			<h3 style="color:#232f5b;">Cena</h3>
-			<p style="margin:10px 0">{$VAR["_order_total"][0]} {$VAR["_order_currency"][0]}</p>
+			<p style="margin:10px 0">{$VAR["order"]["_order_total"][0]} {$VAR["order"]["_order_currency"][0]}</p>
 			
 			<h3 style="color:#232f5b;">Kontaktní údaje</h3>
-			<p style="">{$VAR["_billing_first_name"][0]}</p>
-			<a style="margin:10px 0" href="tel:{$VAR["_billing_phone"][0]}" style="color:#232f5b;font-weight:normal;text-decoration:underline" target="_blank">{$VAR["_billing_phone"][0]}</a>
+			<p style="">{$VAR["order"]["_billing_first_name"][0]} {$VAR["order"]["_billing_last_name"][0]}</p>
+			<a style="margin:10px 0" href="tel:{$VAR["order"]["_billing_phone"][0]}" style="color:#232f5b;font-weight:normal;text-decoration:underline" target="_blank">{$VAR["order"]["_billing_phone"][0]}</a>
 			<br>
-			<a style="margin:10px 0" href="mailto:{$VAR["_billing_email"][0]}" target="_blank">{$VAR["_billing_email"][0]}</a>
+			<a style="margin:10px 0" href="mailto:{$VAR["order"]["_billing_email"][0]}" target="_blank">{$VAR["order"]["_billing_email"][0]}</a>
 			<address>
-				{$VAR["_billing_company"][0]}<br>
-				{$VAR["_billing_first_name"][0]}{$VAR["_billing_last_name"][0]}<br>
-				{$VAR["_billing_address_1"][0]}<br>
-				{$VAR["_billing_city"][0]}<br>
-				{$VAR["_billing_postcode"][0]}<br>
+				{$VAR["order"]["_billing_company"][0]}<br>
+				{$VAR["order"]["_billing_address_1"][0]}<br>
+				{$VAR["order"]["_billing_city"][0]}<br>
+				{$VAR["order"]["_billing_postcode"][0]}<br>
 			</address>
 		
 		</div>
@@ -58,11 +61,11 @@ function nvbk_email_order_complete ( $VAR )
 		<div style="padding: 30px; background-color: rgba(0,0,0,.05);">
 			<h3 style="color:#232f5b;">Hostitel</h3>
 			<div style="display: flex; gap: 15px">
-				<img style="width:64px;height: 64px" src="{$avatar}">
-				<div style="flex: 1">
+				{$avatar}
+				<div style="margin: 0 0 0 10px; flex: 1">
 					<p style="margin:10px 0"><b>{$host}</b></p>
-					<p style="margin:10px 0"><a href="tel:{$VAR["_billing_phone"][0]}" style="color:#232f5b;font-weight:normal;text-decoration:underline" target="_blank">{$host_phone}</a></p>
-					<p style="margin:10px 0"><a href="mailto:{$VAR["_billing_email"][0]}" target="_blank">{$host_mail}</a></p>
+					<p style="margin:10px 0"><a href="tel:{$VAR["host"]["billing_phone"][0]}" style="color:#232f5b;font-weight:normal;text-decoration:underline" target="_blank">{$VAR["host"]["billing_phone"][0]}</a></p>
+					<p style="margin:10px 0"><a href="mailto:{$VAR["host"]["billing_email"][0]}" target="_blank">{$VAR["host"]["billing_email"][0]}</a></p>
 				</div>
 			</div>
 		</div>

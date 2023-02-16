@@ -1,9 +1,5 @@
 <?php
 
-global $user;
-global $isAdmin;
-$isAdmin = $user ? array_key_exists("administrator", $user->roles) : false;
-
 session_start();
 $_SESSION['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
 $currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
@@ -20,13 +16,15 @@ if ( class_exists( 'WooCommerce' ) ) {
 	require_once get_template_directory() . '/inc/functions-woocommerce.php';
 }
 
-add_role(
-  'accomodation_host',
-  'Accomodation Host'
-);
 
+
+
+add_role( 'accomodation_host', 'Accomodation Host' );
+
+global $user;
+global $isAdmin;
 $user = (is_user_logged_in()) ? wp_get_current_user() : false;
-
+$isAdmin = $user ? in_array("administrator", $user->roles) : false;
 
 add_filter( 'login_redirect', 'nv_login_redirect', 10, 3 );
 
@@ -38,6 +36,8 @@ function nv_login_redirect( $redirect_to, $request, $user ) {
     }
     return $redirect_to;
 }
+
+
 
 
 
@@ -143,8 +143,6 @@ add_filter( 'http_request_timeout', 'custom_http_request_timeout' );
 // add_action("wp_ajax_nopriv_nv_gen_voucher", "nv_gen_voucher");
 
 
-//FASTEN UP WOOO CHECKOUT
-add_filter('woocommerce_defer_transactional_emails', '__return_true' );
 
 
 

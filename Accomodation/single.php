@@ -289,10 +289,10 @@ get_header();
 
 			<div class="col">
 				<h3>Storno podmínky</h3>
-				<ul>
-					<li>14 dní předem: 100% ceny zpět</li>
-					<li>7 dní předem: 50% ceny zpět</li>
-				</ul>
+				<div class="iconset">
+					<div class="icon">14 dní předem: 100% ceny zpět</div>
+					<div class="icon">7 dní předem: 50% ceny zpět</div>
+				</div>
 			</div>
 
 		</div>
