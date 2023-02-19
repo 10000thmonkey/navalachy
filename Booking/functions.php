@@ -92,20 +92,21 @@ function nvbk_ajax_to_checkout ()
 	{
 		$booking_id = $nvbk->insert_booking ( (int)$_POST['apartmentId'], $_POST["begin"], $_POST["end"] );
 
-		$args = array(
-			"nvbk_booking_apartmentId" => $_POST["apartmentId"],
-			"nvbk_booking_apartmentName" => $_POST["apartmentName"],
-			"nvbk_booking_begin" => $_POST["begin"],
-			"nvbk_booking_end" => $_POST["end"],
-			"nvbk_booking_price" => $price["price_final"],
-			"nvbk_booking_adults" => $_POST["adults"],
-			"nvbk_booking_kids" => $_POST["kids"],
-			"nvbk_booking_id" => (int)$booking_id,
+		$nv_booking_meta = array(
+			"apartmentId" => $_POST["apartmentId"],
+			"apartmentName" => $_POST["apartmentName"],
+			"begin" => $_POST["begin"],
+			"end" => $_POST["end"],
+			"price" => $price["price_final"],
+			"adults" => $_POST["adults"],
+			"kids" => $_POST["kids"],
+			"booking_id" => (int)$booking_id,
+			"booking_confirmed" => false
 		);
 
 		if ( !$cart->is_empty() ) $cart->empty_cart();
 	
-		$cart->add_to_cart( 1084, 1, NULL, NULL, $args );
+		$cart->add_to_cart( 1084, 1, NULL, NULL, [ "nvbk_meta" => json_encode( $nv_booking_meta ) ] );
 		$cart->calculate_totals();
 		WC()->session->set('cart', $cart->cart_content);
 		$cart->set_session();
@@ -146,17 +147,30 @@ function nv_order_received_redirect()
     $apartment_meta = get_post_meta( $order_meta["nvbk_booking_apartmentId"][0] );
     $host_meta = get_user_meta( $apartment_meta["host"][0] );
 
-    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
+    $nvbk_meta = json_decode( $order_meta["nvbk_meta"], true );
 
-    $mail = nv_send_mail (array(
-		"to" => $order_meta["_billing_email"][0], 
-		"subject" => "Rezervace přijata - NaValachy.cz",
-		"body" => nvbk_email_order_complete( [ "order" => $order_meta, "apartment" => $apartment_meta, "host" => $host_meta ] ),
-		"headers" => array(
-			"From: info@navalachy.cz",
-			'Content-Type: text/html; charset=UTF-8'
-		)
-	));
+    if ( ! $nvbk_meta["booking_confirmed"] )
+    {
+	    $nvbk->confirm_booking( $order_meta["nvbk_booking_id"][0], $order_id, $order, $order_meta );
+
+	    $mail = nv_send_mail (array(
+			"to" => $order_meta["_billing_email"][0], 
+			"subject" => "Rezervace přijata - NaValachy.cz",
+			"body" => nvbk_email_order_complete( [ 
+				"order" => $order_meta,
+				"nvbk" => $nvbk_meta,
+				"apartment" => $apartment_meta,
+				"host" => $host_meta
+			] ),
+			"headers" => array(
+				"From: info@navalachy.cz",
+				'Content-Type: text/html; charset=UTF-8'
+			)
+		));
+
+	    $nvbk_meta["booking_confirmed"] = true;
+		update_post_meta( $order_id, "nvbk_meta", json_encode( $nvbk_meta ) );
+	}
 
     //wp_safe_redirect( get_site_url()."/thankyou?mail=".$order_meta["_billing_email"][0]."&key=" . $_GET['key'] );
 }
@@ -165,29 +179,16 @@ add_action( 'template_redirect', 'nv_order_received_redirect');
 
 
 
-
-function nvbk_cartmeta_to_ordermeta( $order_id, $posted_data )
-{
-    $cart = WC()->cart;
-	
-	foreach ( $cart->get_cart() as $cart_item )
+add_action(
+	'woocommerce_checkout_update_order_meta',
+	function ( $order_id, $posted_data )
 	{
-		$values = [
-			"nvbk_booking_apartmentId",
-			"nvbk_booking_apartmentName",
-			"nvbk_booking_begin",
-			"nvbk_booking_end",
-			"nvbk_booking_price",
-			"nvbk_booking_adults",
-			"nvbk_booking_kids",
-			"nvbk_booking_id"
-		];
-		foreach ( $values as $value ) {
-			if (is_array($cart_item[value]))
-				update_post_meta( $order_id, $value, json_encode($cart_item[$value]) );
-			else
-				update_post_meta( $order_id, $value, $cart_item[$value] );
-		}
-	} 
-}
-add_action( 'woocommerce_checkout_update_order_meta', "nvbk_cartmeta_to_ordermeta", 10, 2);
+	    $cart = WC()->cart;
+		
+		foreach ( $cart->get_cart() as $cart_item )
+		{
+			if ( ! empty( $cart_item["nvbk_meta"] ) )
+				update_post_meta( $order_id, "nvbk_meta", $cart_item["nvbk_meta"] );
+		} 
+	}, 10, 2
+);

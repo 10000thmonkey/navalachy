@@ -52,20 +52,25 @@ defined( 'ABSPATH' ) || exit;
 		.billing_fields_toggle_fields {max-height: 0; overflow: hidden; transition: ease 200ms all;}
 		#billing_fields_toggle:checked ~ .billing_fields_toggle_fields {max-height: 2000px;}
 	</style>
+
+	
+	<div class="form-row">
 		<input type="checkbox" id="billing_fields_toggle">
 		<label for="billing_fields_toggle">Fakturační údaje</label>
-	
-	<div class="woocommerce-billing-fields__field-wrapper billing_fields_toggle_fields">
-		<div class="optional-form-fields"> 
-			<?php
-				foreach ( $checkoutfields as $key => $field ) {
-					woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
-				}
-			?>
+		
+
+		<div class="woocommerce-billing-fields__field-wrapper billing_fields_toggle_fields">
+			<div class="optional-form-fields"> 
+				<?php
+					foreach ( $checkoutfields as $key => $field ) {
+						woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+					}
+				?>
+			</div>
 		</div>
-	</div>
 
 	<?php do_action( 'woocommerce_after_checkout_billing_form', $checkout ); ?>
+	</div>
 </div>
 
 

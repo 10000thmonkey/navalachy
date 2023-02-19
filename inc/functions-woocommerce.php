@@ -75,11 +75,15 @@ set custom product price in cart item
 */
 add_action(
 	'woocommerce_before_calculate_totals',
-	function ( $cart_object ) {  
+	function ( $cart_object )
+	{  
 	    //if( !WC()->session->__isset( "reload_checkout" )) {
-	        foreach ( $cart_object->get_cart() as $item ) {
-	            if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
-	                $item['data']->set_price( $item["nvbk_booking_price"]);
+	        foreach ( $cart_object->get_cart() as $item )
+	        {
+	            if ( ! empty( $item['nvbk_meta'] ) )
+	            {
+	            	$meta = json_decode( $item["nvbk_meta"], true );
+	                $item['data']->set_price( $meta["price"]);
 	            }
 	        }  
 	    //}
@@ -92,20 +96,23 @@ set custom product title in cart item
 */
 add_filter(
 	'woocommerce_cart_item_name',
-	function ( $title, $cart_item, $cart_item_key ) {
+	function ( $title, $cart_item, $cart_item_key )
+	{
 		//@session_start();
-		$name = $cart_item["nvbk_booking_apartmentName"];
-		if (!empty($name))
-			return $name;
-		else
+		if ( empty( $cart_item["nvbk_meta"] ) ) {
 			return $title;
+		}
+		else {
+			$meta = json_decode( $cart_item["nvbk_meta"], true );
+			return $meta["apartmentName"];
+		}
 	}, 99, 3
 );
 
 
 add_filter(
 	'woocommerce_order_button_text',
-	function($text) {
+	function( $text ) {
 		return "Zaplatit a rezervovat";
 	}
 );

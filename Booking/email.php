@@ -5,9 +5,9 @@ function nvbk_email_order_complete ( $VAR )
 	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0], "small" );
 	$avatar = nv_responsive_img( $var["host"]["profile_picture"][0], "(min-width: 1px) 64px, 64px" );
 	$host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
-	$begin = date("j. n. Y", strtotime($VAR["order"]["nvbk_booking_begin"][0]) );
-	$end = date("j. n. Y", strtotime($VAR["order"]["nvbk_booking_end"][0]) );
-	$people = intval($VAR["order"]["nvbk_booking_adults"][0]) + intval($VAR["order"]["nvbk_booking_kids"][0]);
+	$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"][0]) );
+	$end = date("j. n. Y", strtotime($VAR["nvbk"]["end"][0]) );
+	$people = intval($VAR["nvbk"]["adults"][0]) + intval($VAR["nvbk"]["kids"][0]);
 	$checkin = date("H:m", strtotime($VAR["apartment"]["checkin"][0]));
 	$checkout = date("H:m", strtotime($VAR["apartment"]["checkout"][0]));
 	$output = <<<HTML
@@ -21,7 +21,7 @@ function nvbk_email_order_complete ( $VAR )
 		</div>
 
 		<div style="padding: 30px; background-color: #ffe4b3;">
-			<h2 style="margin:10px 0">{$VAR["order"]["nvbk_booking_apartmentName"][0]}</h2>
+			<h2 style="margin:10px 0">{$VAR["nvbk"]["apartmentName"][0]}</h2>
 			<img src="{$featured_img}" style="width:100%; border-radius: 15px; margin: 30px 0;object-fit: cover;">
 
 			<h2 style="color:#232f5b;">Rezervace č. {$VAR["order"]["_order_id"][0]}</h2>

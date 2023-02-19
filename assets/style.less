@@ -124,6 +124,9 @@
 .font-xxl { font-size: var(--font-xxl); } 
 .font-xxxl { font-size: var(--font-xxxl); }
 
+.shadow-md {box-shadow: var(--shadow-md);}
+.shadow-lg {box-shadow: var(--shadow-lg);}
+
 @fontfamily: "Poppins";
 @font-face { //400
 	font-family: @fontfamily;
@@ -1142,14 +1145,39 @@ body.woocommerce-checkout {
 
 	.site-main {.contentwrap();}
 	.woocommerce {
-		.box();
 		max-width: 1200px;
 		margin: 30px auto;
 		padding: 0;
-		overflow: hidden;
+		//overflow: hidden;
+	}
+
+	.woocommerce-form-login-toggle {
+		.woocommerce-info {
+			.padding-md();
+			background: white;
+			text-align: center;
+		}
+	}
+	.woocommerce-form-login {
+		.rows();
+		.center();
+		.padding-hg();
+		.gap-md();
+		max-width: 600px;
+		margin: 0 auto;
+
+		.form-row-first, .form-row-last {
+			display: flex;
+			width: 100%;
+			.gap-md();
+			& > * {flex:1;}
+			label {text-align: right;}
+		}
 	}
 
 	form.woocommerce-checkout {
+		.shadow-md();
+		border-radius: var(--radius-md);
 		display: flex;
 		gap: 0;
 		flex-wrap: wrap;
@@ -1159,7 +1187,7 @@ body.woocommerce-checkout {
 			flex-direction: column;
 		}
 
-		input, textarea {
+		input[type=text], input[type=password], input[type=email], input[type=tel], textarea {
 			.input();
 			.transition();
 
@@ -1170,6 +1198,8 @@ body.woocommerce-checkout {
 		#customer_details {
 			flex: 1;
 			background: var(--color-ui-grey);
+			border-top-left-radius: var(--radius-md);
+			border-bottom-left-radius: var(--radius-md);
 			.padding-lg();
 
 			.woocommerce-billing-fields__field-wrapper {
@@ -1188,14 +1218,14 @@ body.woocommerce-checkout {
 				text-align: left;
 				background: var(--color-ui-bg);
 				border-radius: var(--radius-sm);
-				border: 2px solid var(--color-ui-grey);
+				//border: 2px solid var(--color-ui-grey);
 				.cart-subtotal, .shipping {display: none;}
 				tr {
 					:not(:last-child) {
-						border-bottom: 2px solid var(--color-ui-grey);
+						//border-bottom: 2px solid var(--color-ui-grey);
 					}
 					:is(td, th):not(:last-child) {
-						border-right: 2px solid var(--color-ui-grey);
+						//border-right: 2px solid var(--color-ui-grey);
 					}
 				}
 			}
@@ -1275,7 +1305,7 @@ body.woocommerce-account {
 	}
 }
 body.woocommerce-account.logged-in {
-	 
+
 }
 body.woocommerce-lost-password {
 	.woocommerce {
