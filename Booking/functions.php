@@ -147,7 +147,7 @@ function nv_order_received_redirect()
     $apartment_meta = get_post_meta( $order_meta["nvbk_booking_apartmentId"][0] );
     $host_meta = get_user_meta( $apartment_meta["host"][0] );
 
-    $nvbk_meta = json_decode( $order_meta["nvbk_meta"], true );
+    $nvbk_meta = json_decode( $order_meta["nvbk_meta"][0], true );
 
     if ( ! $nvbk_meta["booking_confirmed"] )
     {
