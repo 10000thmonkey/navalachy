@@ -20,9 +20,8 @@
 			</div>
 			<div class="col padding-lg">
 				<div class="iconlist iconlist-lg" style="color: white">
-					<a class="icon nvicon nvicon-instagram"></a>
-					<a class="icon nvicon nvicon-facebook"></a>
-					<a class="icon nvicon nvicon-youtube"></a>
+					<a href="https://www.instagram.com/mountainlodgeazzy/" class="icon nvicon nvicon-instagram"></a>
+					<a href="https://www.facebook.com/azzyubytovani/" class="icon nvicon nvicon-facebook"></a>
 				</div>
 			</div>
 			<ul class="col padding-lg">

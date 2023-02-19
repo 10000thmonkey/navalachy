@@ -42,10 +42,10 @@ function nv_template_experiences_tags ( $VAR )
 			$c .= <<<HTML
 			
 			<div class="tag">
-				<button class="button button-plain button-icon button-icon-right">
+				<a href="/tipy/?tags=$s" class="button button-plain button-icon button-icon-right">
 					<i class="nvicon nvicon-$s"></i>
 					<div>$n</div>
-				</button>
+				</a>
 			</div>
 			HTML;
 		}		

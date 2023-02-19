@@ -26,17 +26,22 @@ global $isAdmin;
 $user = (is_user_logged_in()) ? wp_get_current_user() : false;
 $isAdmin = $user ? in_array("administrator", $user->roles) : false;
 
-add_filter( 'login_redirect', 'nv_login_redirect', 10, 3 );
-
-function nv_login_redirect( $redirect_to, $request, $user ) {
-    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
-        if ( !in_array( 'administrator', $user->roles )) {
-             $redirect_to = home_url();
-        }
+add_filter(
+	'login_redirect', 
+    function ( $redirect_to, $request, $user ) {
+	    if ( isset( $user->roles ) && is_array( $user->roles ) ) {
+	        if ( !in_array( 'administrator', $user->roles )) {
+	             $redirect_to = home_url();
+	        }
+	    }
+	    return $redirect_to;
+	}, 10, 3
+);
+if ( isset( $user ) && is_array( $user->roles ) ) {
+    if ( !in_array( 'administrator', $user->roles )) {
+         add_filter( "show_admin_bar", "__return_false" );
     }
-    return $redirect_to;
 }
-
 
 
 
@@ -70,12 +75,12 @@ add_filter(
 );
 
 
-
-function custom_http_request_timeout( $timeout_value ) {
-    return 30;
-}
-add_filter( 'http_request_timeout', 'custom_http_request_timeout' );
-
+add_filter(
+	"http_request_timeout" ,
+	function ( $timeout_value ) {
+	    return 30;
+	}
+);
 
 
 // function nv_gen_voucher(){
@@ -211,11 +216,13 @@ add_filter( 'http_request_timeout', 'custom_http_request_timeout' );
 
 //ALLOW SVG UPLOADS
 
-add_filter('upload_mimes', 'cc_mime_types');
-function cc_mime_types($mimes) {
-  $mimes['svg'] = 'image/svg+xml';
-  return $mimes;
-}
+add_filter(
+	'upload_mimes',
+	function ($mimes) {
+		$mimes['svg'] = 'image/svg+xml';
+		return $mimes;
+	}
+);
 
 
 

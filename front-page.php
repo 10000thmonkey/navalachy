@@ -99,7 +99,7 @@ get_header();
 				$post_1_link = get_post_permalink( $post_1 );
 				?>
 
-					<a href="<?= get_post_permalink( $post_1 );?>">
+					<a href="<?= $post_1_link;?>">
 						<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
@@ -112,7 +112,7 @@ get_header();
 							echo force_balance_tags( $match[0] );
 							?>
 						</div>
-						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">
+						<a href="<?= $post_1_link;?>" class="button button-icon button-secondary-transparent self-end">
 							Více<i class="nvicon nvicon-arrow-right"></i>
 						</a>
 					</div>

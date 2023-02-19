@@ -8,101 +8,134 @@
 //FASTEN UP WOOO CHECKOUT
 add_filter('woocommerce_defer_transactional_emails', '__return_true' );
 
-function nv_wc_remove_styles_scripts() {
 
-	// Skip Woo Pages
-	if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
-		return;
-	}
-	// Otherwise...
-	remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
-	remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
-	remove_action('wp_print_footer_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
+add_action(
+	"template_redirect",
+	function ()
+	{
+		// Skip Woo Pages
+		if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
+			return;
+		}
+		// Otherwise...
+		remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
+		remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
+		remove_action('wp_print_footer_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
 
-	wp_dequeue_script( "woocommerce" );
-	wp_dequeue_script( "wc-add-to-cart" );
-	wp_dequeue_script( "wc-cart-fragments-js-extra" );
+		wp_dequeue_script( "woocommerce" );
+		wp_dequeue_script( "wc-add-to-cart" );
+		wp_dequeue_script( "wc-cart-fragments-js-extra" );
 
-	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
-}
+		add_filter( 'woocommerce_enqueue_styles', '__return_false' );
+	},
+	999
+);
 
-add_action( 'template_redirect', 'nv_wc_remove_styles_scripts', 999 );
+add_action(
+	"enqueue_block_assets",
+	function () {
+		wp_dequeue_style( "wc-blocks-style" );
+		wp_dequeue_style( "wc-blocks-vendors-style" );
+	}, 999
+);
 
-function nv_wc_disable_block_styles () {
-	wp_dequeue_style( "wc-blocks-style" );
-	wp_dequeue_style( "wc-blocks-vendors-style" );
-}
-add_action( "enqueue_block_assets", "nv_wc_disable_block_styles", 999 );
 
+/*
+adds woocommerce body classes
+*/
+// add_action(
+// 	'body_class',
+// 	function ( $classes ) {
+
+// 		if ( is_page("my-account") ) {
+// 			$classes[]
+// 		}
+
+// 		return $classes;
+// 	}
+// )
 
 /*
 disable cart
 */
-function nv_wc_disable_cart () {
-	if (is_page("cart"))
-	{
-		wp_redirect(home_url());
-	}
-}
-add_action( "template_redirect", 'nv_wc_disable_cart' );
+
+add_action(
+	'template_redirect',
+	function () {
+		if (is_page("cart"))
+		{
+			wp_redirect(home_url());
+		}
+	}, 1
+);
 
 
 /*
 set custom product price in cart item
 */
-
-function nv_wc_custom_price_to_cart_item( $cart_object ) {  
-    //if( !WC()->session->__isset( "reload_checkout" )) {
-        foreach ( $cart_object->get_cart() as $item ) {
-            if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
-                $item['data']->set_price( $item["nvbk_booking_price"]);
-            }
-        }  
-    //}
-}
-add_action( 'woocommerce_before_calculate_totals', 'nv_wc_custom_price_to_cart_item', 99 );
+add_action(
+	'woocommerce_before_calculate_totals',
+	function ( $cart_object ) {  
+	    //if( !WC()->session->__isset( "reload_checkout" )) {
+	        foreach ( $cart_object->get_cart() as $item ) {
+	            if( array_key_exists( 'nvbk_booking_price', $item  ) ) {
+	                $item['data']->set_price( $item["nvbk_booking_price"]);
+	            }
+	        }  
+	    //}
+	}, 99 
+);
 
 
 /*
 set custom product title in cart item
 */
-
-function nv_wc_cart_booking_product_title( $title, $cart_item, $cart_item_key ) {
-	//@session_start();
-	$name = $cart_item["nvbk_booking_apartmentName"];
-	if (!empty($name))
-		return $name;
-	else
-		return $title;
-}
-add_filter( "woocommerce_cart_item_name", "nv_wc_cart_booking_product_title", 99, 3);
-
-
-
+add_filter(
+	'woocommerce_cart_item_name',
+	function ( $title, $cart_item, $cart_item_key ) {
+		//@session_start();
+		$name = $cart_item["nvbk_booking_apartmentName"];
+		if (!empty($name))
+			return $name;
+		else
+			return $title;
+	}, 99, 3
+);
 
 
-
-function nv_wc_auto_complete_order( $order_id ) { 
-    if ( ! $order_id ) {
-        return;
-    }
-
-    $order = wc_get_order( $order_id );
-    $order->update_status( 'completed' );
-}
-add_action( 'woocommerce_thankyou', 'nv_wc_auto_complete_order' );
+add_filter(
+	'woocommerce_order_button_text',
+	function($text) {
+		return "Zaplatit a rezervovat";
+	}
+);
 
 
-function nv_wc_optional_default_address_fields( $address_fields ) {
-	$address_fields['company']['required'] = false;
-	$address_fields['postcode']['required'] = false;
-	$address_fields['city']['required'] = false;
-	$address_fields['state']['required'] = false;
-	$address_fields['country']['required'] = false;
-	$address_fields['address_1']['required'] = false;
-	return $address_fields;
- }
-add_filter( 'woocommerce_default_address_fields' , 'nv_wc_optional_default_address_fields' );
+
+add_action(
+	'woocommerce_thankyou',
+	function ( $order_id ) { 
+	    if ( ! $order_id ) {
+	        return;
+	    }
+
+	    $order = wc_get_order( $order_id );
+	    $order->update_status( 'completed' );
+	}
+);
+
+add_filter(
+	'woocommerce_default_address_fields', 
+	function ( $address_fields ) {
+		$address_fields['company']['required'] = false;
+		$address_fields['postcode']['required'] = false;
+		$address_fields['city']['required'] = false;
+		$address_fields['state']['required'] = false;
+		$address_fields['country']['required'] = false;
+		$address_fields['address_1']['required'] = false;
+		return $address_fields;
+	 }
+);
 
 
 

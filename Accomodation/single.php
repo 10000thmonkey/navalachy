@@ -152,14 +152,15 @@ get_header();
 						"orderby" => "post__in"
 					));
 
-					if ($query->have_posts()) {
-
+					if ($query->have_posts())
+					{
 						$counter = 0;
 						$first3 = "";
 
-						while ($query->have_posts()) {
-
+						while ($query->have_posts())
+						{
 							$query->the_post();
+							$pod->fetch($query->post->ID);
 							$meta = get_post_meta(get_the_id());
 
 							$t = get_the_title();
@@ -316,7 +317,7 @@ get_header();
 	<footer class="related-experiences" style="background:var(--secondary-light);">
 		<div class="contentwrap padding-xl">
 			<div class="cols-flex cols-md gap-md space-between space-around-hg">
-				<h2 class="">Populární v okolí</h2>
+				<h2 class="">Místa v okolí</h2>
 				<div class="tags">
 					<?= nv_template_experiences_tags(["include" => [52, 29, 28, 46]]);?>
 				</div>

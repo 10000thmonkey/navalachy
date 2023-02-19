@@ -59,10 +59,53 @@ global $user;
     		</nav>
     		<div class="header-right">
     			<?php 
-    			if ( $user )
-    			{
-    				?>
-    					<nav role="navigation" class="dropdown-nav">
+    			if ( $user ):
+				?>
+					<nav role="navigation" class="dropdown-nav">
+						<ul>
+						    <li>
+						    	<a href="#" class="button button-plain">
+						    		<?=$user->data->display_name;?>
+									<div class="avatar avatar-small">
+										<?= nv_responsive_img( 1404, "(min-width: 1px) 32px, 32px" ); ?>
+									</div>
+						    	</a>
+								<ul class="dropdown padding-md">
+									<li><a href="/my-account">Můj účet</a></li>
+									<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
+										<li><a href="/admin-accomodation">Ubytování</a></li>
+									<?php endif; ?>
+
+									<li><a href="/my-account/customer-logout">Odhlásit</a></li>
+								</ul>
+						    </li>
+					 	</ul>
+					</nav>
+				<?php
+    			else:
+    			?>
+    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
+    			<?php
+    			endif;
+    			?>
+				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>
+    		</div>
+    
+  			<nav id="site-navigation-mobile" class="rows main-navigation-mobile">
+	  			<?php	
+	    			wp_nav_menu(
+	    				array(
+	    					'theme_location' => 'menu-1',
+	    					'menu_id'        => 'primary-menu-mobile',
+	    					'container' => false,
+	    				)
+	    			);
+	    		?>
+	    		<div class="padding-md">
+	    			<?php 
+	    			if ( $user ):
+					?>
+						<nav role="navigation" class="dropdown-nav">
 							<ul>
 							    <li>
 							    	<a href="#" class="button button-plain">
@@ -79,24 +122,14 @@ global $user;
 							    </li>
 						 	</ul>
 						</nav>
-    				<?php
-    			}
-
-    			?>
-				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>
-    		</div>
-    
-  			<nav id="site-navigation-mobile" class="main-navigation-mobile">
-	  			<?php	
-	    			wp_nav_menu(
-	    				array(
-	    					'theme_location' => 'menu-1',
-	    					'menu_id'        => 'primary-menu-mobile',
-	    					'container' => false,
-	    				)
-	    			);
-	    		?>
-
+					<?php
+	    			else:
+	    			?>
+	    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
+	    			<?php
+	    			endif;
+	    			?>
+	    		</div>
   			</nav>
     	</div>
 	</header><!-- #masthead -->

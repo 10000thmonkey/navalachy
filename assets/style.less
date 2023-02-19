@@ -235,7 +235,10 @@ h4 {margin: 5px 0;}
 		nav.main-navigation {
 			display: none;
 		}
-		button.menu-toggle {display: block;}
+		.header-right {
+			:not(.menu-toggle) {display: none;}
+			.menu-toggle {display: block;}
+		}
 	}
 
 	& > .contentwrap {
@@ -257,7 +260,7 @@ h4 {margin: 5px 0;}
 	.header-right {
 		display: flex;
 		justify-content: right;
-		.button {
+		.button.menu-toggle {
 			color: transparent;
     		width: 43px;
     		overflow: hidden;
@@ -293,6 +296,8 @@ h4 {margin: 5px 0;}
 	    z-index: -1;
 	    padding: 30px;
 	    padding-top: 100px;
+	    align-items: left;
+	    justify-content: space-between;
 
 	    & > * {filter: none !important;}
 
@@ -484,7 +489,7 @@ body.home {
 	.section_testimonials {
 		display: none;
 		nv-slider {
-			--width: 800px;
+			--width: 800px;1
 			position: relative;
 			.slider-items {
 				height: auto;
@@ -1133,7 +1138,7 @@ body.woocommerce-checkout {
 	#site-navigation-mobile,
 	#wc-stripe-payment-request-wrapper,
 	#wc-stripe-payment-request-button-separator,
-	#billing_address_2_field {display: none;}
+	#billing_address_2_field {display: none !important;}
 
 	.site-main {.contentwrap();}
 	.woocommerce {
@@ -1249,6 +1254,36 @@ body.woocommerce-checkout {
 }
 
 
+body.woocommerce-account {
+	.woocommerce {
+		.space-around-lg();
+		.contentwrap();
+		.padding-lg();
+		
+		form {
+			.rows();
+			.gap-md();
+
+			.woocommerce-form-row {
+				.rows();
+				.gap-sm();
+			}
+			input[type=text], input[type=password], input[type=email] {
+				.input();
+			}
+		}
+	}
+}
+body.woocommerce-account.logged-in {
+	 
+}
+body.woocommerce-lost-password {
+	.woocommerce {
+		.box();
+		max-width: 500px;
+		box-shadow: var(--shadow-md);
+	}
+}
 
 
 
@@ -1790,7 +1825,7 @@ nv-slider {
 		position: relative;
 		padding: var(--space-md);
 		gap: var(--space-md);
-		margin: -15px;
+		margin: calc(-1 * var(--space-md));
 	}
 	.slider-controls {
 		.layer(1);
@@ -2263,6 +2298,7 @@ nv-slider {
 }
 .input {
 	padding: 15px;
+	width: 100%;
 	border-radius: var(--radius-sm);
 	border: 2px solid var(--color-ui-grey);
 	background: var(--color-ui-grey);

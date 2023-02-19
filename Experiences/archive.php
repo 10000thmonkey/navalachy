@@ -88,7 +88,6 @@ get_header();
 				
 				$feed = nv_template_experiences_feed ( $args );
 				echo $feed["data"];
-				echo var_dump($feed["page"]);
 				?>
 			</div>
 			<div style="display:flex;justify-content: center;">

@@ -5,6 +5,8 @@ $NV_MODULES = [
 
 get_header();
 
+echo var_dump(WC()->query->get_query_vars());
+
 
 if ($_GET["test"] == 0)
 {
