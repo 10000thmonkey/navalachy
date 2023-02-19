@@ -73,7 +73,7 @@ global $user;
 								<ul class="dropdown padding-md">
 									<li><a href="/my-account">Můj účet</a></li>
 									<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
-										<li><a href="/admin-accomodation">Ubytování</a></li>
+										<li><a href="/dashboard/accomodation">Ubytování</a></li>
 									<?php endif; ?>
 
 									<li><a href="/my-account/customer-logout">Odhlásit</a></li>

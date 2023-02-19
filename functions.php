@@ -38,7 +38,7 @@ add_filter(
 	}, 10, 3
 );
 if ( isset( $user ) && is_array( $user->roles ) ) {
-    if ( !in_array( 'administrator', $user->roles )) {
+    if ( WP_DEBUG || ! in_array( 'administrator', $user->roles ) ) {
          add_filter( "show_admin_bar", "__return_false" );
     }
 }

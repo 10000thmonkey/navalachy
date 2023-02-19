@@ -155,7 +155,7 @@ get_header();
 					}
 					?>
 				</nv-slider>
-				<a class="button button-icon self-end" href="/tipy">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+				<a class="button button-icon self-end" href="/tipy/">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
@@ -181,7 +181,7 @@ get_header();
 							?>
 						</div>
 				
-						<a href="<?= get_permalink();?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
+						<a href="<?= $post_1_link;?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
 
 					</div>
 				</div>

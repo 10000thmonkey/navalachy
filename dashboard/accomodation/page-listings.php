@@ -21,7 +21,7 @@ if ( empty( $_GET["listing"] ) )
 			$img = nv_responsive_img( get_post_thumbnail_id($apartments->post->ID) );
 
 			echo <<<HTML
-				<a class="box cols-flex space-around-md" href="/admin-accomodation?show=listings&listing={$apartments->post->ID}">
+				<a class="box cols-flex space-around-md" href="/dashboard/accomodation/?show=listings&listing={$apartments->post->ID}">
 					$img
 					<div class="padding-md">
 						<h2>{$apartments->post->post_title}</h2>

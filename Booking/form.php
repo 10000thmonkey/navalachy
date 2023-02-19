@@ -19,7 +19,7 @@ ob_start();
 		<h3>Vyberte termín</h3>
 	<?php endif; ?>
 	
-	<div class="fieldgroup hovering space-around-md">
+	<div class="fieldgroup hovering">
 
 		<div class="datepicker hidden hiding padding-sm" aria-hidden="true" id="datepicker">
 			<div id="calendar"></div>

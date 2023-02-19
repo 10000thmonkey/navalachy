@@ -398,14 +398,14 @@ h4 {margin: 5px 0;}
 	h5 {margin: 0; font-size: var(--font-hg);font-weight: 500;}
 
     .cover-image {
-    	.layer();
+    	.layer(0);
 		background-attachment: fixed;
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position:50%;
 	    overflow: hidden;
 	    img {
-	    	.layer();
+	    	.layer(0);
 	    	object-fit: cover;
 	    }
     }
@@ -521,7 +521,9 @@ body.home {
 	}
 
 	.section-block {
-		padding: 100px 0;
+		.padding-lg();
+		padding-top: 100px;
+		padding-bottom: 100px;
 		position: relative;
 		z-index: 1;
 

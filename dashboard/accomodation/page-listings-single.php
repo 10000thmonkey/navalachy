@@ -49,7 +49,7 @@ if ($apartments->have_posts())
 					{
 						$cls = ($section == $s) ? " selected" : "";
 						echo <<<HTML
-						<a class="button button-icon button-plain$cls" href="/admin-accomodation?show=listings&listing={$apartments->post->ID}&section=$s"><i class="nvicon"></i>{$d[0]}</a>
+						<a class="button button-icon button-plain$cls" href="/dashboard/accomodation/?show=listings&listing={$apartments->post->ID}&section=$s"><i class="nvicon"></i>{$d[0]}</a>
 						HTML;
 					}
 					?>
@@ -95,6 +95,7 @@ if ($apartments->have_posts())
 								<input type="number" name="discount_month" value="<?=$meta["discount_month"][0]?>">
 							</label>
 						</div>
+
 						<div class="dashboard-fieldset ">
 							<h3>Náklady</h3>
 							<template id="template-fields-costs">
@@ -143,7 +144,7 @@ if ($apartments->have_posts())
 							<a onclick="this.parentElement.q('.fields-costs')[0].insert(this.parentElement.q('#template-fields-costs')[0].content.cloneNode(true))" class="button button-plain button-sm">Přidat</a>
 							<input name="costs" type="hidden">
 							<script>
-							function setCostsField () {
+							function setFields () {
 								var fields = q(".fields-costs input, .fields-costs select");
 								var input = q("input[name=costs]");
 								var res = [];
@@ -172,7 +173,7 @@ if ($apartments->have_posts())
 					q(() => {
 						q("form.dashboard-form").on("submit", (e)=>{
 							e.preventDefault();
-							setCostsField ();
+							setFields ();
 
 							jax.post("/wp-admin/admin-ajax.php", {action: "nv_dashboard_accomodation_settings",data: JSON.stringify(q("form.dashboard-form")[0].serialize())});
 						});

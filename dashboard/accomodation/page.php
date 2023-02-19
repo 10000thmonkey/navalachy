@@ -23,7 +23,7 @@ $page = empty($_GET["show"]) ? "listings" : $_GET['show'];
 		foreach ( $pages as $p => $d )
 		{
 			$cls = ($page == $p) ? " selected" : "";
-			echo '<a class="button button-icon button-plain'.$cls.'" href="/admin-accomodation?show='.$p.'"><i class="nvicon nvicon-'.$d[1].'"></i> '.$d[0].'</a>';
+			echo '<a class="button button-icon button-plain'.$cls.'" href="/dashboard/accomodation/?show='.$p.'"><i class="nvicon nvicon-'.$d[1].'"></i> '.$d[0].'</a>';
 		}
 		?>
 	</div>
@@ -33,7 +33,7 @@ $page = empty($_GET["show"]) ? "listings" : $_GET['show'];
 
 	
 	<?php
-	$page_file = "page-$page.php";
+	$page_file = dirname(__FILE__) . "/page-$page.php";
 	if ( file_exists( $page_file ) )
 	{
 		include $page_file;
@@ -41,7 +41,6 @@ $page = empty($_GET["show"]) ? "listings" : $_GET['show'];
 	else 
 	{
 		echo "wrong page";
-		echo $page_file;
 	}
 
 	?>
