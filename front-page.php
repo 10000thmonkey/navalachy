@@ -192,14 +192,14 @@ get_header();
 
 	<div class="section-block section_accomodation">
 		<div class="contentwrap box rows padding-xl gap-xl">
-			<div class="block-header">
-				<a href="/accomodation"><h2>Ubytování</h2></a>
+			<div class="block-header cols">
+				<a href="/ubytovani"><h2>Ubytování</h2></a>
+
+				<?php
+				echo nv_template_booking_form(array("iss" => false));
+				?>
 			</div>
 
-			<?php
-			echo nv_template_booking_form(array("iss" => false));
-			?>
-			
 			<div class="hovercards">
 				<?php
 				echo nv_template_accomodation_feed( array(

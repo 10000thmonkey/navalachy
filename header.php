@@ -64,13 +64,13 @@ global $user;
 					<nav role="navigation" class="dropdown-nav">
 						<ul>
 						    <li>
-						    	<a href="#" class="button button-plain">
+						    	<a class="button button-plain" onclick="this.parentElement.q('.dropdown')[0].toggleHide();">
 						    		<?=$user->data->display_name;?>
 									<div class="avatar avatar-small">
 										<?= nv_responsive_img( 1404, "(min-width: 1px) 32px, 32px" ); ?>
 									</div>
 						    	</a>
-								<ul class="dropdown padding-md">
+								<ul class="dropdown padding-md hiding hidden">
 									<li><a href="/my-account">Můj účet</a></li>
 									<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
 										<li><a href="/dashboard/accomodation">Ubytování</a></li>

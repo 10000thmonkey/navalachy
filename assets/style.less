@@ -522,8 +522,8 @@ body.home {
 
 	.section-block {
 		.padding-lg();
-		padding-top: 100px;
-		padding-bottom: 100px;
+		padding-top: 100px !important;
+		padding-bottom: 100px !important;
 		position: relative;
 		z-index: 1;
 
@@ -544,6 +544,9 @@ body.home {
 		
 		.post-highlight {
 			min-height: 400px;
+			.info {
+				max-width: 550px;
+			}
 			img {
 				object-fit: cover;
 				width:100%;
@@ -1907,11 +1910,7 @@ nv-slider {
 		padding-left: 0;
 
 		& > li {
-			//color: #fff;
-			//background: darkorange;
 			display: block;
-			//float: left;
-			//padding: 1rem;
 			position: relative;
 			text-decoration: none;
 			transition-duration: 0.5s;
@@ -1920,27 +1919,16 @@ nv-slider {
 				.white-bg-backdrop();
 				.box();
 				border-radius: var(--radius-md);
-				visibility: hidden;
-				opacity: 0;
 				min-width: 5rem;
 				position: absolute;
-				transition: all 0.5s ease;
+				transition: all 0.2s ease;
 				right: 0;
-				display: none;
 
 				li {
 					clear: both;
 					width: 100%;
 				}
 			}
-
-			&:focus-within > ul /* this is the line we add */
-			{
-				visibility: visible;
-				opacity: 1;
-				display: block;
-			}
-
 		}
 	}
 }
@@ -2286,7 +2274,10 @@ nv-slider {
 	}
 
 	&.button-sm {
-
+		height: 40px;
+	    padding: 10px 20px;
+	    font-size: var(--font-sm);
+	    border-radius: 20px;
 	}
 }
 .button-showmore {

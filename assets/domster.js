@@ -178,6 +178,7 @@ Node.prototype.hide = function() {this.addClass("hidden");return this;}
 Node.prototype.show = function() {this.removeClass("hidden");return this;}
 NodeList.prototype.hide = function() {return this.each(function(){this.hide();})}
 NodeList.prototype.show = function() {return this.each(function(){this.show();})}
+Node.prototype.toggleHide = function() {return this.toggleClass("hidden");};
 
 Node.prototype.noDisplay = function() {this.addClass("nodisplay");return this;}
 Node.prototype.display = function() {this.removeClass("nodisplay");return this;}

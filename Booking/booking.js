@@ -354,7 +354,7 @@ function loadDatePicker ( c )
 
 
 	document.body.on( "click", (e) => {
-		if ( e.path.indexOf( cal.form[0] ) == -1 ) {
+		if ( e.composedPath().indexOf( cal.form[0] ) == -1 ) {
 			if (cal.shown) cal.show();
 		}
 	} );
