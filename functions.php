@@ -58,7 +58,7 @@ add_filter(
 
             // get top level parent page
             $parent = get_post(
-               reset(array_reverse(get_post_ancestors($post->ID)))
+               reset( array_reverse( get_post_ancestors( $post->ID ) ) )
             );
 
             // or ...

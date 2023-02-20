@@ -1534,13 +1534,13 @@ body.single-accomodation {
 		#booking-form {
 			.box();
 			.padding-hg();
+			.gap-md();
 			align-items: unset;
 			flex-direction: column;
 			backdrop-filter: none !important;
 		    max-width: 600px;
 		    background: none;
 		    backdrop-filter: none;
-		    gap: unset;
 
 			& > h3 {display: none;}
 			.fieldgroup {
@@ -1977,7 +1977,7 @@ nv-slider {
 	overflow: hidden;
 	
 	img {
-		.layer(-1);
+		.layer(0);
 		object-fit: cover;
 	}
 	.iconset, .label {
@@ -1994,6 +1994,8 @@ nv-slider {
 
 	&:before {
 		.transition();
+		position: relative;
+		z-index: 1;
 		width: 100%;
 		content: " ";
 		padding-top: 100%;

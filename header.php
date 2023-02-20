@@ -19,7 +19,7 @@ global $user;
 
 
 	<?php wp_head(); ?>
-	<?php if (!WP_DEBUG && !$isAdmin): ?>
+	<?php if ( ! WP_DEBUG && ! $isAdmin ): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
@@ -27,6 +27,15 @@ global $user;
 		c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
 		})(document);
 		smartlook('init', '794196b5441c964e421dc60be90b282ea9023239', { region: 'eu' });
+	</script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-R6ZWF4NFP5"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-R6ZWF4NFP5');
 	</script>
 	<?php endif; ?>
 </head>
@@ -59,6 +68,7 @@ global $user;
     		</nav>
     		<div class="header-right">
     			<?php 
+    			if ( WP_DEBUG ):
     			if ( $user ):
 				?>
 					<nav role="navigation" class="dropdown-nav">
@@ -87,6 +97,7 @@ global $user;
     				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
     			<?php
     			endif;
+    			endif;
     			?>
 				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>
     		</div>
@@ -103,7 +114,7 @@ global $user;
 	    		?>
 	    		<div class="padding-md">
 	    			<?php 
-	    			if ( $user ):
+	    			if ( $user && WP_DEBUG ):
 					?>
 						<nav role="navigation" class="dropdown-nav">
 							<ul>
@@ -123,7 +134,7 @@ global $user;
 						 	</ul>
 						</nav>
 					<?php
-	    			else:
+	    			//else:
 	    			?>
 	    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
 	    			<?php

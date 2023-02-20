@@ -142,7 +142,6 @@ function nv_order_received_redirect()
     $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
     $order = wc_get_order( $order_id );
     $order_meta = get_post_meta( $order_id );
-    $order_meta["_order_id"] = $order_id;
    
     $nvbk_meta = json_decode( $order_meta["nvbk_meta"][0], true );
     $apartment_meta = get_post_meta( $nvbk_meta["apartmentId"] );
@@ -158,6 +157,7 @@ function nv_order_received_redirect()
 			"subject" => "Rezervace přijata - NaValachy.cz",
 			"body" => nvbk_email_order_complete( [ 
 				"order" => $order_meta,
+				"order_id" => $order_id,
 				"nvbk" => $nvbk_meta,
 				"apartment" => $apartment_meta,
 				"host" => $host_meta

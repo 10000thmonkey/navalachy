@@ -24,6 +24,8 @@ function nv_template_experiences_feed ( $VAR = [] )
 
 	if ( !empty($VAR["paged"]) )
 		$wpargs["paged"] = $VAR["paged"];
+	else
+		$VAR["paged"] = 1;
 
 
 	$query = new WP_Query( $wpargs );

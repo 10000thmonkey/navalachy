@@ -79,7 +79,7 @@ get_header();
 
 	<footer class="related-accomodation" style="background:var(--secondary-light);">
 		<div class="contentwrap padding-xl">
-			<h2 class="space-around-hg">Populární ubytování v okolí</h2>
+			<h2 class="space-around-hg">Ubytování v okolí</h2>
 
 			<div class="cols cols-sm-2 cols-md-3 gap-hg">
 				<?php
