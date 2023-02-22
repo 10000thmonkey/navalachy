@@ -18,7 +18,7 @@ get_header();
 
 	<?php
 	echo nv_c( "UI/cover-image", [
-		"attachment_id" => get_post_thumbnail_id( get_the_id() ),
+		"attachment_id" => 1441,
 		"heading" => "Ubytování v Bílých Karpatech",
 		"subheading" => "",
 		"content" => nv_c( "accomodation/c/form", [

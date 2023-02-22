@@ -28,6 +28,8 @@ echo $post_type;
 if ( is_archive() && file_exists( __DIR__."/$post_type/archive.php" ) )
 {
 	include_once __DIR__."/$post_type/archive.php";
+
+    add_action("qm/debug", __DIR__."/$post_type/archive.php");
 }
 else if ( is_single() && file_exists( __DIR__."/$post_type/single.php" ) )
 {

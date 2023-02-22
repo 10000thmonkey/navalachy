@@ -6,7 +6,7 @@ get_header();
 
 	<?php
 	echo nv_c( "UI/cover-image", [
-		"attachment_id" => 1,
+		"attachment_id" => 1298,
 		"heading" => "Tipy na výlet",
 		"subheading" => ""
 	] );
