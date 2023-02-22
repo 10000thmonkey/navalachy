@@ -8,15 +8,19 @@
 //FASTEN UP WOOO CHECKOUT
 add_filter('woocommerce_defer_transactional_emails', '__return_true' );
 
+function is_woocommerce_page ()
+{
+	return ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() );
+}
+
 
 add_action(
 	"template_redirect",
 	function ()
 	{
 		// Skip Woo Pages
-		if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
-			return;
-		}
+		if ( is_woocommerce_page() ) return;
+
 		// Otherwise...
 		remove_action('wp_enqueue_scripts', [WC_Frontend_Scripts::class, 'load_scripts']);
 		remove_action('wp_print_scripts', [WC_Frontend_Scripts::class, 'localize_printed_scripts'], 5);
@@ -104,7 +108,7 @@ add_filter(
 		}
 		else {
 			$meta = json_decode( $cart_item["nvbk_meta"], true );
-			return $meta["apartmentName"];
+			return $meta["apartment_name"];
 		}
 	}, 99, 3
 );

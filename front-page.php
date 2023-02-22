@@ -1,28 +1,21 @@
 <?php
-nv_use_modules([
-	"Booking/lib",
-	"Booking/form",
-	"Accomodation/feed",
-	"UI/slider",
-]);
-
-global $nvbk;
-
-
-$nv_vars = [
-	
-];
+wp_enqueue_script("nv-slider", "/wp-content/themes/navalachy/assets/slider.js" );
+wp_enqueue_script("nv-booking", "/wp-content/themes/navalachy/accomodation/a/booking.js");
+wp_enqueue_script( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.js" );
+wp_enqueue_style( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.css" );
 
 get_header();
 ?>
 <main id="primary" class="site-main">
 
-	<?php
-	echo nv_template_cover_image( array(
+	<?= nv_c( "UI/cover-image", [
 		"attachment" => get_post_thumbnail_id( get_the_id() ),
 		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
-	) );
+	] );
 	?>
+	<svg class="clip-path-template">
+		<clipPath id="section-cover-image-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.929 C0.55,1,0.25,0.929,0,1 L0,0 L1,0"></path></clipPath>
+	</svg>
 	
 	<div class="section_testimonials space-around-xl">
 		<nv-slider controls class="space-around-hg slider-wrapper center" style="height:auto">
@@ -32,7 +25,7 @@ get_header();
 
 				while( $testimonials->fetch() )
 				{
-					$img = @nv_responsive_img( get_post_thumbnail_id( $testimonials->display( "ID" ) ) );
+					$img = nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $testimonials->display( "ID" ) ) ] );
 
 					echo <<<HTML
 					
@@ -59,39 +52,44 @@ get_header();
 					<p class="text-primary">Výlet na Valachy potěší každého, od horolezce po běžkaře</p>
 				</div>
 
-				<nv-slider class="hovercards">
-					<?php
-					$tags_query = get_terms( "experiences_tags", array(
-						"include" => (array) get_option("homepage_settings_tags_1"),  
-						"orderby" => "include",
-						"hide_empty" => false
-					) );
-					foreach ( $tags_query as $tag )
-					{
-						$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
-						echo <<<HTML
+				<div class="padding-hg">
+					<nv-slider class="hovercards">
+						<?php
+						$tags_query = get_terms( "tips_tags", array(
+							"include" => (array) get_option("homepage_settings_tags_1"),  
+							"orderby" => "include",
+							"hide_empty" => false
+						) );
+						foreach ( $tags_query as $tag )
+						{
+							$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
+							echo <<<HTML
 
-						<a class="hovercard" href="/tipy?tags={$tag->slug}">
-							$i
-							<div class="iconset">
-								<div class="icon">
-									<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
-									{$tag->name}
+							<a class="hovercard" href="/tipy?tags={$tag->slug}">
+								$i
+								<div class="iconset">
+									<div class="icon">
+										<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+										{$tag->name}
+									</div>
 								</div>
-							</div>
-						</a>
+							</a>
 
-						HTML;
-					}
-					?>
-				</nv-slider>
+							HTML;
+						}
+						?>
+					</nv-slider>
+				</div>
 
 				<a class="self-end button button-icon" href="/tipy">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
 		<div class="section-highlight">
-			<div class="contentwrap highlight padding-xl">
+			<svg class="clip-path-template">
+				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
+			</svg>
+			<div class="contentwrap highlight padding-xxl">
 				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
 
 				<?php
@@ -100,7 +98,7 @@ get_header();
 				?>
 
 					<a href="<?= $post_1_link;?>">
-						<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
 						<h3 class="secondary-text">Doporučujeme</h3>
@@ -119,6 +117,7 @@ get_header();
 
 				</div>
 			</div>
+			
 		</div>
 	</div>
 
@@ -131,36 +130,42 @@ get_header();
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
 				</div>
 
-				<nv-slider class="hovercards">
-					<?php
-					$tags_query = get_terms( "experiences_tags", array(
-						"include" => (array) get_option("homepage_settings_tags_2"),
-						"orderby" => "include",
-						"hide_empty" => false
-					) );
-					foreach ( $tags_query as $tag )
-					{
-						$i = @nv_responsive_img( (int) get_term_meta( $tag->term_id )["image"][0] );
-						echo <<<HTML
-						<a class="hovercard" href="/tipy?tags={$tag->slug}">
-							$i
-							<div class="iconset">
-								<div class="icon">
-									<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
-									{$tag->name}
+				<div class="padding-hg">
+					<nv-slider class="hovercards">
+						<?php
+						$tags_query = get_terms( "tips_tags", array(
+							"include" => (array) get_option("homepage_settings_tags_2"),
+							"orderby" => "include",
+							"hide_empty" => false
+						) );
+						foreach ( $tags_query as $tag )
+						{
+							$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
+							echo <<<HTML
+							<a class="hovercard" href="/tipy?tags={$tag->slug}">
+								$i
+								<div class="iconset">
+									<div class="icon">
+										<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+										{$tag->name}
+									</div>
 								</div>
-							</div>
-						</a>
-						HTML;
-					}
-					?>
-				</nv-slider>
+							</a>
+							HTML;
+						}
+						?>
+					</nv-slider>
+				</div>
+
 				<a class="button button-icon self-end" href="/tipy/">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
 			</div>
 		</div>
 
 		<div class="section-highlight">
-			<div class="contentwrap highlight padding-xl">
+			<svg class="clip-path-template">
+				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
+			</svg>
+			<div class="contentwrap highlight padding-xxl">
 				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
 
 					<?php
@@ -168,7 +173,7 @@ get_header();
 					$post_1_link = get_post_permalink( $post_1 );
 					?>
 					<a href="<?= get_post_permalink( $post_1 );?>">
-						<?= nv_responsive_img( get_post_thumbnail_id( $post_1->ID ) ); ?>
+						<?= nv_c( "UI/responsive_image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
 						<h3 class="secondary-text">Doporučujeme</h3>
@@ -195,18 +200,14 @@ get_header();
 			<div class="block-header cols">
 				<a href="/ubytovani"><h2>Ubytování</h2></a>
 
-				<?php
-				echo nv_template_booking_form(array("iss" => false));
-				?>
+				<?= nv_c( "accomodation/c/form" ); ?>
 			</div>
 
-			<div class="hovercards">
-				<?php
-				echo nv_template_accomodation_feed( array(
-					"hovercards" => true
-				) );
-				?>
-			</div>
+			<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
+			
+			<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
+				<?= nv_t( "accomodation/t/hovercard" ); ?>
+			</nv-repeat>
 		</div>
 	</div>
 <?php /*

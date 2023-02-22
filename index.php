@@ -14,46 +14,40 @@
 
 get_header();
 
-echo var_dump
-?>
 
-	<main id="primary" class="site-main">
+$post_type = get_post_type();
 
-		<?php
-		if ( have_posts() ) :
+if ( file_exists( __DIR__."/$post_type/functions.php" ) )
+	include_once __DIR__."/$post_type/functions.php";
 
-			if ( is_home() && ! is_front_page() ) :
-				?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-				</header>
-				<?php
-			endif;
 
-			/* Start the Loop */
-			while ( have_posts() ) :
-				the_post();
 
-				/*
-				 * Include the Post-Type-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Type name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_type() );
 
-			endwhile;
+echo $post_type;
 
-			the_posts_navigation();
+if ( is_archive() && file_exists( __DIR__."/$post_type/archive.php" ) )
+{
+	include_once __DIR__."/$post_type/archive.php";
+}
+else if ( is_single() && file_exists( __DIR__."/$post_type/single.php" ) )
+{
+	include_once __DIR__."/$post_type/single.php";
+}
+else if (
+    is_page()
+    && file_exists( __DIR__."/page/page-{$post->post_name}" )
+    && ! is_woocommerce_page()
+)
+{
+	include_once __DIR__."/page/page-{$post->post_name}";
+}
+else {
+	add_action("qm/debug", $post_type);
+    //add_action("qm/debug", $post->post_name );
 
-		else :
+    the_content();
+}
 
-			get_template_part( 'template-parts/content', 'none' );
 
-		endif;
-		?>
 
-	</main><!-- #main -->
-
-<?php
-//get_sidebar();
 get_footer();

@@ -3,10 +3,10 @@
 switch ( get_post_type() )
 {
 	case "accomodation":
-		include "Accomodation/archive.php";
+		include "accomodation/archive/template.php";
 		break;
 	case "tipy":
-		include "Experiences/archive.php";
+		include "experiences/archive/template.php";
 		break;
 }
 echo get_post_type();

@@ -4,16 +4,14 @@ session_start();
 $_SESSION['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
 $currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
 
-require_once "inc/functions-nv.php";
-require_once "inc/functions-email.php";
+$templ_dir = get_template_directory();
 
-require_once "Booking/functions.php";
-require_once "Experiences/functions.php";
-
-require_once "dashboard/functions.php";
+require_once "$templ_dir/accomodation/functions-global.php";
+require_once "$templ_dir/inc/functions-nv.php";
+require_once "$templ_dir/inc/functions-email.php";
 
 if ( class_exists( 'WooCommerce' ) ) {
-	require_once get_template_directory() . '/inc/functions-woocommerce.php';
+	require_once "$templ_dir/inc/functions-woocommerce.php";
 }
 
 
@@ -84,6 +82,46 @@ add_filter(
 	    return 30;
 	}
 );
+
+
+
+
+
+
+
+
+
+
+
+// DOING AJAX.
+// Tries to load ajax.php from module directory.
+
+if ( defined( "DOING_AJAX" ) && DOING_AJAX )
+{
+	$action = $_REQUEST['action'];
+	
+	if ( strpos( $action, "/") )
+	{	
+		//$mod = explode( "/", $action )[0];
+		$mod = substr( $action, 0, strpos( $action, "/" ) );
+
+		//override $action used by wordpress, "booking/confirm_booking" becomes "nv_confirm_booking"
+		$_REQUEST['action'] = $_GET['action'] = $_POST['action'] = $action = "nv_" . str_replace( "/", "_", $action );
+
+		if ( file_exists( "$templ_dir/$mod/ajax.php" ) )
+			include_once "$templ_dir/$mod/ajax.php";
+	}
+}
+
+
+
+
+
+
+
+
+
+
 
 
 // function nv_gen_voucher(){

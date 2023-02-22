@@ -55,37 +55,14 @@
 
 <script type="text/javascript">
 var modal;
-var isMobile = false;
-  
 var ggg;
 
+function isMobile () {
+	return window.screen.width <= 800;
+}
 
-q(function(){
-	q('.openmodale').on("click", function (e) {
-	    let modale = e.currentTarget.attr("data-modale");
-	    q('.modale[data-modale="' + modale + '"]').addClass('opened');
-	    document.body.css("overflow", "hidden");
-	});
-	q('.closemodale').on("click", function (e) {
-		e.preventDefault();
-		q('.modale').removeClass('opened');
-	    document.body.css("overflow", "unset");
-	});
-	q('.modale').on("click", function (e) {
-		//e.preventDefault();
-		if ( e.path.indexOf( this.q(".modal-dialog")[0] ) == -1 )
-		{
-			q('.modale').removeClass('opened');
-		    document.body.css("overflow", "unset");
-		}
-	});
-
-	if (window.screen.width <= 800) isMobile = true;
-	window.addEventListener("resize", () => { if (window.screen.width <= 800) isMobile = true; else isMobile = false; });
-
-
-
-
+q(function()
+{
 	q(".gallery-slider").each( function (e)
 	{
 		ggg = this;
@@ -133,7 +110,7 @@ q(function(){
 
 
 
-	if ( undefined !== lightbox ) {
+	if ( 'undefined' !== typeof lightbox ) {
 		lightbox.option({
 			'resizeDuration': 200,
 			'fadeDuration': 200,

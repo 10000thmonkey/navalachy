@@ -85,8 +85,10 @@ jax = {
 
 
 
-var createNode = function (el = "div") {
-	return document.createElement(el);
+var createNode = function (element = "div", classes = undefined) {
+	let el = document.createElement(element);
+	if (classes) el.addClass(classes);
+	return el;
 };
 
 var q = function (q) {
@@ -148,12 +150,18 @@ NodeList.prototype.hasClass = function (c) {
 	return this.each( function () { this.hasClass(c) } ); }
 
 
-Node.prototype.on = function (name,callback) {this.addEventListener(name,callback);return this;};
-NodeList.prototype.on = function (n, c) {
-	return this.each( function () { this.on(n, c) } ); }
+Node.prototype.on = function (name,callback,r = undefined) {
+	if (r === undefined)
+		this.addEventListener(name,callback);
+	else if (r === true || r === "remove")
+		this.removeEventListener(name,callback);
+	return this;
+};
+NodeList.prototype.on = function (n, c, r = undefined) {
+	return this.each( function () { this.on(n, c, r) } ); }
 
 
-Node.prototype.content = function (text) {
+Node.prototype.html = function (text) {
 	if (text !== undefined) {
 		this.innerHTML = text;
 		return this;
@@ -161,15 +169,29 @@ Node.prototype.content = function (text) {
 		return this.innerHTML;
 	}
 };
-NodeList.prototype.content = function (c) {
-	return this.each( function() { this.content(c);
+NodeList.prototype.html = function (c) {
+	return this.each( function() { this.html(c);
 	} ); };
 
 Node.prototype.css = function(name,value){if(value===undefined){return this.style[name];}else {this.style[name] = value;return this;}};
 NodeList.prototype.css = function (c, v) {
 	return this.each( function () { this.css(c, v) } ); }
 
-Node.prototype.attr = function(name,value) {if(value === undefined){return this.getAttribute(name);}else {this.setAttribute(name,value);return this;}};
+Node.prototype.attr = function(name,value) {
+	if(value === undefined){
+		return this.getAttribute(name);
+	}
+	else if (value === true){
+		this.attr(name,name);
+	}
+	else if (value === false) {
+		this.removeAttribute(name);
+		return this;
+	} else {
+		this.setAttribute(name,value);
+		return this;
+	}
+};
 NodeList.prototype.attr = function (c, v) {
 	return this.each( function () { this.attr(c, v) } ); }
 
@@ -232,5 +254,18 @@ HTMLFormElement.prototype.serialize = function () {
 Node.prototype.messagebox = function (msg, type = "info", icon = "") {
 	if (icon !== "") icon = "<i class='nvicon nvicon-"+icon+"'></i>"; 
 	this.parentElement.q(".messagebox").remove();
-	this.insert(createNode("div").addClass(["messagebox",type]).content(icon + msg));
+	this.insert(createNode("div").addClass(["messagebox",type]).html(icon + msg));
+}
+
+String.prototype.fill = function( values ) {
+	let formatted = this;
+	let keys = Object.keys(values);
+
+	for( let i = 0; i < keys.length; i++ ) {
+		formatted = formatted.replace("{$" + keys[i] + "}", values[keys[i]]);
+	}
+	return formatted;
+};
+String.prototype.escapeAttr = function () {
+	return this.replaceAll('"', '&#34;').replaceAll(' ', '&#32;');
 }

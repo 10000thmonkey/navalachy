@@ -77,7 +77,7 @@ global $user;
 						    	<a class="button button-plain" onclick="this.parentElement.q('.dropdown')[0].toggleHide();">
 						    		<?=$user->data->display_name;?>
 									<div class="avatar avatar-small">
-										<?= nv_responsive_img( 1404, "(min-width: 1px) 32px, 32px" ); ?>
+										<?= nv_c( "UI/responsive-image", [ "attachment_id" => 1404, "sizes" => "(min-width: 1px) 32px, 32px" ] ); ?>
 									</div>
 						    	</a>
 								<ul class="dropdown padding-md hiding hidden">
@@ -122,7 +122,7 @@ global $user;
 							    	<a href="#" class="button button-plain">
 							    		<?=$user->data->display_name;?>
 										<div class="avatar avatar-small">
-											<?= nv_responsive_img( 1404, "(min-width: 1px) 32px, 32px" ); ?>
+											<?= nv_c( "UI/responsive-image", [ "attachment_id" => 1404, "sizes" => "(min-width: 1px) 32px, 32px" ] ); ?>
 										</div>
 							    	</a>
 									<ul class="dropdown padding-md">

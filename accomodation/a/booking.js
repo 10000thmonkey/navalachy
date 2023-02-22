@@ -7,13 +7,13 @@ class NV_Booking
 		this.shown = false;
 		this.adults = 1;
 		this.kids = 0;
-		this.peopleLimit = args.peopleLimit;
+		this.capacity = args.capacity;
 		this.begin = [];
 		this.end = [];
 		this.form = q(args.selector);
-		this.apartmentId = args.apartmentId;
-		this.apartmentName = args.apartmentName;
-		this.disableDates = args.disabled;
+		this.apartment_id = args.apartment_id;
+		this.apartment_name = args.apartment_name;
+		this.disabled_dates = args.disabled_dates;
 
 		this.el =
 		{
@@ -41,7 +41,7 @@ class NV_Booking
 			},
 			selector: args.selector + " #calendar",
 			todayHighlight: true,
-			disableDates: args.disabled,
+			disableDates: args.disabled_dates,
 			weekStart: 1,
 			range: true,
 			disablePastDays: true,
@@ -89,29 +89,32 @@ class NV_Booking
 	}
 	select ()
 	{
-		if ( typeof this.hw.intervalRange["end"] != "number" ) {
-
+		if ( typeof this.hw.intervalRange["end"] != "number" )
+		{
 			let day = new Date( this.hw.intervalRange.begin );
-		 	this.el.beginValue.content(day.getDate() + ". " + (day.getMonth() + 1) + ". " + day.getFullYear() );
+		 	this.el.beginValue.html(day.getDate() + ". " + (day.getMonth() + 1) + ". " + day.getFullYear() );
 		 	this.begin = this.dateToString(day);
 
 		 	this.el.datepicker.q(".month .day.is-selected").addClass("is-begin-range");
 			this.focusfield("end");
-		
-		} else {
-
+		}
+		else
+		{
 			let errorcode = -1;
+			let daysSelected = this.hw.daysSelected;
 
 			//check for intersection with disabled dates
-			let daysSelected = this.hw.daysSelected;
-			let intersect = cal.hw.daysSelected.reduce(function(result, element) {
-				if (cal.disableDates.indexOf(element) !== -1) {
-					result.push(element);
+			if ( this.iss )
+			{
+				let intersect = cal.hw.daysSelected.reduce(function(result, element) {
+					if (cal.disabled_dates.indexOf(element) !== -1) {
+						result.push(element);
+					}
+					return result;
+				}, []);
+				if ( intersect.length > 0 ) {
+					errorcode = 0;
 				}
-				return result;
-			}, []);
-			if ( intersect.length > 0 ) {
-				errorcode = 0;
 			}
 
 			//check for minimum two days stay
@@ -130,8 +133,8 @@ class NV_Booking
 				this.hw.goToDate( this.dateToString( d ) );
 
 
-				this.el.beginValue.content("-");
-				this.el.endValue.content("-");
+				this.el.beginValue.html("-");
+				this.el.endValue.html("-");
 				this.begin = [];
 				this.end = [];
 				
@@ -139,11 +142,12 @@ class NV_Booking
 				this.showErrorDatepicker( errorcode );
 
 				this.focusfield("begin");
-			} else {
-
+			}
+			else
+			{
 				//display form value
 				let day = new Date( this.hw.intervalRange.end );
-			 	this.el.endValue.content(day.getDate() + ". " + (day.getMonth() + 1) + ". " + day.getFullYear() );
+			 	this.el.endValue.html(day.getDate() + ". " + (day.getMonth() + 1) + ". " + day.getFullYear() );
 			 	this.end = this.dateToString(day);
 
 			 	//values correct, store for submission
@@ -154,8 +158,10 @@ class NV_Booking
 				this.set();
 				this.shown = false;
 
-				q('aside.reservation').removeClass('reallyaside').addClass('slided');
-				document.body.css('overflow','hidden');
+				if ( this.iss ) {
+					q('aside.reservation').removeClass('reallyaside').addClass('slided');
+					document.body.css('overflow','hidden');
+				}
 			}
 		}
 	}
@@ -168,34 +174,34 @@ class NV_Booking
 				this.preCheckout("yes", (data) => {
 					var data = JSON.parse(data);
 					
-					this.el.priceField.removeClass("nodisplay").q(".field-value").content(data.price.price_final);
+					this.el.priceField.removeClass("nodisplay").q(".field-value").html(data.price.price_final);
 
-					this.el.priceFieldSet.removeClass("nodisplay").content("");
+					this.el.priceFieldSet.removeClass("nodisplay").html("");
 
 					if (data.price.costs.length != 0) {
 						this.el.priceFieldSet
 							.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    .insert(createNode("div").addClass("field-label").content("Pronájem × " +data.price.nights+ " noci"))
-							    .insert(createNode("div").addClass("field-value").content(data.price.price_host)))
+							    .insert(createNode("div").addClass("field-label").html("Pronájem × " +data.price.nights+ " noci"))
+							    .insert(createNode("div").addClass("field-value").html(data.price.price_host)))
 						for (let cost of data.price.costs) {
 							this.el.priceFieldSet
 								.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    	.insert(createNode("div").addClass("field-label").content(cost[0]))
-							    	.insert(createNode("div").addClass("field-value").content(cost[1])));
+							    	.insert(createNode("div").addClass("field-label").html(cost[0]))
+							    	.insert(createNode("div").addClass("field-value").html(cost[1])));
 						}
 					}
 					if (data.price.discounts.length != 0) {
 						for (let discount of data.price.discounts) {
 							this.el.priceFieldSet
 								.insert(createNode("div").addClass(["field","field-price-discounts"])
-							    	.insert(createNode("div").addClass("field-label").content(discount.label))
-							    	.insert(createNode("div").addClass("field-value").content(discount.value)));
+							    	.insert(createNode("div").addClass("field-label").html(discount.label))
+							    	.insert(createNode("div").addClass("field-value").html(discount.value)));
 						}
 					}
 					this.el.priceFieldSet
 						.insert(createNode("div").addClass(["field","field-price-final"]) //celkova cena
-					        .insert(createNode("div").addClass("field-label").content("Celkem"))
-					        .insert(createNode("div").addClass("field-value").content(data.price.price_final)));
+					        .insert(createNode("div").addClass("field-label").html("Celkem"))
+					        .insert(createNode("div").addClass("field-value").html(data.price.price_final)));
 
 
 					this.el.spinner.hide();
@@ -209,11 +215,11 @@ class NV_Booking
 	setFromUrl (begin, end)
 	{
 		let beginDay = new Date( begin );
-	 	this.el.beginValue.content( beginDay.getDate() + ". " + (beginDay.getMonth() + 1) + ". " + beginDay.getFullYear() );
+	 	this.el.beginValue.html( beginDay.getDate() + ". " + (beginDay.getMonth() + 1) + ". " + beginDay.getFullYear() );
 	 	this.begin = begin;
 
 		let endDay = new Date( end );
-	 	this.el.endValue.content( endDay.getDate() + ". " + (endDay.getMonth() + 1) + ". " + endDay.getFullYear() );
+	 	this.el.endValue.html( endDay.getDate() + ". " + (endDay.getMonth() + 1) + ". " + endDay.getFullYear() );
 	 	this.end = end;
 
 	 	this.set();
@@ -227,8 +233,8 @@ class NV_Booking
 		this.hw.intervalRange = {};
 		this.hw.reset();
 		//reset values in form
-		this.el.beginValue.content("-");
-		this.el.endValue.content("-");
+		this.el.beginValue.html("-");
+		this.el.endValue.html("-");
 
 		this.el.datepicker.hide();
 		this.shown = false;
@@ -241,26 +247,26 @@ class NV_Booking
 			var newValue = parseInt(this.adults) + parseInt(num);
 
 			if (newValue < 1) newValue = 1;
-			if ((newValue + this.kids) > cal.peopleLimit) {
+			if ((newValue + this.kids) > cal.capacity) {
 				newValue = newValue - num;
-				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.peopleLimit);
+				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.capacity);
 			}
 		
 			this.adults = newValue;
-			this.el.adultsValue.content(newValue);
+			this.el.adultsValue.html(newValue);
 		}
 		else
 		{
 			var newValue = parseInt(this.kids) + parseInt(num);
 
 			if (newValue < 1) newValue = 1;
-			if ((newValue + this.adults) > cal.peopleLimit) {
+			if ((newValue + this.adults) > cal.capacity) {
 				newValue = newValue - num;
-				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.peopleLimit);
+				this.form.q("#fieldgroup-people")[0].messagebox("Maximální počet hostů: " + this.capacity);
 			}
 		
 			this.kids = newValue;
-			this.el.kidsValue.content(newValue);
+			this.el.kidsValue.html(newValue);
 		}
 	}
 	dateToString ( date )
@@ -273,14 +279,14 @@ class NV_Booking
 	{
 		jax.post( "/wp-admin/admin-ajax.php",
 			{
-				"action": "nvbk_to_checkout",
-				"preCheckout" : isPrecheckout,
+				"action": "accomodation/to-checkout",
+				"pre_checkout" : isPrecheckout,
 				"begin": this.begin,
 				"end": this.end,
 				"adults" : this.adults,
 				"kids" : this.kids,
-				"apartmentId" : this.apartmentId,
-				"apartmentName" : this.apartmentName
+				"apartment_id" : this.apartment_id,
+				"apartment_name" : this.apartment_name
 			},
 			(data) => successCb(data),
 			(error) => errorCb(error)
@@ -317,6 +323,28 @@ class NV_Booking
 		if ( !this.isSelected() )
 			return alert("Vyberte prosím datum příjezdu i odjezdu");
 
+		let feed = q("#accomodation-feed")[0];
+		feed.spinnerShow();
+
+		jax.post(
+		    "/wp-admin/admin-ajax.php",
+		    {
+		    	"action" : "accomodation/feed-search",
+		    	"begin" : this.begin,
+		    	"end" : this.end
+			},
+			(r) => {
+				let data = JSON.parse( r );
+				q("#accomodation-feed")[0].cleanItems().addItems( data.items );
+				feed.spinnerHide();
+		    }
+		);
+	}
+	goToSearch ()
+	{
+		if ( !this.isSelected() )
+			return alert("Vyberte prosím datum příjezdu i odjezdu");
+
 		location.replace( "/ubytovani?begin=" + this.begin + "&end=" + this.end );
 	}
 
@@ -325,17 +353,15 @@ class NV_Booking
 }
 
 
-var cal;
-
 function loadDatePicker ( c )
 {
-	cal = new NV_Booking({
-		peopleLimit: c.capacity,
+	window.cal = new NV_Booking({
+		capacity: c.capacity,
 		selector: "#booking-form",
-		disabled: c.disabledDays,
+		disabled_dates: c.disabled_dates,
 		iss: c.iss,
-		apartmentId: c.apartmentId,
-		apartmentName: c.apartmentName
+		apartment_id: c.apartment_id,
+		apartment_name: c.apartment_name
 	});
 	cal.el.spinner.hide();
 
@@ -346,7 +372,7 @@ function loadDatePicker ( c )
 		cal.setFromUrl( URLParams.get("begin"), URLParams.get("end") );
 	}
 
-	if ( URLParams.get("show") == "reservation" ) {
+	if ( c.iss && URLParams.get("show") == "reservation" ) {
 		q('aside.reservation').removeClass('reallyaside').addClass('slided');
 		document.body.css('overflow','hidden');
 		cal.preCheckout();

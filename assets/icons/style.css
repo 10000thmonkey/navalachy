@@ -10,7 +10,7 @@
   font-display: block;
 }
 
-.nvicon {
+.nvicon, nv-icon {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'nvicons' !important;
   speak: never;

@@ -21,7 +21,7 @@ function nvbk_email_order_complete ( $VAR )
 		</div>
 
 		<div style="padding: 30px; background-color: #ffe4b3;">
-			<h2 style="margin:10px 0">{$VAR["nvbk"]["apartmentName"]}</h2>
+			<h2 style="margin:10px 0">{$VAR["nvbk"]["apartment_name"]}</h2>
 			<img src="{$featured_img}" style="width:100%; border-radius: 15px; margin: 30px 0;object-fit: cover;">
 
 			<h2 style="color:#232f5b;">Rezervace č. {$VAR["order_id"]}</h2>

@@ -1,24 +1,74 @@
 <?php
 global $_VAR;
+$templ_dir = get_template_directory();
 
-function nv_template ($filePath, $variables = array(), $print = false)
+
+
+
+
+
+global $nv_controllers;
+$nv_controllers = array();
+
+function nv_new_c ( $path, $callable )
 {
-    $output = NULL;
-    if(file_exists($filePath)){
-
-        $_VAR = $variables;
-
-        ob_start();
-
-        include get_template_directory() . "/templates/" . $filePath . ".php" ;
-
-        $output = ob_get_clean();
-    }
-    if ($print) {
-        print $output;
-    }
-    return $output;
+    global $nv_controllers;
+    $nv_controllers[ $path ] = $callable;
 }
+
+function nv_c ( $path, $VAR = array(), $print = false )
+{
+    global $nv_controllers;
+    global $templ_dir;
+
+    if ( file_exists( "$templ_dir/$path.php" ) )
+    {
+        include_once "$templ_dir/$path.php";
+        return $nv_controllers[ $path ]( $VAR );
+    }
+    else {
+        return false;
+    }
+}
+
+
+global $nv_templates;
+
+function nv_new_t ( $path, $callable )
+{
+    global $nv_templates;
+    $nv_templates[ $path ] = $callable; 
+}
+function nv_t ( $path )
+{
+    global $templ_dir;
+    global $nv_templates;
+
+    if ( file_exists( "$templ_dir/$path.php" ) )
+    {
+        include_once "$templ_dir/$path.php";
+        return $nv_templates[ $path ]();
+    }
+    else {
+        return false;
+    }
+}
+
+
+
+function nv_ajax ( $endpoint, $callback )
+{
+    $endpoint = str_replace( "/", "_", $endpoint );
+
+    $passing = function () use ( $callback ) {
+        //echo var_dump( $callback );
+        echo json_encode( call_user_func( $callback ) );
+        die();
+    };
+    add_action( "wp_ajax_nv_$endpoint", $passing );
+    add_action( "wp_ajax_nopriv_nv_$endpoint", $passing );
+}
+
 
 
 
@@ -42,24 +92,13 @@ function navalachy_modules()
     $templ_dir = get_template_directory_uri();
     global $NV_MODULES;
 
-    include_once get_template_directory() . "/UI/cover-image.php";
 
-    //wp_enqueue_style( 'navalachy', $templ_dir."/assets/style.css" );
     wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css" );
     wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/assets/legacy.css" );
     wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
 
-    wp_enqueue_script( "domster", $templ_dir. "/assets/domster.js" );
-    
-    if ( !empty( $NV_MODULES ) )
-    {
-        foreach ( $NV_MODULES as $M )
-        {
-            include_once get_template_directory() . "/$M.php";
-        }
-    }
-
-    do_action( "nv_load_modules" );
+    wp_enqueue_script( "nv-domster", $templ_dir. "/assets/domster.js" );
+    wp_enqueue_script( "nv-framework", $templ_dir. "/assets/framework.js" );
 
     if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
         wp_enqueue_script( 'comment-reply' );
@@ -77,34 +116,13 @@ USAGE:
 in template file, before wp_head(), assign variables to global $nv_vars
 */
 
-
-function nv_register_vars ( ) {
-    global $nv_vars;
-    if ( empty( $nv_vars ) ) return;
-    wp_register_script( "nv_vars", "" );
-    wp_enqueue_script( "nv_vars" );
-    wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
-}
-add_action( 'wp_enqueue_scripts', 'nv_register_vars' );
-
-
-
-
-
-
-
-//RESPONSIVE IMG FUNCTION
-
-function nv_responsive_img ( $attachment_id, $sizes = "(max-width: 600px) 100vw, 25vw", $alt = "") {
-    $src = wp_get_attachment_image_url( $attachment_id, "medium");
-    $srcfull = wp_get_attachment_image_url( $attachment_id, "full");
-    $srcset = wp_get_attachment_image_srcset( $attachment_id, "large" );
-    $attalt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true);
-    if ($attalt != "") $alt = $attalt;
-
-    return '<img src="'.esc_attr( $src ).'"
-            srcset="'.esc_attr( $srcset ).'"
-            sizes="'.esc_attr( $sizes ).'"
-            alt="'.esc_attr( $alt ).'"
-            loading="lazy"/>';
-}
+add_action(
+    'wp_enqueue_scripts',
+    function () {
+        global $nv_vars;
+        if ( empty( $nv_vars ) ) return;
+        wp_register_script( "nv_vars", "" );
+        wp_enqueue_script( "nv_vars" );
+        wp_add_inline_script( 'nv_vars', 'var nv_vars = ' . json_encode($nv_vars) , 'before' );
+    }
+);

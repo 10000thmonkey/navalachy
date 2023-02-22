@@ -2,7 +2,7 @@
 if ( empty($_GET['id']) ) die();
 
 require( "../../../../wp-load.php" );
-require( "./lib-ical-export.php" );
+require( "../accomodation/i/lib-ical-export.php" );
 
 $ical = new ICal();
 

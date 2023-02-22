@@ -1,4 +1,4 @@
-class Slider extends HTMLElement
+class NVSlider extends HTMLElement
 {
 	constructor() {
 		super();
@@ -11,10 +11,8 @@ class Slider extends HTMLElement
 			const slider = this;
 			const items = this.q("article, a");
 
-			console.log(items);
 			const slider_items = createNode().addClass("slider-items");
 			slider_items.insert( items );
-
 
 
 			if (typeof this.attr("controls") == "string")
@@ -65,7 +63,7 @@ class Slider extends HTMLElement
 			}
 
 			slider.insert( slider_items ); 
-		}, 10 );
+		}, 20 );
 	}
 
 	disconnectedCallback() {
@@ -83,4 +81,4 @@ class Slider extends HTMLElement
 
   // there can be other element methods and properties
 }
-customElements.define( "nv-slider", Slider );
+customElements.define( "nv-slider", NVSlider );

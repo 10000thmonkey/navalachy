@@ -1,6 +1,6 @@
 <?php
-require_once("../../../../wp-load.php");
-require_once("lib.php");
+require_once( "../../../../wp-load.php" );
+require_once( "../accomodation/i/lib.php" );
 
 $nvbk = new NVBK();
 $nvbk->sync();
