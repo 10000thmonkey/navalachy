@@ -217,7 +217,7 @@ get_header();
 								<div class="icon">
 									<i class="nvicon nvicon-phone"></i>
 									<span class="nodisplay"></span>
-									<a class="link" onclick="this.parentElement.q('span').removeClass('nodisplay').content('<?= $host["billing_phone"][0];?>'); this.remove();">Zobrazit</a>
+									<a class="link" onclick="this.parentElement.q('span').removeClass('nodisplay').html('<?= $host["billing_phone"][0];?>'); this.remove();">Zobrazit</a>
 								</div>
 								<div class="icon">
 									<i class="nvicon nvicon-email"></i>
@@ -329,7 +329,7 @@ get_header();
 						<h1 class="space-around-hg"><?=$title?></h1>
 						<p style="font-size: calc(var(--font-md) + 2px); color:var(--primary);"><?=$meta_fields["desc_long"][0];?></p>
 					</div>
-					<div class="col imgstretch"><?= nv_c ("UI/responsive_image", ["attachment_id" => $meta_fields["photo"][0] ] ) ?></div>
+					<div class="col imgstretch"><?= nv_c ("UI/responsive-image", ["attachment_id" => $meta_fields["photo"][0] ] ) ?></div>
 				</header>
 
 				<?php

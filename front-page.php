@@ -9,7 +9,7 @@ get_header();
 <main id="primary" class="site-main">
 
 	<?= nv_c( "UI/cover-image", [
-		"attachment" => get_post_thumbnail_id( get_the_id() ),
+		"attachment_id" => 1575,
 		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
 	] );
 	?>
@@ -204,7 +204,7 @@ get_header();
 			</div>
 
 			<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
-			
+
 			<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
 				<?= nv_t( "accomodation/t/hovercard" ); ?>
 			</nv-repeat>

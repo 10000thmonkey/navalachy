@@ -987,10 +987,16 @@ body.single-accomodation {
 			font-size: var(--font-hg);
 			margin: 15px 0;
 		}
+		article > header {
+			@media (max-width: @breakpoint-md) {
+				& :first-child { order: 2; }
+			}
+		}
 		.section {
 			.contentwrap();
 
 			.details {
+				@media (max-width: @breakpoint-md) { order: 2; }
 
 				.amenities {
 					color: var(--primary);
