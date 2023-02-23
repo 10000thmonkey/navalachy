@@ -228,7 +228,7 @@ get_header();
 								</div>
 							</div>
 							<a class="button button-icon button-plain button-sm" nv-modal-open="accomodation-modal-contact" style="width:fit-content;">
-								Rychlý dotaz <nvicon class="nvicon-write"></nvicon>
+								Rychlý dotaz <nv-icon class="nvicon-write"></nv-icon>
 							</a>
 						</div>
 					</div>
