@@ -50,7 +50,7 @@ get_header();
 			<?php
 			$feed = nv_c ( "tips/c/feed", [	"tags" => $_GET["tags"]	] );
 			?>
-			<nv-feed id="tips-feed" class="contentwrap" nv-inner-class="gap-xl padding-lg" nv-items="<?php echo esc_attr( json_encode($feed["data"]) );?>">
+			<nv-feed id="tips-feed" class="contentwrap" nv-inner-class="gap-lg padding-lg" nv-items="<?php echo esc_attr( json_encode($feed["data"]) );?>">
 				<?= nv_t ( "tips/t/feed-item" ); ?>
 			</nv-feed>
 

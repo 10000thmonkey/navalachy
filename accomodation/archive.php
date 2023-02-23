@@ -30,7 +30,7 @@ get_header();
 	<?php
 	$feed = nv_c( "accomodation/c/feed", [ "range" => $range, "apartments" => [] ] );
 	?>
-	<nv-feed id="accomodation-feed" nv-items="<?= esc_attr( json_encode( $feed["items"] ) );?>" id="accomodation-feed" class="contentwrap space-around-lg">
+	<nv-feed id="accomodation-feed" nv-inner-class="gap-hg padding-hg" nv-items="<?= esc_attr( json_encode( $feed["items"] ) );?>" id="accomodation-feed" class="contentwrap space-around-lg">
 		<?php echo nv_t("accomodation/t/feed-item"); ?>
 	</nv-feed>
 

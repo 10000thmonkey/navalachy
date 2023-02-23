@@ -543,7 +543,7 @@ body.home {
 		padding-bottom: 100px !important;
 		position: relative;
 		z-index: 1;
-
+		& > .contentwrap {max-width: 1200px;}
 		.hovercards, .hovercards > .nv-feed-items {
 			display: grid;
 			grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
@@ -596,7 +596,7 @@ body.home {
 		.hovercard:before {padding-top: 162%;}
 		.section-block {
 			margin-top: -50px;
-			& > .contentwrap {max-width: 1200px;}
+			
 		}
 		.section-highlight {
 			background: var(--secondary-light);
@@ -623,8 +623,6 @@ body.home {
 			.hovercard .label {left: 30px;bottom: 30px;}
 			.hovercard:after {bottom:40px;}
 			.hovercard .iconset {bottom: 25px; left: 25px;}
-
-			& > .contentwrap {max-width: 1400px;}
 		}
 		.section-highlight {
 			background: var(--primary);
@@ -858,9 +856,7 @@ body.post-type-archive-tips {
 
 	nv-feed#tips-feed {
 		& > .nv-feed-items {
-			display: grid;
 			grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-			gap: 15px;
 			margin: 30px auto;
 			justify-content: center;
 
@@ -909,10 +905,6 @@ body.single-tips {
 body.post-type-archive-accomodation {
 	.menu-item-1303 {.menu_selected();}
 	nv-feed#accomodation-feed .nv-feed-items {
-		display: grid;
-		.gap-hg();
-		.padding-lg();
-
 		@media (min-width: @breakpoint-xs) {
 		    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
 		}
@@ -1630,6 +1622,10 @@ nv-feed {
 	display: block;
 	.spinner-wrapper {
 
+	}
+	.nv-feed-items {
+		display: grid;
+		grid-template-columns: repeat(auto-fill,minmax(350px,1fr));
 	}
 }
 
