@@ -9,7 +9,7 @@ get_header();
 <main id="primary" class="site-main">
 
 	<?= nv_c( "UI/cover-image", [
-		"attachment_id" => 1575,
+		"attachment_id" => 1193,
 		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
 	] );
 	?>
@@ -46,10 +46,10 @@ get_header();
 	<div class="section_experiences">
 
 		<div class="section-block">
-			<div class="contentwrap box padding-xl rows gap-lg">
+			<div class="contentwrap box padding-xl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Do přírody</h2></a>
-					<p class="text-primary">Výlet na Valachy potěší každého, od horolezce po běžkaře</p>
+					<p class="text-primary">Objevte krásu valašské přírody</p>
 				</div>
 
 				<div class="padding-hg">
@@ -121,10 +121,11 @@ get_header();
 		</div>
 	</div>
 
+
 	<div class="section_experiences2">
 
 		<div class="section-block">
-			<div class="contentwrap box padding-xl rows gap-lg">
+			<div class="contentwrap box padding-xl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Za zážitky</h2></a>
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>

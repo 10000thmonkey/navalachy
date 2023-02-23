@@ -14,7 +14,7 @@ get_header();
 	
 	<div class="contentwrap padding-lg">
 		
-		<nv-modal class="notmodal" id="tips-modal-filter">
+		<nv-modal class="notmodal fullwidth" id="tips-modal-filter">
 			<div>
 				<article style="padding:5px">
 
@@ -35,7 +35,7 @@ get_header();
 
 				</article>
 				<footer>
-					<a class="button closemodale" onclick="nv.modal['tips-modal-filter'].addClass('notmodal'); tipsFilter(true)">OK</a>
+					<a class="button" nv-modal-close onclick="nv.modal['tips-modal-filter'].addClass('notmodal'); tipsFilter(true)">OK</a>
 				</footer>
 			</div>
 		</div>
@@ -44,7 +44,7 @@ get_header();
 		<div class="tips-feed-wrapper" style="position: relative;">
 
 			<div class="filter-mobilebar">
-				<a class="button button-transparent-secondary button-icon" nv-modal="tips-modal-filter" onclick="nv.modal['tips-modal-filter'].removeClass('notmodal');">Filtrovat<nv-icon class="nvicon-filter"></nv-icon></a>
+				<a class="button button-transparent-secondary button-icon" nv-modal-open="tips-modal-filter" onclick="nv.modal['tips-modal-filter'].removeClass('notmodal');">Filtrovat<nv-icon class="nvicon-filter"></nv-icon></a>
 			</div>
 
 			<?php

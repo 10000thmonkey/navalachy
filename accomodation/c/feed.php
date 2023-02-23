@@ -59,7 +59,10 @@ nv_new_c (
 				$id = $query->post->ID;
 				$meta = get_post_meta( $id );
 
-				$img = nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $id ) ] );
+				$img = nv_c( "UI/responsive-image", [
+					"attachment_id" => get_post_thumbnail_id( $id ),
+					"sizes" => "(min-width: 1px) 800px"
+				] );
 
 				$permalink = get_permalink( $query->post );
 
