@@ -23,9 +23,13 @@ get_header();
 		<div class="col entry-content">
 
 			<p class="description"><?= get_the_content(); ?></p>
-			<div class="gallery space-around-lg">
-				<?= nv_c( "UI/gallery", ["gallery" => $meta_fields["gallery"] ] );	?>
-			</div>
+
+			<nv-gallery
+				class="space-around-lg"
+				nv-items="<?= nv_c_attr ( nv_c( "UI/gallery", ["gallery" => $meta_fields["gallery"] ] )["items"] );?>"
+				nv-gallery-grid >
+				<?= nv_t( "UI/t/gallery-item" ); ?>
+			</nv-gallery>
 		</div>
 
 		<div class="col sidebar rows gap-hg">	

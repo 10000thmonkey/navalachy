@@ -159,6 +159,16 @@ customElements.define( "nv-form", NVForm );
 
 
 
+/*
+
+Repeatable components
+
+
+
+
+*/
+
+
 
 
 
@@ -257,3 +267,77 @@ class NVFeed extends NVRepeat
 	}
 }
 customElements.define( "nv-feed", NVFeed );
+
+
+
+
+class NVGallery extends NVRepeat
+{
+	constructor () { super(); }
+
+	connectedCallback ()
+	{
+		super.connectedCallback();
+	}
+}
+customElements.define( "nv-gallery", NVGallery );
+
+
+class NVGallerySlider extends NVRepeat
+{
+	constructor () {
+		super();
+	}
+	connectedCallback ()
+	{
+		super.connectedCallback();
+		
+		setTimeout ( () =>
+		{
+			const slider_feed = this.feed;
+			const items = this.feed.children;
+			const controls_wrapper = createNode("div", "slider-controls");
+
+			let prev = createNode( "a", ["slider-prev", "nvicon", "nvicon-arrow-left"] )
+			.on( "click", () =>
+			{
+				for ( let i = 0; i < items.length; i++ )
+				{
+					if ( slider_feed.scrollLeft > items[i].offsetLeft ) 
+					{
+						slider_feed.scrollBy( {
+							left: -500,
+							top: 0,
+							behavior: "smooth"
+						} );
+						break;
+					}
+				}
+			} );
+
+			let next = createNode( "a", ["slider-next", "nvicon", "nvicon-arrow-right"])
+			.on( "click", () =>
+			{
+				for ( let i = 0; i < items.length; i++ )
+				{
+					if ( slider_feed.scrollLeft < items[i].offsetLeft ) 
+					{
+						slider_feed.scrollBy( {
+							left: 500,
+							top: 0,
+							behavior: "smooth"
+						} );
+						break;
+					}
+				}
+			} );
+
+			controls_wrapper.insert( next );
+			controls_wrapper.insert( prev );
+
+			this.insert( controls_wrapper ); 
+		}, 5 );
+	}
+}
+customElements.define( "nv-gallery-slider", NVGallerySlider );
+

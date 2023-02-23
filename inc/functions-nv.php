@@ -27,8 +27,14 @@ function nv_c ( $path, $VAR = array(), $print = false )
         return $nv_controllers[ $path ]( $VAR );
     }
     else {
+        trigger_error( "Component does not exist!", E_USER_WARNING);
         return false;
     }
+}
+
+function nv_c_attr ( $attr )
+{
+    return esc_attr( json_encode( $attr ) );
 }
 
 
@@ -44,12 +50,13 @@ function nv_t ( $path )
     global $templ_dir;
     global $nv_templates;
 
-    if ( file_exists( "$templ_dir/$path.php" ) )
+    if ( file_exists( "$templ_dir/$path.html" ) )
     {
-        include_once "$templ_dir/$path.php";
-        return $nv_templates[ $path ]();
+        return file_get_contents( "$templ_dir/$path.html" );
+        //return $nv_templates[ $path ]();
     }
     else {
+        trigger_error( "Template does not exist!", E_USER_WARNING);
         return false;
     }
 }

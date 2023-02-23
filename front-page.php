@@ -173,7 +173,7 @@ get_header();
 					$post_1_link = get_post_permalink( $post_1 );
 					?>
 					<a href="<?= get_post_permalink( $post_1 );?>">
-						<?= nv_c( "UI/responsive_image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
+						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
 						<h3 class="secondary-text">Doporučujeme</h3>

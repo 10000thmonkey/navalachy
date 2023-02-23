@@ -30,13 +30,16 @@ get_header();
 	<div class="section-gallery">
 
 		<?php
-		echo nv_c( "UI/gallery", [
+		$gallery = nv_c( "UI/gallery", [
 			"gallery" => $meta_fields["gallery"],
 			"sizes_w" => "(min-width: 800px) 700px, 100vw",
 			"sizes_h" => "(min-width: 800px) 350px, 50vw",
 			"slider" => true
 		] );
 		?>
+		<nv-gallery-slider nv-items="<?= nv_c_attr( $gallery["items"] );?>">
+			<?= nv_t( "UI/t/gallery-item" );?>
+		</nv-gallery-slider>
 
 		<a class="gallery-showmore button button-plain" nv-modal-open="accomodation-modal-detail">Více<i class="nvicon nvicon-grid"></i></a>
 	</div>
@@ -371,15 +374,19 @@ get_header();
 							</div>
 							<div class="col">
 								<?php
-								if (!empty ($meta["foto"])) {
-									echo nv_c( "UI/gallery", [
+								if ( !empty( $meta["foto"] ) ):
+									$gallery = nv_c( "UI/gallery", [
 										"gallery" => $meta["foto"],
 										"sizes_w" => "(min-width: 800px) 700px, 100vw",
 										"sizes_h" => "(min-width: 800px) 350px, 50vw",
 										"slider" => true
 									] );
-								}
-								?>
+									?>
+									<nv-gallery-slider nv-items="<?= nv_c_attr( $gallery["items"] );?>">
+										<?= nv_t( "UI/t/gallery-item" );?>
+									</nv-gallery-slider>
+								<?php endif; ?>
+								
 							</div>
 						</div>
 

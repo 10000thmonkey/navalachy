@@ -21,10 +21,6 @@ if ( file_exists( __DIR__."/$post_type/functions.php" ) )
 	include_once __DIR__."/$post_type/functions.php";
 
 
-
-
-echo $post_type;
-
 if ( is_archive() && file_exists( __DIR__."/$post_type/archive.php" ) )
 {
 	include_once __DIR__."/$post_type/archive.php";

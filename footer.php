@@ -63,52 +63,6 @@ function isMobile () {
 
 q(function()
 {
-	q(".gallery-slider").each( function (e)
-	{
-		ggg = this;
-		const slider = this;
-		const items = this.q(".gallery-image");
-
-		let prev = createNode("a")
-		.addClass("slider-prev").addClass("nvicon").addClass("nvicon-arrow-left")
-		.on( "click", () =>
-		{
-			for ( let item of items )
-			{
-				if ( slider.scrollLeft > item.offsetLeft ) 
-				{
-					slider.scrollTo( {
-						left: item.offsetLeft,
-						top: 0,
-						behavior: "smooth"
-					} );
-				}
-			}
-		} );
-
-		let next = createNode("a")
-		.addClass("slider-next").addClass("nvicon").addClass("nvicon-arrow-right")
-		.on( "click", () =>
-		{
-			for ( let item of items )
-			{
-				if ( slider.scrollLeft < item.offsetLeft ) 
-				{
-					slider.scrollTo( {
-						left: item.offsetLeft,
-						top: 0,
-						behavior: "smooth"
-					} );
-					break;
-				}
-			}
-		} );
-
-		slider.parentElement.append(prev);
-		slider.parentElement.append(next);
-	});
-
-
 
 	if ( 'undefined' !== typeof lightbox ) {
 		lightbox.option({
