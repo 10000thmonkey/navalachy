@@ -92,7 +92,7 @@ get_header();
 				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
 			</svg>
 			<div class="padding-lg">
-				<div class="contentwrap highlight center cols cols-sm-2 gap-lg padding-xl">
+				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xl">
 
 					<?php
 					$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
@@ -102,6 +102,7 @@ get_header();
 					<a href="<?= $post_1_link;?>" class="img-golden">
 						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
+
 					<div class="info rows gap-sm space-around-lg">
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
@@ -169,7 +170,7 @@ get_header();
 				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
 			</svg>
 			<div class="padding-lg">
-				<div class="contentwrap highlight cols center cols-sm-2 gap-lg padding-xl">
+				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xl">
 
 					<?php
 					$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
@@ -178,6 +179,7 @@ get_header();
 					<a href="<?= get_post_permalink( $post_1 );?>" class="img-golden">
 						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
+
 					<div class="info rows gap-sm space-around-lg">
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
@@ -203,19 +205,22 @@ get_header();
 
 
 
-	<div class="section-block section_accomodation">
-		<div class="contentwrap box rows padding-xl gap-xl">
-			<div class="block-header cols">
-				<a href="/ubytovani"><h2>Ubytování</h2></a>
+	<div class="section_accomodation">
 
-				<?= nv_c( "accomodation/c/form" ); ?>
+		<div class="section-block padding-lg">
+			<div class="contentwrap box rows padding-xl gap-hg">
+				<div class="block-header rows gap-md">
+					<a href="/ubytovani"><h2>Ubytování</h2></a>
+
+					<?= nv_c( "accomodation/c/form" ); ?>
+				</div>
+
+				<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
+
+				<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
+					<?= nv_t( "accomodation/t/hovercard" ); ?>
+				</nv-repeat>
 			</div>
-
-			<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
-
-			<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
-				<?= nv_t( "accomodation/t/hovercard" ); ?>
-			</nv-repeat>
 		</div>
 	</div>
 <?php /*
