@@ -20,32 +20,34 @@ get_header();
 	<div class="section_testimonials space-around-xl">
 		<nv-slider controls class="space-around-hg slider-wrapper center" style="height:auto">
 
-				<?php
-				$testimonials = pods("reviews")->find( ["where" => "d.homepage = 1"] );
+		<?php
+		$testimonials = pods("reviews")->find( ["where" => "d.homepage = 1"] );
 
-				while( $testimonials->fetch() )
-				{
-					$img = nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $testimonials->display( "ID" ) ) ] );
+		while( $testimonials->fetch() )
+		{
+			$img = nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $testimonials->display( "ID" ) ) ] );
 
-					echo <<<HTML
-					
-					<article class="card padding-xl rows center gap-md space-around-md"> 
-						<div class="avatar avatar-xxxl"> $img </div>
-						<h2 style="font-size: var(--font-hg)">{$testimonials->display( "title" )}</h2>
-						<p>{$testimonials->display( "text" )}</p>
-					</article>
+			echo <<<HTML
+			
+			<article class="card padding-xl rows center gap-md space-around-md"> 
+				<div class="avatar avatar-xxxl"> $img </div>
+				<h2 style="font-size: var(--font-hg)">{$testimonials->display( "title" )}</h2>
+				<p>{$testimonials->display( "text" )}</p>
+			</article>
 
-					HTML;
-				}
-				?>
+			HTML;
+		}
+		?>
 
 		</nv-slider>
 	</div>
 
 
+
+
 	<div class="section_experiences">
 
-		<div class="section-block">
+		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Do přírody</h2></a>
@@ -54,34 +56,34 @@ get_header();
 
 				<div>
 					<nv-slider class="hovercards">
-						<?php
-						$tags_query = get_terms( "tips_tags", array(
-							"include" => (array) get_option("homepage_settings_tags_1"),  
-							"orderby" => "include",
-							"hide_empty" => false
-						) );
-						foreach ( $tags_query as $tag )
-						{
-							$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
-							echo <<<HTML
+					<?php
+					$tags_query = get_terms( "tips_tags", array(
+						"include" => (array) get_option("homepage_settings_tags_1"),  
+						"orderby" => "include",
+						"hide_empty" => false
+					) );
+					foreach ( $tags_query as $tag )
+					{
+						$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
+						echo <<<HTML
 
-							<a class="hovercard" href="/tipy?tags={$tag->slug}">
-								$i
-								<div class="iconset">
-									<div class="icon">
-										<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
-										{$tag->name}
-									</div>
+						<a class="hovercard" href="/tipy?tags={$tag->slug}">
+							$i
+							<div class="iconset">
+								<div class="icon">
+									<i class="nvicon nvicon-md nvicon-{$tag->slug}"></i>
+									{$tag->name}
 								</div>
-							</a>
+							</div>
+						</a>
 
-							HTML;
-						}
-						?>
+						HTML;
+					}
+					?>
 					</nv-slider>
 				</div>
 
-				<a class="self-end button button-icon" href="/tipy">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+				<a class="self-end button button-icon" href="/tipy">Objevujte <nv-icon class="nvicon-arrow-right"></nv-icon></a>
 			</div>
 		</div>
 
@@ -89,15 +91,15 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
 			</svg>
-			<div class="contentwrap highlight padding-xl">
-				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
+			<div class="padding-lg">
+				<div class="contentwrap highlight center cols cols-sm-2 gap-lg padding-xl">
 
-				<?php
-				$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
-				$post_1_link = get_post_permalink( $post_1 );
-				?>
+					<?php
+					$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
+					$post_1_link = get_post_permalink( $post_1 );
+					?>
 
-					<a href="<?= $post_1_link;?>">
+					<a href="<?= $post_1_link;?>" class="img-golden">
 						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
@@ -110,21 +112,21 @@ get_header();
 							echo force_balance_tags( $match[0] );
 							?>
 						</div>
-						<a href="<?= $post_1_link;?>" class="button button-icon button-secondary-transparent self-end">
+						<a href="<?= $post_1_link;?>" class="button button-icon space-around-md button-secondary-transparent self-end">
 							Více<i class="nvicon nvicon-arrow-right"></i>
 						</a>
 					</div>
-
 				</div>
 			</div>
-			
 		</div>
 	</div>
 
 
+
+
 	<div class="section_experiences2">
 
-		<div class="section-block">
+		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Za zážitky</h2></a>
@@ -158,7 +160,7 @@ get_header();
 					</nv-slider>
 				</div>
 
-				<a class="button button-icon self-end" href="/tipy/">Objevujte <i class="nvicon nvicon-arrow-right"></i></a>
+				<a class="button button-icon self-end" href="/tipy/">Objevujte <nv-icon class="nvicon-arrow-right"></nv-icon></a>
 			</div>
 		</div>
 
@@ -166,14 +168,14 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
 			</svg>
-			<div class="contentwrap highlight padding-xl">
-				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
+			<div class="padding-lg">
+				<div class="contentwrap highlight cols center cols-sm-2 gap-lg padding-xl">
 
 					<?php
 					$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
 					$post_1_link = get_post_permalink( $post_1 );
 					?>
-					<a href="<?= get_post_permalink( $post_1 );?>">
+					<a href="<?= get_post_permalink( $post_1 );?>" class="img-golden">
 						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 					<div class="info rows gap-sm space-around-lg">
@@ -187,13 +189,18 @@ get_header();
 							?>
 						</div>
 				
-						<a href="<?= $post_1_link;?>" class="button button-icon button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
+						<a href="<?= $post_1_link;?>" class="button button-icon space-around-md button-secondary-transparent self-end">Více<i class="nvicon nvicon-arrow-right"></i></a>
 
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+
+
 
 
 	<div class="section-block section_accomodation">

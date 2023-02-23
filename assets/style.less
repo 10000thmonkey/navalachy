@@ -35,7 +35,7 @@
 	--space-md: 22px;
 	--space-hg: 30px;
 	--space-lg: 50px;
-	--space-xl: 75px;
+	--space-xl: 80px;
 	--space-xxl: 100px;
 	--space-xxxl: 140px;
 
@@ -50,6 +50,8 @@
 		--radius-md: 15px;
 		--radius-lg: 25px;
 	}
+
+	--header-height: 80px;
 }
 
 .button, .field {user-select: none;}
@@ -190,6 +192,15 @@ body,button,input,select,optgroup,textarea {
 
 
 .imgstretch img {width: 100%; height: 100%; object-fit: cover;}
+.img-golden {
+	height: 0;
+	padding-top: 62%;
+	position: relative;
+	img {
+		.layer(1);
+		object-fit: cover;
+	}
+}
 
 a { 
 	color: var(--primary);
@@ -225,7 +236,7 @@ h4 {margin: 5px 0;}
 	//position: sticky;
 	top: 0;
 	z-index: 10;
-	height: 80px;
+	height: var(--header-height);
 	width: 100%;
 	background: rgba(255,255,255,0.97);
 	backdrop-filter: blur(50px);
@@ -264,7 +275,7 @@ h4 {margin: 5px 0;}
 		display: flex;
 		justify-content: start;
 		padding: 15px 0;
-		height: 80px;
+		height: var(--header-height);
 		min-width: 260px;
 
 		img {height: 50px; width: 100%; object-fit:contain;}
@@ -474,8 +485,9 @@ body.home {
 		.site-branding *, .main-navigation * {filter: none;}
 	}
 	.section-cover-image {
-		height: 100vh;
+		height: calc(100vh + 300px);
 		max-height: none;
+		align-items: start;
 		
 		@ur: ~"ur";
 		@f: ~"#";
@@ -483,14 +495,20 @@ body.home {
 		clip-path: e("@{ur}l(@{f}@{s})");
 
 		.cover-image {
+			background: red;
 			overflow: hidden;
 			position: absolute;
 			img {
-				top: 50%;
+				top: calc(50%);
 				transform: translateY(-50%);
 			}
 		}
-		.cover-content {padding-top: 15vh;}
+		.cover-content {
+			display: flex;
+			.center();
+			height: calc(100vh - var(--header-height));
+			margin-top: var(--header-height);
+		}
 	}
 
 	h2 {
@@ -538,12 +556,10 @@ body.home {
 	}
 
 	.section-block {
-		.padding-lg();
-		padding-top: 100px !important;
-		padding-bottom: 100px !important;
+		padding-top: 70px !important;
+		padding-bottom: 70px !important;
 		position: relative;
 		z-index: 1;
-		& > .contentwrap {max-width: 1200px;}
 		.hovercards, .hovercards > .nv-feed-items {
 			display: grid;
 			grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
@@ -558,33 +574,14 @@ body.home {
 	.section-highlight {
 		padding-top: 150px;
 		padding-bottom: 150px;
-		& > .contentwrap { max-width: 1200px; }
-
-		.post-highlight {
-			min-height: 400px;
-			.info {
-			}
-			img {
-				object-fit: cover;
-				width:100%;
-				height: 100%;
-				border-radius: var(--radius-lg);
-			}
-			h2 {
-				font-size: var(--font-lg);
-				line-height: 1;
-			}
-			.content {
-				flex: 1;
-				margin: 0;
-			}
+		.info {
 		}
-		@media (max-width: @breakpoint-sm) {
-			.post-highlight {
-				flex:auto;height: auto;
-				& > a {width: auto;}
-			}
-			.highlight {max-width: 500px; margin: 0 auto;}
+		img {
+			border-radius: var(--radius-lg);
+		}
+		h2 {
+			font-size: var(--font-lg);
+			line-height: 1;
 		}
 	}
 
@@ -595,8 +592,7 @@ body.home {
 	.section_experiences {
 		.hovercard:before {padding-top: 162%;}
 		.section-block {
-			margin-top: -50px;
-			
+			margin-top: -300px;
 		}
 		.section-highlight {
 			background: var(--secondary-light);
@@ -647,6 +643,9 @@ body.home {
 
 
 	.section_experiences, .section_experiences2 {
+		.contentwrap {
+			max-width: 1225px;
+		}
 		.section-highlight {
 			margin-top: -250px;
 			margin-bottom: -250px;
@@ -696,31 +695,6 @@ body.home {
 			}
 		}
 	}
-
-	// .section_voucher {
-	// 	background: url('/wp-content/uploads/navalachy/bg-voucher.jpg');
-	// 	background-size: cover;
-	// 	background-position: 50%;
-	// 	padding: 100px 15px;
-	// 	text-align: center;
-
-
-
-	// 	h2 {margin: 30px 0; text-align: center; font-size: var(--font-xl);}
-	// 	.voucher-banner {
-	// 		display: block;
-	// 		text-align: center;
-	// 		img {border-radius: var(--radius-md);}
-	// 	}
-	// 	.button {
-	// 		display: inline-flex;
-	// 		margin: 30px 0;
-	// 	}
-	// 	@media (max-width: @breakpoint-sm) {
-		
-	// 	}
-	// }
-
 }
 
 
@@ -1874,8 +1848,8 @@ nv-slider {
 		gap: var(--space-md);
 		margin-top: calc(-1 * var(--space-md));
 		margin-left: calc(-1 * var(--space-md));
-		margin-right: calc(-1 * var(--space-md) - 15px);
-		margin-bottom: calc(-1 * var(--space-md) - 15px);
+		margin-right: calc(-1 * var(--space-md) - 13px);
+		margin-bottom: calc(-1 * var(--space-md) - 13px);
 		padding: var(--space-md);
 	}
 	.slider-controls {
