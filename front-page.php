@@ -52,7 +52,7 @@ get_header();
 					<p class="text-primary">Objevte krásu valašské přírody</p>
 				</div>
 
-				<div class="padding-hg">
+				<div>
 					<nv-slider class="hovercards">
 						<?php
 						$tags_query = get_terms( "tips_tags", array(
@@ -89,7 +89,7 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
 			</svg>
-			<div class="contentwrap highlight padding-xxl">
+			<div class="contentwrap highlight padding-xl">
 				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
 
 				<?php
@@ -131,7 +131,7 @@ get_header();
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
 				</div>
 
-				<div class="padding-hg">
+				<div>
 					<nv-slider class="hovercards">
 						<?php
 						$tags_query = get_terms( "tips_tags", array(
@@ -166,7 +166,7 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
 			</svg>
-			<div class="contentwrap highlight padding-xxl">
+			<div class="contentwrap highlight padding-xl">
 				<div class="post-highlight cols cols-sm-2 gap-lg space-around-lg">
 
 					<?php

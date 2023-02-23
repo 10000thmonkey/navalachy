@@ -562,11 +562,11 @@ body.home {
 	.section-highlight {
 		padding-top: 150px;
 		padding-bottom: 150px;
-		
+		& > .contentwrap { max-width: 1200px; }
+
 		.post-highlight {
 			min-height: 400px;
 			.info {
-				max-width: 550px;
 			}
 			img {
 				object-fit: cover;
@@ -600,7 +600,7 @@ body.home {
 		.hovercard:before {padding-top: 162%;}
 		.section-block {
 			margin-top: -50px;
-			& > .contentwrap {max-width: 1400px;}
+			& > .contentwrap {max-width: 1200px;}
 		}
 		.section-highlight {
 			background: var(--secondary-light);
@@ -1879,9 +1879,9 @@ nv-slider {
 		overflow: scroll;
 		scroll-snap-type: both mandatory;
 		position: relative;
-		padding: var(--space-md);
 		gap: var(--space-md);
 		margin: calc(-1 * var(--space-md));
+		padding: var(--space-md);
 	}
 	.slider-controls {
 		.layer(1);
