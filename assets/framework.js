@@ -331,7 +331,7 @@ class NVGallerySlider extends NVRepeat
 		setTimeout ( () =>
 		{
 			const slider_feed = this.feed;
-			const items = this.feed.children;
+			const items = this._feed.children;
 			const controls_wrapper = createNode("div", "slider-controls");
 
 			let prev = createNode( "a", ["slider-prev", "nvicon", "nvicon-arrow-left"] )

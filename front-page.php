@@ -103,7 +103,7 @@ get_header();
 						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 
-					<div class="info rows gap-sm space-around-lg">
+					<div class="info rows gap-sm">
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
 						<div class="content">
@@ -180,7 +180,7 @@ get_header();
 						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
 					</a>
 
-					<div class="info rows gap-sm space-around-lg">
+					<div class="info rows gap-sm">
 						<h3 class="secondary-text">Doporučujeme</h3>
 						<a href="<?= $post_1_link ?>"><h2><?= $post_1->post_title;?></h2></a>
 						<div class="content">
