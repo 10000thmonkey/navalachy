@@ -47,16 +47,14 @@ get_header();
 				<a class="button button-transparent-secondary button-icon" nv-modal-open="tips-modal-filter" onclick="nv.modal['tips-modal-filter'].removeClass('notmodal');">Filtrovat<nv-icon class="nvicon-filter"></nv-icon></a>
 			</div>
 
-			<?php
-			$feed = nv_c ( "tips/c/feed", [	"tags" => $_GET["tags"]	] );
-			?>
-			<nv-feed id="tips-feed" class="contentwrap" nv-inner-class="gap-lg padding-lg" nv-items="<?php echo esc_attr( json_encode($feed["data"]) );?>">
-				<?= nv_t ( "tips/t/feed-item" ); ?>
+			<nv-feed id="tips-feed" class="contentwrap" nv-ajax-get="tips/feed" nv-ajax-params="tags">
+				<nv-items class="gap-lg padding-lg">
+					<?= nv_t ( "tips/t/feed-item" ); ?>
+				</nv-items>
+				<div class="cols-flex center">
+					<a id="button-loadmore" onclick="loadMore()" class="button button-primary nodisplay">Další</a>
+				</div>
 			</nv-feed>
-
-			<div style="display:flex;justify-content: center;">
-				<a id="button-loadmore" onclick="loadMore()"  class="button button-primary<?php if( (int)$feed["more"] === 0 ) echo ' nodisplay';?>">Další</a>
-			</div>
 
 		</div>
 	</div>
@@ -80,7 +78,7 @@ get_header();
 		
 		jax.post( filterform.attr('action'), 
 			{
-				action: "tips/filter",
+				action: "tips/feed",
 				paged: counter,
 				tags: nv_filter_tags
 			},
@@ -88,13 +86,15 @@ get_header();
 			{
 				let data = JSON.parse(response);
 
-				feed.addItems( data.data ); // insert data
+				if ( parseInt( data.status ) === 0 )
+				{						
+					feed.addItems( data.items ); // insert data
 
-				if ( ! parseInt( data.mode ) )
-					loadMoreBtn.noDisplay();
-				else
-					loadMoreBtn.display();
-
+					if ( ! parseInt( data.more ) )
+						loadMoreBtn.noDisplay();
+					else
+						loadMoreBtn.display();
+				}
 				feed.spinnerHide();
 			}
 		);
@@ -110,7 +110,7 @@ get_header();
 
 		jax.post( filterform.attr('action'),
 		{
-			action: "tips/filter",
+			action: "tips/feed",
 			paged: counter,
 			tags: nv_filter_tags
 		},
@@ -120,7 +120,7 @@ get_header();
 			counter = 1;
 
 			feed.cleanItems();
-			feed.addItems( data.data ); // insert data
+			feed.addItems( data.items ); // insert data
 
 			feed.spinnerHide();
 

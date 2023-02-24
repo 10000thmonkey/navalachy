@@ -1,6 +1,6 @@
 <?php
 
-function nvbk_email_order_complete ( $VAR )
+nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 {
 	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0] );
 	$avatar = wp_get_attachment_image_url( $VAR["host"]["profile_picture"][0] );
@@ -85,4 +85,4 @@ function nvbk_email_order_complete ( $VAR )
 	HTML;
 
 	return $output;
-}
+} );

@@ -38,6 +38,34 @@ function nv_c_attr ( $attr )
 }
 
 
+global $nv_emails;
+$nv_emails = array();
+
+function nv_new_e ( $path, $callable )
+{
+    global $nv_emails;
+    $nv_emails[ $path ] = $callable;
+}
+
+function nv_e ( $path, $VAR = array(), $print = false )
+{
+    global $nv_emails;
+    global $templ_dir;
+
+    if ( file_exists( "$templ_dir/$path.php" ) )
+    {
+        include_once "$templ_dir/$path.php";
+        return $nv_emails[ $path ]( $VAR );
+    }
+    else {
+        trigger_error( "Email does not exist!", E_USER_WARNING);
+        return false;
+    }
+}
+
+
+
+
 global $nv_templates;
 
 function nv_new_t ( $path, $callable )

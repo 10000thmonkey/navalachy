@@ -281,40 +281,50 @@ class NVBK
 		global $wpdb;
 
 		$apartments_all = $this->get_apartments_ids();
-		$apartments_booked = [];
+		$apartments_not_available = [];
 
 		$from .= " 00:00:00";
 		$to .= " 00:00:00";
+
 
 		$apartments_sql = "";
 		if ( is_integer($apartments) ) {
 			$apartments = [$apartments];
 		}
 		if ( is_array($apartments) && !empty($apartments) ) {
-			$apartments_sql = "AND `apartment_id` IN (".implode(",", $apartments).")";
+			$apartments_sql = " AND `apartment_id` IN (".implode(",", $apartments).")";
 		}
 
+		/*
+		sql date selection condition breakdown:
+			1. checks if the room is already occupied at the start of the requested reservation period.
+			2. checks if the room is already occupied at the end of the requested reservation period
+			3. checks if the room is already occupied during the requested reservation period.
+
+		to allow turnaround:
+			WHERE NOT ((begin < '$start' AND end > '$start') OR (begin < '$end' AND end > '$end') OR (begin >= '$start' AND end <= '$end'))
+		*/
 		$query = $wpdb->prepare("
-			SELECT * FROM {$this->table_name}
+			SELECT `apartment_id` FROM {$this->table_name}
 	        WHERE
 	        (
-	        	( `begin_date` BETWEEN %s AND %s )
-	        	OR ( `end_date` BETWEEN %s AND %s )
+	        		( `begin_date` <= %s AND `end_date` >= %s )
+	        	AND ( `begin_date` <= %s AND `end_date` >= %s )
+	        	OR  ( `begin_date` >= %s AND `end_date` <= %s )
 	        )
-	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartments_sql,
-			$from,
-			date( "Y-m-d H:i:s", strtotime( $to . " -1 day" ) ), // reservations with arrival on end date can be skipped
-			date( "Y-m-d H:i:s", strtotime( $from . " +1 day" ) ), // reservations with departure on the same day as begin skipped
-			$to
+	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartments_sql . "
+	        GROUP BY `apartment_id` ",
+			$from, $from,
+			$to, $to,
+			$from, $to
 		);
 		$results = $wpdb->get_results($query);
+		foreach ( $results as $value ) $apartments_not_available[] = $value->apartment_id;
 
-		foreach($results as $result) {
-			$apartments_booked[] = (int)$result->apartment_id;	
-		}
-
-		return array_diff($apartments_all, $apartments_booked);
+		return array_diff( $apartments_all, $apartments_not_available );
 	}
+
+
 
 	public function get_apartments_ids ()
 	{
@@ -395,29 +405,28 @@ class NVBK
 
 		$price_base = ( $nights * ( empty($meta["price"]) ? 1 : (int)$meta["price"][0] ) );
 
-
-
+		$price_final = $price_base;
 
 		$discounts = [];
 
 		if ($nights >= 7 && $nights < 30) {
-			$discounts = [
-				"label" => "Sleva na týden",
-				"value" => "-" . $meta["discount_week"][0] . "%"
-			];
-			$price_final = $price_base * ( (int)$meta["discount_week"][0] / 100 );
+			if ( ! empty( $meta["discount_week"] ) && $meta["discount_week"].length > 0 ) {
+				$discounts = [
+					"label" => "Sleva na týden",
+					"value" => "-" . $meta["discount_week"][0] . "%"
+				];
+				$price_final = $price_final * ( (int)$meta["discount_week"][0] / 100 );
+			}
 		}
 		else if ($nights >= 30) {
-			$discounts = [
-				"label" => "Sleva na měsíc",
-				"value" => "-" . $meta["discount_month"][0] . "%"
-			];
-			$price_final = $price_base * ( (int)$meta["discount_month"][0] / 100 );
+			if ( ! empty( $meta["discount_month"] ) && $meta["discount_month"].length > 0 ) {
+				$discounts = [
+					"label" => "Sleva na měsíc",
+					"value" => "-" . $meta["discount_month"][0] . "%"
+				];
+				$price_final = $price_final * ( (int)$meta["discount_month"][0] / 100 );
+			}
 		}
-		else {
-			$price_final = $price_base;
-		}
-
 
 		$price_host = $price_final;
 

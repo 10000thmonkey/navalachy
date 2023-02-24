@@ -33,14 +33,14 @@ else if ( is_single() && file_exists( __DIR__."/$post_type/single.php" ) )
 }
 else if (
     is_page()
-    && file_exists( __DIR__."/page/page-{$post->post_name}" )
+    && file_exists( __DIR__."/page/page-{$post->post_name}.php" )
     && ! is_woocommerce_page()
 )
 {
-	include_once __DIR__."/page/page-{$post->post_name}";
+	include_once __DIR__."/page/page-{$post->post_name}.php";
 }
 else {
-	add_action("qm/debug", $post_type);
+	
     //add_action("qm/debug", $post->post_name );
 
     the_content();

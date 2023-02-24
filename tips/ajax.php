@@ -3,7 +3,7 @@
 // FILTERING FUNCTION
 
 nv_ajax(
-	"tips/filter",
+	"tips/feed",
 	function ( )
 	{
 		return nv_c( "tips/c/feed", [

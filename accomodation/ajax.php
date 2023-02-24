@@ -1,13 +1,13 @@
 <?php
 
 nv_ajax(
-	"accomodation/feed-search",
+	"accomodation/feed",
 	function ()
 	{
 		return nv_c( "accomodation/c/feed",[
 			"range" => [
-				"begin" => $_POST["begin"],
-				"end" => $_POST["end"]
+				"begin" => $_POST["begin"] ? $_POST["begin"] : [],
+				"end" => $_POST["end"] ? $_POST["end"] : []
 			]
 		] );
 	}
@@ -41,17 +41,16 @@ nv_ajax (
 	"accomodation/form-contact",
 	function ()
 	{
-
 		if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 		$from = $_POST["name"] ? $_POST['name'] : "";
 		$headers = 
 		
 		$res = nv_send_mail (array(
 			"to" => $_POST["host_email"], 
-			"subject" => "Nový dotaz z Valach od " . $_POST['name'] . " (" . $_POST['email'] . ")",
+			"subject" => "Dotaz na ".$_POST["name"]." od " . $_POST['name'] . " (" . $_POST['email'] . ")",
 			"body" => $_POST['message'],
 			"headers" => array(
-				"From: Na Valachy kontaktní formulář <info@navalachy.cz>",
+				"From: NaValachy ubytování - dotaz <info@navalachy.cz>",
 				'Content-Type: text/html; charset=UTF-8',
 				'Reply-To: '.$_POST["name"].' <'.$_POST['email'].'>',
 			)
@@ -59,8 +58,8 @@ nv_ajax (
 
 		$res2 = nv_send_mail (array(
 			"to" => $_POST["email"], 
-			"subject" => "NaValachy.cz: Dotaz jsme majiteli odeslali.",
-			"body" => "Váš dotaz na e-mail ".$_POST["host_email"]." byl úspěšně zaslán.",
+			"subject" => "NaValachy: Dotaz na ".$_POST["name"]." jsme odeslali majiteli",
+			"body" => "Váš dotaz na ".$_POST["name"]." byl úspěšně zaslán majiteli ".$_POST["host_name"]." na e-mail ".$_POST["host_email"].". Co nevidět se vám ozve.",
 			"headers" => array(
 				"From: NaValachy.cz <info@navalachy.cz>",
 				'Content-Type: text/html; charset=UTF-8'

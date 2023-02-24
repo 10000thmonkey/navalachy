@@ -1,6 +1,9 @@
 <?php
 
 
+
+// BOOKING CONFIRM
+
 add_action(
 	'template_redirect', 
 	function ()
@@ -32,7 +35,7 @@ add_action(
 		    $mail = nv_send_mail (array(
 				"to" => $order_meta["_billing_email"][0], 
 				"subject" => "Rezervace přijata - NaValachy.cz",
-				"body" => nvbk_email_order_complete( [ 
+				"body" => nv_e ( "accomodation/e/order-complete", [ 
 					"order" => $order_meta,
 					"order_id" => $order_id,
 					"nvbk" => $nvbk_meta,
@@ -55,6 +58,7 @@ add_action(
 
 
 
+// ADD NVBK CART META TO ORDER META
 
 add_action(
 	'woocommerce_checkout_update_order_meta',

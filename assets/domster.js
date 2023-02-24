@@ -120,7 +120,7 @@ Node.prototype.insert = function (el) {
 	}
 	return parent;
 };
-NodeList.prototype.insert = function (el) { console.log(this);this[0].insert(el); return this; }
+NodeList.prototype.insert = function (el) { this[0].insert(el); return this; }
 
 Node.prototype.remove = function () {return this.parentElement.removeChild(this);};
 NodeList.prototype.remove = function () {
@@ -253,7 +253,7 @@ HTMLFormElement.prototype.serialize = function () {
 
 Node.prototype.messagebox = function (msg, type = "info", icon = "") {
 	if (icon !== "") icon = "<i class='nvicon nvicon-"+icon+"'></i>"; 
-	this.parentElement.q(".messagebox").remove();
+	this.q(".messagebox").remove();
 	this.insert(createNode("div").addClass(["messagebox",type]).html(icon + msg));
 }
 

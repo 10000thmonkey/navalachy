@@ -3,19 +3,11 @@ window.nv = {};
 class NVElement extends HTMLElement {
 	constructor() {
 		super();
-		// Check to see if observedAttributes are defined and has length
-		// if (this.constructor.observedAttributes && this.constructor.observedAttributes.length) {
-		// 	// Loop through the observed attributes
-		// 	this.constructor.observedAttributes.forEach( attribute => {
-		// 		// Dynamically define the property getter/setter
-		// 		let prop = attribute.replaceAll("-", "_");
-		// 		Object.defineProperty( this, prop, {
-		// 			get () { return this.attr( attribute ); },
-		// 			set ( attrValue ) { this.attr( attribute, attrValue ); }
-		// 		});
-		// 	});
-		// }
+		//this.css("display", "block");
+
 	}
+
+	connectedCallback() {}
 
 	prepareTemplate ( templateHTML, keys, values )
 	{
@@ -58,7 +50,7 @@ class NVModal extends NVElement
 	{
 		window.nv.modal[ this.id ] = this;
 
-		this.on( "click", this.outerClickHandler );
+		this.on( "click", this._outerClickHandler );
 
 		setTimeout( ()=>{
 			this.q("[nv-modal-close]").on("click", () => this.closeModal() );
@@ -69,7 +61,7 @@ class NVModal extends NVElement
 	{
 		delete window.nv.modal[ this.id ];
 
-		this.on( "click", this.outerClickHandler, "remove" );
+		this.on( "click", this._outerClickHandler, "remove" );
 	}
 
 	static get observedAttributes()
@@ -82,7 +74,7 @@ class NVModal extends NVElement
 	}
 
 
-	outerClickHandler (e)
+	_outerClickHandler (e)
 	{
 		if ( e.composedPath().indexOf( this.firstElementChild ) == -1 )
 		{
@@ -159,6 +151,9 @@ customElements.define( "nv-form", NVForm );
 
 
 
+
+
+
 /*
 
 Repeatable components
@@ -179,8 +174,8 @@ class NVRepeat extends NVElement
 	{
 		super();
 
-		this.nv_items = [];
-		this.nv_fill = [];
+		this._items = [];
+		this._fill = [];
 	}
 
 	//static get observedAttributes () { return ["nv-items"]; }
@@ -190,16 +185,20 @@ class NVRepeat extends NVElement
 		setTimeout( () =>
 		{
 			let template = this.q("template")[0];
-			this.template = template.cloneNode(true);
+			this._template = template.cloneNode(true);
 			template.remove();
 
-			this.feed = createNode("div", "nv-feed-items");
-			this.insert( this.feed );
+			if ( this.q("nv-items").length > 0 ) {
+				this._feed = this.q("nv-items")[0];
+			} else {
+				this._feed = createNode("nv-items");
+				this.insert( this._feed );
+			}
 
-			if ( this.attr("nv-fill") ) this.nv_fill = this.attr("nv-fill").split(",");
+			if ( this.attr("nv-fill") ) this._fill = this.attr("nv-fill").split(",");
 
 			if ( this.attr("nv-inner-class") ) {
-				this.feed.addClass( this.attr("nv-inner-class").split(" ") );
+				this._feed.addClass( this.attr("nv-inner-class").split(" ") );
 				this.attr("nv-inner-class", false);
 			}
 
@@ -210,18 +209,16 @@ class NVRepeat extends NVElement
 		}, 5 );
 	}
 
-	attributeChangedCallback(name, old, newv) {}
-
 	addItems ( items )
 	{
-		this.nv_items.push( ...items );
+		this._items.push( ...items );
 
-		let keys = this.nv_fill.length > 0 ?
-			this.nv_fill :
+		let keys = this._fill.length > 0 ?
+			this._fill :
 			Object.keys( items[0] );
 
 		for (let item of items) {
-			this.feed.insert( this.prepareTemplate( this.template.innerHTML, keys, item ) );
+			this._feed.insert( this.prepareTemplate( this._template.innerHTML, keys, item ) );
 		}
 
 		return this;
@@ -229,8 +226,8 @@ class NVRepeat extends NVElement
 
 	cleanItems ()
 	{
-		this.nv_items = [];
-		this.feed.innerHTML = "";
+		this._items = [];
+		this._feed.innerHTML = "";
 
 		return this;
 	}
@@ -248,21 +245,59 @@ class NVFeed extends NVRepeat
 		super.connectedCallback();
 		setTimeout ( () =>
 		{
-			this.spinnerElement =
+			this._spinner =
 				createNode("div", ["spinner-wrapper", "hiding", "hidden"] )
 					.insert( createNode("div", "spinner") );
 			
-			this.insert( this.spinnerElement );
+			this.insert( this._spinner );
+
+			if ( this.attr("nv-ajax-get") )
+			{
+				this.spinnerShow();
+ 
+				let params = { action: this.attr("nv-ajax-get") };
+
+				if ( this.attr("nv-ajax-params") ) {
+					let urlparams = Object.fromEntries( new URLSearchParams( location.search ) );
+					let attrparams = this.attr("nv-ajax-params").split(",");
+
+					for ( let key of attrparams ) if ( urlparams[ key ] ) params[ key ] = urlparams[ key ];
+				} else {
+					params = Object.fromEntries( new URLSearchParams( location.search ) );
+				}
+
+				jax.post(
+					"/wp-admin/admin-ajax.php",
+					{ ...params },
+					( response ) =>	{
+						let data = JSON.parse( response );
+
+						if ( parseInt( data.status ) === 0 )
+						{
+							this.addItems( data.items );
+
+						}
+
+						if ( this.q("#button-loadmore").length > 0 )
+						{
+							if ( ! parseInt(data.more) ) loadMoreBtn.noDisplay();
+							else loadMoreBtn.display();
+						}
+						this.spinnerHide();
+					},
+					error => console.log( error )
+				);
+			}
 		}, 5 );
 	}
 	spinnerShow()
 	{
-		this.spinnerElement.show();
+		this._spinner.show();
 		return this;
 	}
 	spinnerHide()
 	{
-		this.spinnerElement.hide();
+		this._spinner.hide();
 		return this;
 	}
 }
@@ -283,6 +318,7 @@ class NVGallery extends NVRepeat
 customElements.define( "nv-gallery", NVGallery );
 
 
+
 class NVGallerySlider extends NVRepeat
 {
 	constructor () {
@@ -299,38 +335,10 @@ class NVGallerySlider extends NVRepeat
 			const controls_wrapper = createNode("div", "slider-controls");
 
 			let prev = createNode( "a", ["slider-prev", "nvicon", "nvicon-arrow-left"] )
-			.on( "click", () =>
-			{
-				for ( let i = 0; i < items.length; i++ )
-				{
-					if ( slider_feed.scrollLeft > items[i].offsetLeft ) 
-					{
-						slider_feed.scrollBy( {
-							left: -500,
-							top: 0,
-							behavior: "smooth"
-						} );
-						break;
-					}
-				}
-			} );
+			.on( "click", this.galleryPrev );
 
 			let next = createNode( "a", ["slider-next", "nvicon", "nvicon-arrow-right"])
-			.on( "click", () =>
-			{
-				for ( let i = 0; i < items.length; i++ )
-				{
-					if ( slider_feed.scrollLeft < items[i].offsetLeft ) 
-					{
-						slider_feed.scrollBy( {
-							left: 500,
-							top: 0,
-							behavior: "smooth"
-						} );
-						break;
-					}
-				}
-			} );
+				.on( "click", this.galleryNext );
 
 			controls_wrapper.insert( next );
 			controls_wrapper.insert( prev );
@@ -338,6 +346,87 @@ class NVGallerySlider extends NVRepeat
 			this.insert( controls_wrapper ); 
 		}, 5 );
 	}
+	galleryPrev ()
+	{
+		for ( let i = 0; i < items.length; i++ )
+		{
+			if ( slider_feed.scrollLeft > items[i].offsetLeft ) 
+			{
+				slider_feed.scrollBy( {
+					left: -500,
+					top: 0,
+					behavior: "smooth"
+				} );
+				break;
+			}
+		}
+		return this;
+	}
+	galleryNext ()
+	{
+		for ( let i = 0; i < items.length; i++ )
+		{
+			if ( slider_feed.scrollLeft < items[i].offsetLeft ) 
+			{
+				slider_feed.scrollBy( {
+					left: 500,
+					top: 0,
+					behavior: "smooth"
+				} );
+				break;
+			}
+		}
+		return this;
+	}
 }
 customElements.define( "nv-gallery-slider", NVGallerySlider );
 
+
+
+class NVItems extends NVElement { constructor() { super(); } connectedCallback() { super.connectedCallback(); } }
+customElements.define( "nv-items", NVItems );
+class NVItem extends NVElement { constructor() { super(); } connectedCallback() { super.connectedCallback(); } }
+customElements.define( "nv-item", NVItem );
+class NVFeedItem extends NVElement { constructor() { super(); } connectedCallback() { super.connectedCallback(); } }
+customElements.define( "nv-feed-item", NVFeedItem );
+class NVGalleryItem extends NVElement { constructor() { super(); } connectedCallback() { super.connectedCallback(); } }
+customElements.define( "nv-gallery-item", NVGalleryItem );
+
+
+
+
+class NVMessageBox extends NVElement
+{
+	constructor () { super(); }
+
+	connectedCallback() {
+		setTimeout(()=>
+		{
+			// to access messagebox from nv-feed
+			if ( this.parentElement.nodeName === "NV-FEED" ) this.parentElement.messagebox = this;
+			// to access from global nv object
+			if ( this.attr("id") ) window.nv.messagebox[ this.attr["id"] ] = this;
+
+		}, 5 );
+	}
+
+	addMessage ( message, type = "info", icon = "" )
+	{
+		if ( icon !== "" ) icon = "<nv-icon class='nvicon-"+icon+"'></nv-icon>";
+		this.insert( createNode( "div", [ "message", type ] ).html( icon + message ) );
+		return this;
+	}
+	showMessage ( message, type = "info", icon = "" )
+	{
+		this.clearMessages();
+		this.addMessage( message, type, icon );
+		return this;
+	}
+	clearMessages ()
+	{
+		this.q( ".message" ).remove();
+		return this;
+	}
+}
+customElements.define( "nv-messagebox", NVMessageBox );
+window.nv.messagebox = {};

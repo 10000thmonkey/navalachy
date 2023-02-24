@@ -48,7 +48,7 @@ get_header();
 	<div class="section_experiences">
 
 		<div class="section-block padding-lg">
-			<div class="contentwrap box padding-xl rows gap-hg">
+			<div class="contentwrap box padding-xxl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Do přírody</h2></a>
 					<p class="text-primary">Objevte krásu valašské přírody</p>
@@ -92,7 +92,7 @@ get_header();
 				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
 			</svg>
 			<div class="padding-lg">
-				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xl">
+				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xxl">
 
 					<?php
 					$post_1 = get_post( get_option("homepage_settings_featured_1")[0] );
@@ -128,7 +128,7 @@ get_header();
 	<div class="section_experiences2">
 
 		<div class="section-block padding-lg">
-			<div class="contentwrap box padding-xl rows gap-hg">
+			<div class="contentwrap box padding-xxl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
 					<a href="/tipy"><h2>Za zážitky</h2></a>
 					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
@@ -170,7 +170,7 @@ get_header();
 				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
 			</svg>
 			<div class="padding-lg">
-				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xl">
+				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xxl">
 
 					<?php
 					$post_1 = get_post( get_option("homepage_settings_featured_2")[0] );
@@ -208,7 +208,7 @@ get_header();
 	<div class="section_accomodation">
 
 		<div class="section-block padding-lg">
-			<div class="contentwrap box rows padding-xl gap-hg">
+			<div class="contentwrap box rows padding-xxl gap-hg">
 				<div class="block-header rows gap-md">
 					<a href="/ubytovani"><h2>Ubytování</h2></a>
 
@@ -218,7 +218,9 @@ get_header();
 				<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
 
 				<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
-					<?= nv_t( "accomodation/t/hovercard" ); ?>
+					<nv-items class="gap-md">
+						<?= nv_t( "accomodation/t/hovercard" ); ?>
+					</nv-items>
 				</nv-repeat>
 			</div>
 		</div>

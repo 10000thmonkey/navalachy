@@ -1,10 +1,13 @@
 <?php
-$NV_MODULES = [
-	"Booking/lib"
-];
+include_once( get_template_directory(). "/accomodation/i/lib.php" );
+
+global $nvbk;
+
 
 get_header();
 
+
+echo var_dump( file_exists(get_template_directory()."/accomodation/i/lib.php"));
 
 if ($_GET["test"] == 0)
 {
@@ -12,10 +15,6 @@ if ($_GET["test"] == 0)
 	$wpdb->print_error();
 	echo $nvbk->sync();
 }
-
-//$insert = $nvbk->insert_booking ( 149, "2023-07-01", "2023-07-05", ["name"=>"voja"], 2 );
-
-//print_r(json_encode($nvbk->get_disabled_days(149)));
 
 if ($_GET['test'] == 1) {
 	$id = empty($_GET["id"]) ? 149 : $_GET['id'];
@@ -41,7 +40,9 @@ if ($_GET['test'] == 1) {
 }
 if ($_GET["test"] == 2)
 {
-	print_r($nvbk->get_available_apartments( "2023-05-13", "2023-05-15" ));
+	global $nvbk;
+	//echo "prdel";
+	print_r( $nvbk->get_available_apartments( "2023-05-13", "2023-06-15" ) );
 }
 
 if ($_GET['test'] == 3)

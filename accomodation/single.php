@@ -291,7 +291,7 @@ get_header();
 	<footer class="related-experiences" style="background:var(--secondary-light);">
 		<div class="contentwrap padding-xl">
 			<div class="cols-flex cols-md gap-md space-between space-around-hg">
-				<h2 class="">Místa v okolí</h2>
+				<h2 class="">Tipy na výlet v okolí</h2>
 				<div class="tags inverted">
 					<?= nv_c( "UI/tags", ["include" => [52, 29, 28, 46] ]);?>
 				</div>
@@ -303,7 +303,7 @@ get_header();
 				"post__in" => $meta_fields["related_tips"]
 			] );
 			?>
-			<nv-repeat nv-inner-class="cols cols-sm-2 cols-md-3 gap-hg" nv-items="<?=esc_attr( json_encode( $feed["data"] ) );?>">
+			<nv-repeat nv-inner-class="cols cols-sm-2 cols-md-3 gap-hg" nv-items="<?=esc_attr( json_encode( $feed["items"] ) );?>">
 				<?= nv_t ( "tips/t/feed-item" ); ?>
 			</nv-repeat>
 
@@ -420,6 +420,7 @@ get_header();
 						<div>Dotaz:</div>
 						<textarea required rows="5" class="input" name="message"></textarea>
 					</label>
+					<input type="hidden" name="host_name" value="<?php $host["first_name"][0]." ".$host["last_name"][0];?>">
 					<input type="hidden" name="host_email" value="<?php $host["billing_email"][0]?>">
 					
 					<div class="messages nodisplay"></div>
@@ -444,6 +445,7 @@ get_header();
 				"name" : form.q("input[name=name]")[0].value,
 				"email" : form.q("input[name=email]")[0].value,
 				"message" : form.q("textarea[name=message]")[0].value,
+				"host_name" : form.q("input[name=host_email]")[0].value,
 				"host_email" : form.q("input[name=host_email]")[0].value
 			},
 			(e) => {

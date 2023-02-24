@@ -329,13 +329,20 @@ class NV_Booking
 		jax.post(
 		    "/wp-admin/admin-ajax.php",
 		    {
-		    	"action" : "accomodation/feed-search",
+		    	"action" : "accomodation/feed",
 		    	"begin" : this.begin,
 		    	"end" : this.end
 			},
 			(r) => {
 				let data = JSON.parse( r );
-				q("#accomodation-feed")[0].cleanItems().addItems( data.items );
+				let status = parseInt( data.status );
+				let feed = q("#accomodation-feed")[0].cleanItems();
+
+				if ( status === 0 )
+					feed.addItems( data.items );
+				else if ( status === 1 )
+					feed.messagebox.showMessage( "Pro tento termín není dostupné žádné z ubytování.", "warning", "calendar-error" );
+
 				feed.spinnerHide();
 		    }
 		);

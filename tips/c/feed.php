@@ -17,7 +17,7 @@ nv_new_c (
 	"tips/c/feed",
 	function ( $VAR )
 	{
-		$data = [];
+		$items = [];
 		$wpargs = [
 			'post_type' => 'tips',
 			'post_status' => 'publish'
@@ -65,7 +65,7 @@ nv_new_c (
 					"title" => $query->post->post_title,
 					"location" => $query->post->location,
 				];
-				array_push( $data, $item );
+				array_push( $items, $item );
 
 				//print_r($item);
 			}
@@ -76,7 +76,7 @@ nv_new_c (
 				"status" => 0,
 				"query" => $wpargs,
 				"more" => ( (int)$query->max_num_pages > (int)$VAR["paged"] ) ? 1 : 0,
-				"data" => $data
+				"items" => $items
 			];
 		}
 		else
@@ -85,7 +85,7 @@ nv_new_c (
 				"status" => 1,
 				"query" => $wpargs,
 				"more" => 0,
-				"data" => []
+				"items" => []
 			];
 		}
 	}
