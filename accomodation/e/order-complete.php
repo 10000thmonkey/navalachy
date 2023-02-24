@@ -2,7 +2,7 @@
 
 nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 {
-	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0] );
+	$featured_img = wp_get_attachment_image_url( get_post_thumbnail_id( (int)$VAR["apartment"]["apartment_id"][0] ) );
 	$avatar = wp_get_attachment_image_url( $VAR["host"]["profile_picture"][0] );
 	$host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
 	$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"][0]) );
@@ -10,6 +10,9 @@ nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 	$people = intval($VAR["nvbk"]["adults"][0]) + intval($VAR["nvbk"]["kids"][0]);
 	$checkin = date("H:i", strtotime($VAR["apartment"]["checkin"][0]));
 	$checkout = date("H:i", strtotime($VAR["apartment"]["checkout"][0]));
+
+	echo var_dump($featured_img);
+
 	$output = <<<HTML
 
 	<div style="text-align:center;">
