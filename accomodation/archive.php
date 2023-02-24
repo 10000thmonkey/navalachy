@@ -30,8 +30,8 @@ get_header();
 	<?php
 	$feed = nv_c( "accomodation/c/feed", [ "range" => $range, "apartments" => [] ] );
 	?>
-	<nv-feed id="accomodation-feed" nv-ajax-get="accomodation/feed" nv-ajax-params="begin,end" class="contentwrap space-around-lg">
-		<nv-items class="gap-hg padding-hg">
+	<nv-feed id="accomodation-feed" nv-ajax-get="accomodation/feed" nv-ajax-params="begin,end" class="contentwrap space-around-lg padding-lg">
+		<nv-items class="gap-hg">
 			<?php echo nv_t("accomodation/t/feed-item"); ?>
 		</nv-items>
 		<nv-messagebox></nv-messagebox>

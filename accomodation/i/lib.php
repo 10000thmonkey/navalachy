@@ -136,7 +136,7 @@ class NVBK
 				            'status' => 'SYNCED',
 				            'is_read' => '0',
 				            'date_created' => $current_time,
-				            'date_synced' => $current_time,
+				            'date_synced' => $current_sync_time,
 				        ] ) );
 				        $formats[] = $table_format;
 					}

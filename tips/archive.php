@@ -38,7 +38,7 @@ get_header();
 					<a class="button" nv-modal-close onclick="nv.modal['tips-modal-filter'].addClass('notmodal'); tipsFilter(true)">OK</a>
 				</footer>
 			</div>
-		</div>
+		</nv-modal>
 
 		
 		<div class="tips-feed-wrapper" style="position: relative;">

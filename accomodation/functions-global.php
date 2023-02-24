@@ -14,7 +14,6 @@ add_action(
 	        return; 
 	    }
 	    include_once get_template_directory() . "/accomodation/i/lib.php";
-	    include_once get_template_directory() . "/accomodation/email.php";
 
 	    $nvbk = new NVBK();
 
@@ -32,16 +31,18 @@ add_action(
 	    {
 		    $nvbk->confirm_booking( $nvbk_meta["booking_id"][0], $order_id, $order, $order_meta );
 
+		    $mail_body = nv_e( "accomodation/e/order-complete", [ 
+				"order" => $order_meta,
+				"order_id" => $order_id,
+				"nvbk" => $nvbk_meta,
+				"apartment" => $apartment_meta,
+				"host" => $host_meta
+			] );
+
 		    $mail = nv_send_mail (array(
 				"to" => $order_meta["_billing_email"][0], 
 				"subject" => "Rezervace přijata - NaValachy.cz",
-				"body" => nv_e ( "accomodation/e/order-complete", [ 
-					"order" => $order_meta,
-					"order_id" => $order_id,
-					"nvbk" => $nvbk_meta,
-					"apartment" => $apartment_meta,
-					"host" => $host_meta
-				] ),
+				"body" => $mail_body,
 				"headers" => array(
 					"From: info@navalachy.cz",
 					'Content-Type: text/html; charset=UTF-8'
@@ -50,6 +51,8 @@ add_action(
 
 		    $nvbk_meta["booking_confirmed"] = true;
 			update_post_meta( $order_id, "nvbk_meta", json_encode( $nvbk_meta ) );
+
+			add_action( "nv_after_header", function() use ($mail_body) { echo $mail_body; } );
 		}
 
 	    //wp_safe_redirect( get_site_url()."/thankyou?mail=".$order_meta["_billing_email"][0]."&key=" . $_GET['key'] );

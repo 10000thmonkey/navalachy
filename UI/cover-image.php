@@ -9,6 +9,9 @@ nv_new_c (
 			"content" => "",
 			"attachment_id" => 1
 		], $VAR );
+		$VAR["heading"] = $VAR["heading"] ? "<h1>{$VAR["heading"]}</h1>" : "";
+		$VAR["subheading"] = $VAR["subheading"] ? "<h5>{$VAR["subheading"]}</h5>" : "";
+
 
 		$i = nv_c( "UI/responsive-image", [ "attachment_id" => $VAR["attachment_id"], "sizes" => "(min-width: 1px) 100vw, 100vw" ] );
 
@@ -19,9 +22,9 @@ nv_new_c (
 			<div class="cover-image">
 				$i
 			</div>
-			<div class="cover-content">
-				<h1>{$VAR["heading"]}</h1>
-				<h5>{$VAR["subheading"]}</h5>
+			<div class="cover-content rows gap-md">
+				{$VAR["heading"]}
+				{$VAR["subheading"]}
 				{$VAR["content"]}
 			</div>
 		</div>

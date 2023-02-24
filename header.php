@@ -144,3 +144,4 @@ global $user;
   			</nav>
     	</div>
 	</header><!-- #masthead -->
+	<?php do_action("nv_after_header"); ?>
