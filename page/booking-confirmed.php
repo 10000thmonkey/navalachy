@@ -1,7 +1,32 @@
 <?php
 
-nv_new_e( "accomodation/e/order-complete", function ( $VAR )
-{
+$order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );
+$order = wc_get_order( $order_id );
+$order_meta = get_post_meta( $order_id );
+
+// do nothing if this is not reservation
+if ( empty( $order_meta["nvbk_meta"] ) )
+	return;
+
+
+include_once get_template_directory() . "/accomodation/i/lib.php";
+global $nvbk;
+
+
+$nvbk_meta = json_decode( $order_meta["nvbk_meta"][0], true );
+$apartment_meta = get_post_meta( $nvbk_meta["apartment_id"] );
+$host_meta = get_user_meta( $apartment_meta["host"][0] );
+
+
+$order = $order_meta;
+$order_id = $order_id;
+$nvbk = $nvbk_meta;
+$apartment = $apartment_meta;
+$host = $host_meta;
+
+
+
+
 	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0], "medium" );
 	$avatar = wp_get_attachment_image_url( $VAR["host"]["profile_picture"][0] );
 	$host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
@@ -87,5 +112,4 @@ nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 
 	HTML;
 
-	return $output;
-} );
+	echo $output;
