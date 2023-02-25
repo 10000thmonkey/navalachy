@@ -50,6 +50,14 @@
 		--radius-md: 15px;
 		--radius-lg: 25px;
 	}
+
+	--header-height: 80px;
+	--header-space: 15px;	
+	@media (max-width: @breakpoint-xs) {
+		--header-height: 60px;
+		--header-space: 10px;
+	}
+
 }
 
 .button, .field {user-select: none;}
@@ -233,9 +241,6 @@ h4 {margin: 5px 0;}
 	min-height: 100vh;
 }
 .site-header {
-	--header-height: 80px;
-	--header-space: 15px;
-
 	//position: sticky;
 	top: 0;
 	z-index: 999;
@@ -265,10 +270,6 @@ h4 {margin: 5px 0;}
 			:not(.menu-toggle) {display: none;}
 			.menu-toggle {display: block;}
 		}
-	}
-	@media (max-width: @breakpoint-xs) {
-		--header-height: 60px;
-		--header-space: 10px;
 	}
 
 	& > .contentwrap {
