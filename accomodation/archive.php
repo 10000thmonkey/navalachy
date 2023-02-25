@@ -1,8 +1,6 @@
 <?php /* Template Name: NV/Accomodation/Archive */
 wp_enqueue_script("nv-booking", "/wp-content/themes/navalachy/accomodation/a/booking.js");
 wp_enqueue_script( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.js" );
-wp_enqueue_style( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.css" );
-
 $meta_fields = get_post_meta( get_the_ID() );
 
 $nv_vars = [$meta_fields];
@@ -30,7 +28,10 @@ get_header();
 	<?php
 	$feed = nv_c( "accomodation/c/feed", [ "range" => $range, "apartments" => [] ] );
 	?>
-	<nv-feed id="accomodation-feed" nv-ajax-get="accomodation/feed" nv-ajax-params="begin,end" class="contentwrap space-around-lg padding-lg">
+	<nv-feed id="accomodation-feed" nv-ajax-get="accomodation/feed" nv-ajax-params="begin,end" class="contentwrap space-around-hg padding-lg">
+		<div class="padding-hg feed-filters">
+			<a class="button button-plain" style="width:fit-content;" onclick="document.q('#accomodation-feed')[0].removeClass('feed-filtered').feedFetch();">Zobrazit vše</a>
+		</div>
 		<nv-items class="gap-hg">
 			<?php echo nv_t("accomodation/t/feed-item"); ?>
 		</nv-items>
@@ -38,5 +39,9 @@ get_header();
 	</nv-feed>
 
 </main>
+<style type="text/css">
+	#accomodation-feed .feed-filters {display: none}
+	#accomodation-feed.feed-filtered .feed-filters {display: block}
+</style>
 <?php
 get_footer();

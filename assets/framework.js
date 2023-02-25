@@ -36,7 +36,12 @@ class NVElement extends HTMLElement {
 
 
 
+/*
 
+
+					MODAL
+
+*/
 
 
 class NVModal extends NVElement
@@ -156,9 +161,7 @@ customElements.define( "nv-form", NVForm );
 
 /*
 
-Repeatable components
-
-
+					Repeatable components
 
 
 */
@@ -236,6 +239,9 @@ customElements.define( "nv-repeat", NVRepeat );
 
 
 
+
+
+
 class NVFeed extends NVRepeat
 {
 	constructor () {
@@ -250,46 +256,49 @@ class NVFeed extends NVRepeat
 					.insert( createNode("div", "spinner") );
 			
 			this.insert( this._spinner );
-
-			if ( this.attr("nv-ajax-get") )
-			{
-				this.spinnerShow();
- 
-				let params = { action: this.attr("nv-ajax-get") };
-
-				if ( this.attr("nv-ajax-params") ) {
-					let urlparams = Object.fromEntries( new URLSearchParams( location.search ) );
-					let attrparams = this.attr("nv-ajax-params").split(",");
-
-					for ( let key of attrparams ) if ( urlparams[ key ] ) params[ key ] = urlparams[ key ];
-				} else {
-					params = Object.fromEntries( new URLSearchParams( location.search ) );
-				}
-
-				jax.post(
-					"/wp-admin/admin-ajax.php",
-					{ ...params },
-					( response ) =>	{
-						let data = JSON.parse( response );
-
-						if ( parseInt( data.status ) === 0 )
-						{
-							this.addItems( data.items );
-
-						}
-
-						if ( this.q("#button-loadmore").length > 0 )
-						{
-							if ( ! parseInt(data.more) ) loadMoreBtn.noDisplay();
-							else loadMoreBtn.display();
-						}
-						this.spinnerHide();
-					},
-					error => console.log( error )
-				);
-			}
+			this.feedFetch();
 		}, 5 );
 	}
+	feedFetch()
+	{
+		if (this.attr("nv-ajax-get"))
+		{
+			this.spinnerShow();
+	 
+			let params = { action: this.attr("nv-ajax-get") };
+
+			if ( this.attr("nv-ajax-params") ) {
+				let urlparams = Object.fromEntries( new URLSearchParams( location.search ) );
+				let attrparams = this.attr("nv-ajax-params").split(",");
+
+				for ( let key of attrparams ) if ( urlparams[ key ] ) params[ key ] = urlparams[ key ];
+			} else {
+				params = Object.fromEntries( new URLSearchParams( location.search ) );
+			}
+
+			jax.post(
+				"/wp-admin/admin-ajax.php",
+				{ ...params },
+				( response ) =>	{
+					let data = JSON.parse( response );
+
+					if ( parseInt( data.status ) === 0 )
+					{
+						this.cleanItems().addItems( data.items ).removeClass("feed-filtered");
+					}
+
+					if ( this.q("#button-loadmore").length > 0 )
+					{
+						if ( ! parseInt(data.more) ) loadMoreBtn.noDisplay();
+						else loadMoreBtn.display();
+					}
+					this.spinnerHide();
+				},
+				error => console.log( error )
+			);
+		}
+	}
+
 	spinnerShow()
 	{
 		this._spinner.show();
@@ -394,6 +403,12 @@ customElements.define( "nv-gallery-item", NVGalleryItem );
 
 
 
+/*
+
+						MESSAGEBOX 
+
+*/
+
 
 class NVMessageBox extends NVElement
 {
@@ -430,3 +445,28 @@ class NVMessageBox extends NVElement
 }
 customElements.define( "nv-messagebox", NVMessageBox );
 window.nv.messagebox = {};
+
+
+
+
+window.nv.logged = !! ( document.cookie.replace(/(?:(?:^|.*;\s*)wordpress_logged_in_\S*\s*\=\s*([^;]*).*$)|^.*$/, "$1") );
+class NVLoggedIn extends NVElement
+{
+	constructor () { super(); }
+	connectedCallback ()
+	{
+		super.connectedCallback();
+		if ( ! nv.logged ) this.remove();
+	}
+}
+class NVLoggedOut extends NVElement
+{
+	constructor () { super(); }
+	connectedCallback ()
+	{
+		super.connectedCallback();
+		if ( nv.logged ) this.remove();
+	}
+}
+customElements.define( "nv-logged-in", NVLoggedIn );
+customElements.define( "nv-logged-out", NVLoggedOut );

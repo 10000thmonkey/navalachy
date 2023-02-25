@@ -17,7 +17,7 @@ nv_new_c (
 		$VAR = array_merge( [
 			"page" => 1,
 			"apartments" => [],
-			"limit" => 9
+			"limit" => 9,
 		], $VAR );
 	
 		$args = [

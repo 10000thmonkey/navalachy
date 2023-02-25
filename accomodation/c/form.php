@@ -28,8 +28,11 @@ nv_new_c(
 	<form id="booking-form">
 
 		<?php if( $VAR["iss"] ) : ?>
-			<h3>Vyberte termín</h3>
+			<h3 class="show-only-when-closed-popup">Vyberte termín</h3>
+			<h3 class="show-only-when-opened-popup">Kdy</h3>
 		<?php endif; ?>
+
+
 		
 		<div class="fieldgroup hovering">
 
@@ -56,39 +59,33 @@ nv_new_c(
 		
 		<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');document.body.css('overflow','hidden')">Pokračovat</a>
 
+
 		<div class="reservation-form-popup rows gap-md">
+
+			<h3>Kdo</h3>
+
 			<div class="fieldgroup rows" id="fieldgroup-people">
-				<div class="field" id="field-adults">	
-					<div style="display:flex">
-						<div style="flex:1">
-							<div class="field-label">Dospělí</div>
-							<div class="field-value">1</div>
-						</div>
-						<div style="display: flex;">
-							<a class="button button-plain button-icon-only" onclick="cal.setPeople(-1, 'adults')"><i class="nvicon nvicon-minus"></i></a>
-							<a class="button button-plain button-icon-only" onclick="cal.setPeople(+1, 'adults')"><i class="nvicon nvicon-plus"></i></a>
-						</div>
-					</div>
+				<div class="field cols-flex center" id="field-adults" style="flex-direction: row;">	
+					<div class="field-label" style="flex:1">Dospělí</div>
+					<a class="button button-transparent-grey button-icon-only" onclick="cal.setPeople(-1, 'adults')"><i class="nvicon nvicon-minus"></i></a>
+					<div class="field-value text-center">1</div>
+					<a class="button button-transparent-grey button-icon-only" onclick="cal.setPeople(+1, 'adults')"><i class="nvicon nvicon-plus"></i></a>
 				</div>
-				<div class="field" id="field-kids">	
-					<div style="display:flex">
-						<div style="flex:1">
-							<div class="field-label">Děti</div>
-							<div class="field-value">0</div>
-						</div>
-						<div style="display: flex;">
-							<a class="button button-plain button-icon-only" onclick="cal.setPeople(-1, 'kids')"><i class="nvicon nvicon-minus"></i></a>
-							<a class="button button-plain button-icon-only" onclick="cal.setPeople(+1, 'kids')"><i class="nvicon nvicon-plus"></i></a>
-						</div>
-					</div>
+				<div class="field cols-flex center" id="field-kids" style="flex-direction: row;">
+					<div class="field-label" style="flex:1">Děti</div>
+					<a class="button button-transparent-grey button-icon-only" onclick="cal.setPeople(-1, 'kids')"><i class="nvicon nvicon-minus"></i></a>
+					<div class="field-value text-center">0</div>
+					<a class="button button-transparent-grey button-icon-only" onclick="cal.setPeople(+1, 'kids')"><i class="nvicon nvicon-plus"></i></a>
 				</div>
 			</div>
 
-			<div class="fieldgroup rows space-around-md nodisplay" id="fieldset-price"></div>
+			<div class="rows space-around-md nodisplay" id="fieldset-price"></div>
 
-			<div style="padding: 5px 30px">
-				<p class="font-sm">Energie a dřevo navíc jednoduše doplatíte při odjezdu dle spotřeby. (postup bude zaslán v manuálu)</p>
-			</div>
+			<div class="rows space-around-md nodisplay" id="fieldset-price-additional"></div>
+
+			<p style="padding: 5px 30px" class="font-sm">Palivové dřevo navíc a energie jednoduše doplatíte při odjezdu dle spotřeby.</p>
+
+
 
 			<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
 			
@@ -126,6 +123,7 @@ nv_new_c(
 
 				(response) => {
 					data = JSON.parse( response );
+					//console.log(data);
 					c.iss = true;
 					c.apartment_id = data.apartment_id;
 					c.apartment_name = data.apartment_name;

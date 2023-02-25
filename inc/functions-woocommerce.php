@@ -1,9 +1,5 @@
 <?php
-/**
- * Remove Woo Styles and Scripts from non-Woo Pages
- * @link https://gist.github.com/DevinWalker/7621777#gistcomment-1980453
- * @since 1.7.0
- */
+
 
 //FASTEN UP WOOO CHECKOUT
 add_filter('woocommerce_defer_transactional_emails', '__return_true' );
@@ -12,6 +8,8 @@ function is_woocommerce_page ()
 {
 	return ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() );
 }
+
+
 
 
 add_action(
@@ -46,21 +44,23 @@ add_action(
 
 /*
 adds woocommerce body classes
+
+add_action(
+	'body_class',
+	function ( $classes ) {
+
+		if ( is_page("my-account") ) {
+			$classes[]
+		}
+
+		return $classes;
+	}
+)
 */
-// add_action(
-// 	'body_class',
-// 	function ( $classes ) {
 
-// 		if ( is_page("my-account") ) {
-// 			$classes[]
-// 		}
-
-// 		return $classes;
-// 	}
-// )
 
 /*
-disable cart
+disable cart page
 */
 
 add_action(
@@ -72,6 +72,7 @@ add_action(
 		}
 	}, 1
 );
+
 
 
 /*
@@ -93,6 +94,7 @@ add_action(
 	    //}
 	}, 99 
 );
+
 
 
 /*

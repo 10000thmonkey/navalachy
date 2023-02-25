@@ -7,7 +7,9 @@ global $nvbk;
 get_header();
 
 
-echo var_dump( file_exists(get_template_directory()."/accomodation/i/lib.php"));
+//echo var_dump( file_exists(get_template_directory()."/accomodation/i/lib.php"));
+
+
 
 if ($_GET["test"] == 0)
 {
@@ -66,6 +68,26 @@ if ($_GET["test"] == 6)
 {
 	echo var_dump( $nvbk->get_disabled_dates(149) );
 }
+
+if ($_GET["test"] == 7)
+{
+    echo var_dump( $nvbk->insert_booking(149, "2023-05-13", "2023-06-15") );
+}
+
+if ($_GET["test"] == 8)
+{
+	?>
+
+	<nv-logged-in>
+		<h1>přihlasen</h1>
+	</nv-logged-in>
+	<nv-logged-out>
+		<h1>nepřihlasen</h1>
+	</nv-logged-out>
+
+	<?php
+}
+
 
 
 get_footer();

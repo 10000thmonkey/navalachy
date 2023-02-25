@@ -6,8 +6,8 @@ nv_ajax(
 	{
 		return nv_c( "accomodation/c/feed",[
 			"range" => [
-				"begin" => $_POST["begin"] ? $_POST["begin"] : [],
-				"end" => $_POST["end"] ? $_POST["end"] : []
+				"begin" => ! empty( $_POST["begin"] ) ? $_POST["begin"] : null,
+				"end" =>   ! empty( $_POST["end"] )   ? $_POST["end"] : null,
 			]
 		] );
 	}
@@ -82,67 +82,52 @@ nv_ajax(
 	"accomodation/to-checkout",
 	function ()
 	{
-		if(WP_DEBUG) @ini_set( 'display_errors', 1 );
 		include_once( get_template_directory() . "/accomodation/i/lib.php" );
 
 		$nvbk = new NVBK();
 		$cart = WC()->cart;
 		$cart_cache = DAY_IN_SECONDS * 2;
 
-		$return = array(
-			"success" => false,
-			"body" => "",
-		);
-
 
 		//CHECK IF DATE IS AVAILABLE, IF NOT, RETURN ERROR IN MESSAGE BODY
 		if ( ! $nvbk->is_available( $_POST['apartment_id'], $_POST['begin'], $_POST['end'] ) )
-		{
-			$return["body"] = "Termín je obsazený.";
-			return $return;
-		}
+			return ["status" => 1];
+
+
 
 
 		//GET PRICE AND SEND IN MESSAGE BODY
 		$price = $nvbk->get_new_booking_price( $_POST['apartment_id'], $_POST['begin'], $_POST['end'] );
-		
 
-		//IF OK, SEND PRICE TO MESSAGE BODY
 
 		//SENDING PRICE INFO AFTER DATE RANGE SELECTION
 		if ( isset($_POST['pre_checkout']) && $_POST['pre_checkout'] == "yes" )
-		{	
-			$return["price"] = $price;
-			$return["success"] = true;
-		}
+			return ["price" => $price, "status" => 0];
+
+
 		//CREATING ORDER BEFORE SENDING USER TO CHECKOUT (with JS)
-		else
-		{ 
-			$booking_id = $nvbk->insert_booking ( (int)$_POST['apartment_id'], $_POST["begin"], $_POST["end"] );
+		$booking_id = $nvbk->insert_booking ( (int)$_POST['apartment_id'], $_POST["begin"], $_POST["end"] );
 
-			$nvbk_meta = array(
-				"apartment_id" => $_POST["apartment_id"],
-				"apartment_name" => $_POST["apartment_name"],
-				"begin" => $_POST["begin"],
-				"end" => $_POST["end"],
-				"price" => $price["price_final"],
-				"adults" => $_POST["adults"],
-				"kids" => $_POST["kids"],
-				"booking_id" => (int)$booking_id,
-				"booking_confirmed" => false
-			);
+		$nvbk_meta = array(
+			"apartment_id" => $_POST["apartment_id"],
+			"apartment_name" => $_POST["apartment_name"],
+			"begin" => $_POST["begin"],
+			"end" => $_POST["end"],
+			"price" => $price["price_final"],
+			"adults" => $_POST["adults"],
+			"kids" => $_POST["kids"],
+			"booking_id" => (int)$booking_id,
+			"booking_confirmed" => false
+		);
 
-			if ( !$cart->is_empty() ) $cart->empty_cart();
-		
-			$cart->add_to_cart( 1084, 1, NULL, NULL, [ "nvbk_meta" => json_encode( $nvbk_meta ) ] );
-			$cart->calculate_totals();
-			WC()->session->set('cart', $cart->cart_content);
-			$cart->set_session();
-			$cart->maybe_set_cart_cookies();
+		if ( !$cart->is_empty() ) $cart->empty_cart();
+	
+		$cart->add_to_cart( 1084, 1, NULL, NULL, [ "nvbk_meta" => json_encode( $nvbk_meta, JSON_UNESCAPED_UNICODE ) ] );
+		$cart->calculate_totals();
+		WC()->session->set('cart', $cart->cart_content);
+		$cart->set_session();
+		$cart->maybe_set_cart_cookies();
 
-			$return["success"] = true;
-		}
-		
-		return $return;
+		return ["status" => 0];
 	}
 );

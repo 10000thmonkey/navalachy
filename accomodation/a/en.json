@@ -1,0 +1,50 @@
+{
+    "days": [
+        "Ne",
+        "Po",
+        "Út",
+        "St",
+        "Čt",
+        "Pá",
+        "So"
+    ],
+    "daysShort": [
+        "Ne",
+        "Po",
+        "Út",
+        "St",
+        "Čt",
+        "Pá",
+        "So"
+    ],
+    "months": [
+        "Leden",
+        "Únor",
+        "Březen",
+        "Duben",
+        "Květen",
+        "Červen",
+        "Červenec",
+        "Srpen",
+        "Září",
+        "Říjen",
+        "Listopad",
+        "Prosinec"
+    ],
+    "monthsShort": [
+        "Led",
+        "Úno",
+        "Bře",
+        "Dub",
+        "Kvě",
+        "Čvn",
+        "Čvc",
+        "Srp",
+        "Zář",
+        "Říj",
+        "Lis",
+        "Pro"
+    ],
+    "today": "Dnes",
+    "clear": "Smazat"
+}

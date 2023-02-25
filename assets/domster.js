@@ -107,15 +107,15 @@ NodeList.prototype.q = function(c) {
 	return new NodeListConstruct(list);
 }
 
-Node.prototype.insert = function (el) {
+Node.prototype.insert = function (el = "") {
 	const parent = this;
-	if (el instanceof NodeList) {
+	if ( el instanceof NodeList) {
 		//console.log(el);
 		for( let e of el ) {
 			//console.log(e);
 			parent.appendChild( e );
 		};
-	} else {
+	} else if (el instanceof Node) {
 		parent.appendChild(el);
 	}
 	return parent;

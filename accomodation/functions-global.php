@@ -26,13 +26,12 @@ add_action(
     	include_once get_template_directory() . "/accomodation/i/lib.php";
 		global $nvbk;
 
-		$nvbk->confirm_booking( $nvbk_meta["booking_id"][0], $order_id, $order, $order_meta );
-
 	    
 	    $nvbk_meta = json_decode( $order_meta["nvbk_meta"][0], true );
 	    $apartment_meta = get_post_meta( $nvbk_meta["apartment_id"] );
 	    $host_meta = get_user_meta( $apartment_meta["host"][0] );
 
+		$nvbk->confirm_booking( $nvbk_meta["booking_id"][0], $order_id, $order, $order_meta );
 
 	    $mail_body = nv_e( "accomodation/e/order-complete", [ 
 			"order" => $order_meta,

@@ -2,7 +2,6 @@
 wp_enqueue_script("nv-slider", "/wp-content/themes/navalachy/assets/slider.js" );
 wp_enqueue_script("nv-booking", "/wp-content/themes/navalachy/accomodation/a/booking.js");
 wp_enqueue_script( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.js" );
-wp_enqueue_style( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.css" );
 
 get_header();
 ?>

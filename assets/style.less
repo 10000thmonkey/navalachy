@@ -188,6 +188,8 @@ body,button,input,select,optgroup,textarea {
 	line-height: 1.5;
 }
 
+body.logged-in nv-logged-out { display: none !important; }
+body:not(.logged-in) nv-logged-in { display: none !important; }
 
 .imgstretch img {width: 100%; height: 100%; object-fit: cover;}
 .img-golden {
@@ -1122,15 +1124,26 @@ body.post-type-archive-product, body.single-product, body.tax-product_cat {
 }
 
 /*WOOCOMMERCE CHECKOUT*/
-.woocommerce-message {padding: 15px; margin: 15px; border-radius: 15px; color: white;}
-.woocommerce-NoticeGroup, .woocommerce-notices-wrapper, .stripe-source-errors {
-	width: 100%;
-	ul {.woocommerce-message();}
-	ul.woocommerce-error {}
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error li {
+	.message();
+	padding: 15px; margin: 15px; border-radius: 15px; color: white;
 }
+
+.woocommerce-NoticeGroup,
+.woocommerce-error,
+.woocommerce-notices-wrapper,
+.stripe-source-errors {
+	.message-box();
+	width: 100%;
+	background: white !important;
+	ul {.woocommerce-message();}
+	&.woocommerce-error li {background: rgba(255, 155, 155, .7);}
+}
+
 body.woocommerce-checkout {
 	.site-header {box-shadow: none;position: static; & > div {grid-template-columns: unset; justify-content: center;} a {cursor: default;}}
-	.woocommerce-form-coupon-toggle,
 	.site-header .header-right,
 	#site-navigation,
 	#site-navigation-mobile,
@@ -1142,9 +1155,27 @@ body.woocommerce-checkout {
 	.woocommerce {
 		max-width: 1200px;
 		margin: 30px auto;
+		display: flex;
+		flex-direction: column;
 		padding: 0;
 		//overflow: hidden;
 	}
+
+
+	.woocommerce-form-coupon-toggle {
+		.padding-md();
+
+		.woocommerce-info { background: var(--color-ui-grey); color: var(--text-paragraph-color); margin: 0; }
+	}
+	.woocommerce-form-coupon {
+		.padding-md();
+		.gap-md();
+		display: flex;
+
+		p:not(.form-row) {display: none;}
+		input[type=text] { .input(); }
+	}
+
 
 	.woocommerce-form-login-toggle {
 		.woocommerce-info {
@@ -1170,13 +1201,13 @@ body.woocommerce-checkout {
 		}
 	}
 
+
 	form.woocommerce-checkout {
-		.shadow-md();
-		border-radius: var(--radius-md);
 		display: flex;
 		gap: 0;
 		flex-wrap: wrap;
 		padding: 0;
+		.space-around-hg();
 
 		@media (max-width: @breakpoint-sm) {
 			flex-direction: column;
@@ -1192,15 +1223,16 @@ body.woocommerce-checkout {
 		
 		#customer_details {
 			flex: 1;
-			background: var(--color-ui-grey);
-			border-top-left-radius: var(--radius-md);
-			border-bottom-left-radius: var(--radius-md);
+			border-radius: var(--radius-md);
+			.shadow-md();
 			.padding-lg();
 
 			.woocommerce-billing-fields__field-wrapper {
 				margin: 20px 0;
 			}
 		}
+
+
 		#order_review {
 			width: 100% !important;
 			margin: 0 !important;
@@ -1257,7 +1289,6 @@ body.woocommerce-checkout {
 				width: 100%;
 				input, textarea {
 					width:100%;
-					background: white;
 				}
 			}
 		}
@@ -1311,7 +1342,7 @@ body.woocommerce-lost-password {
 
 
 
-/*FORMULARE*/
+/* REZERVACE */
 body {
 
 	#booking-form {
@@ -1356,11 +1387,10 @@ body {
 		    top: 20%;
 		}
 		.field-label {
-			font-size: var(--font-xs);
-			text-transform: uppercase;
+			font-size: var(--font-sm);
 		}
 		.field-value {
-			width: 100%;
+			min-width: 20px;
 			color: var(--primary);
 			font-size: var(--font-sm);
 		}
@@ -1374,11 +1404,8 @@ body {
 			flex-direction: row;
 			justify-content: space-between;
 			align-items:center;
-
-			.field-label {}
-			.field-value {width: auto;}
 		}
-		.field-price-final * {font-size: var(--font-hg);}
+		.field-price-final * {font-size: var(--font-md); font-weight: 600; color: var(--secondary);}
 	}
 	#field-price {
 		display: flex;
@@ -1478,8 +1505,6 @@ body {
 		.button {margin: 0;}
 	}
 }
-
-
 body.single-accomodation {
 
 	@media (min-width: @breakpoint-md) {
@@ -1488,7 +1513,6 @@ body.single-accomodation {
 			margin-bottom: var(--space-hg);
 			position: sticky;
 			top: 50px;
-			max-width: 400px;
 			flex: 1;
 			height: auto;
 			width: auto;
@@ -1498,7 +1522,6 @@ body.single-accomodation {
 			z-index: 1;
 			align-self: flex-start;
 			#booking-form {align-self: start;}
-			#booking-form > h3 {display: block;}
 
 			.mobile-sliding-footer {display: none;}
 			.reservation-form-popup {display: none;}
@@ -1521,6 +1544,9 @@ body.single-accomodation {
 	    display: flex;
 	    flex-direction: column;
 	    align-items: center;
+
+		.show-only-when-closed-popup {display: block;}
+		.show-only-when-opened-popup {display: none;}
 	
 		#booking-form {
 			.box();
@@ -1529,11 +1555,11 @@ body.single-accomodation {
 			align-items: unset;
 			flex-direction: column;
 			backdrop-filter: none !important;
-		    max-width: 600px;
 		    background: none;
 		    backdrop-filter: none;
+		    width: 100%;
+    		max-width: 520px;
 
-			& > h3 {display: none;}
 			.fieldgroup {
 				box-shadow: none;
 				border: 2px solid var(--color-ui-grey);
@@ -1587,17 +1613,62 @@ body.single-accomodation {
 		    overflow: auto;
 
 		    #booking-form {margin: 30px 0;}
-	
+			h3 {margin: 10px 0; padding: 0 30px;}
 	    	.mobile-sliding-footer {
 		    	.content-on-shown {opacity: 1;pointer-events: auto;}
 		    	.content-on-hidden {opacity: 0;pointer-events: none;}
 		    }
+
+		    .show-only-when-opened-popup {display: block;}
+		    .show-only-when-closed-popup {display: none;}
 	    }
+
 	    .fieldgroup.fieldgroup-price, .continuebutton {display: none;}
 	    .reservation-form-popup {
 	    	width: 100%;
-	    	max-width: 400px;
+	    	//max-width: 400px;
 	    }
+	}
+}
+.hello-week {
+	width: 100%;
+	margin: 0 auto;
+	user-select: none;
+	font-size: 1em;
+
+	.navigation {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		padding: 0;
+	}
+	.prev,
+	.next {
+		padding: 1em;
+		cursor: pointer;
+	}
+	.period {
+		width: 100%;
+		font-size: var(--font-hg);
+		color: var(--primary);
+		text-align: center;
+	}
+	.week {
+		display: flex;
+	}
+	.month {
+		display: flex;
+		flex-wrap: wrap;
+		cursor: pointer;
+	}
+	.day {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 14.28571%;
+		padding: 1em;
+		transition: all 0.2s cubic-bezier(0.25, 0.1, 0.49, 0.9);
 	}
 }
 
@@ -1956,11 +2027,17 @@ nv-slider {
 }
 
 nv-messagebox {
+	.message-box();
+}
+nv-messagebox .message, .messagebox {
+	.message();
+}
+.message-box {
 	max-width: 500px;
     margin: 0 auto;
     display: block;
 }
-nv-messagebox .message, .messagebox {
+.message {
 	display: flex;
     gap: 15px;
     align-items: center;
@@ -2253,6 +2330,7 @@ nv-messagebox .message, .messagebox {
 	&:hover {box-shadow: var(--shadow-md);}
 	&:active {box-shadow: none; transform: translateY(2px);}
 
+
 	&.button-icon {
 		align-items: center;
 		.nvicon {font-size: var(--font-md);}
@@ -2271,6 +2349,13 @@ nv-messagebox .message, .messagebox {
 		.nvicon {font-size: var(--font-md);}
 	}
 
+	&.button-transparent-grey {
+		background: none;
+		outline: 2px solid transparent;
+		color: var(--primary);
+		&:hover { background: var(--color-ui-grey); box-shadow: none; }
+		&:focus { outline-color: var(--color-ui-grey); }
+	}
 	&.button-primary-transparent {
 		background: none;
 		color: var(--primary);
@@ -2285,6 +2370,8 @@ nv-messagebox .message, .messagebox {
 		padding: 13px 30px;
 		&.button-icon {padding: 13px 30px 13px 50px;}
 	}
+
+
 	&.button-primary {
 		background: var(--primary);
 		color: white;
@@ -2471,27 +2558,17 @@ nv-messagebox .message, .messagebox {
 	&.cols-3 {grid-template-columns: 1fr 1fr;}
 	&.cols-4 {grid-template-columns: 1fr 1fr;}
 
-	&.cols-sm-2 {
-		@media(min-width: @breakpoint-sm) {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-	&.cols-md-2 {
-		@media(min-width: @breakpoint-md) {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
+	&.cols-sm-2 { @media(min-width: @breakpoint-sm) {grid-template-columns: 1fr 1fr;} }
+	&.cols-sm-3 { @media(min-width: @breakpoint-sm) {grid-template-columns: 1fr 1fr 1fr;} }
 
-	&.cols-md-3 {
-		@media(min-width: @breakpoint-md) {
-			grid-template-columns: 1fr 1fr 1fr;
-		}
-	}
-	&.cols-md-4 {
-		@media(min-width: @breakpoint-md) {
-			grid-template-columns: 1fr 1fr 1fr 1fr;
-		}
-	}
+	&.cols-md-2 { @media(min-width: @breakpoint-md) {grid-template-columns: 1fr 1fr;} }
+	&.cols-md-3 { @media(min-width: @breakpoint-md) {grid-template-columns: 1fr 1fr 1fr;} }
+	&.cols-md-4 { @media(min-width: @breakpoint-md) {grid-template-columns: 1fr 1fr 1fr 1fr;} }
+
+	&.cols-lg-2 { @media(min-width: @breakpoint-lg) {grid-template-columns: 1fr 1fr;} }
+	&.cols-lg-3 { @media(min-width: @breakpoint-lg) {grid-template-columns: 1fr 1fr 1fr;} }
+	&.cols-lg-4 { @media(min-width: @breakpoint-lg) {grid-template-columns: 1fr 1fr 1fr 1fr;} }
+
 	.col {	
 	}
 }

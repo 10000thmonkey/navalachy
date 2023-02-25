@@ -67,10 +67,9 @@ global $user;
 
     		</nav>
     		<div class="header-right">
-    			<?php 
-    			if ( WP_DEBUG ):
-    			if ( $user ):
-				?>
+
+    			<?php if ( WP_DEBUG ): ?>
+    			<nv-logged-in>
 					<nav role="navigation" class="dropdown-nav">
 						<ul>
 						    <li>
@@ -91,14 +90,12 @@ global $user;
 						    </li>
 					 	</ul>
 					</nav>
-				<?php
-    			else:
-    			?>
+				</nv-logged-in>
+				<nv-logged-out>
     				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
-    			<?php
-    			endif;
-    			endif;
-    			?>
+    			</nv-logged-out>
+    			<?php endif; ?>
+
 				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>
     		</div>
     
@@ -112,35 +109,6 @@ global $user;
 	    				)
 	    			);
 	    		?>
-	    		<div class="padding-md">
-	    			<?php 
-	    			if ( $user && WP_DEBUG ):
-					?>
-						<nav role="navigation" class="dropdown-nav">
-							<ul>
-							    <li>
-							    	<a href="#" class="button button-plain">
-							    		<?=$user->data->display_name;?>
-										<div class="avatar avatar-small">
-											<?= nv_c( "UI/responsive-image", [ "attachment_id" => 1404, "sizes" => "(min-width: 1px) 32px, 32px" ] ); ?>
-										</div>
-							    	</a>
-									<ul class="dropdown padding-md">
-										<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
-											<li><a href="/admin-accomodation">Ubytování</a></li>
-										<?php endif; ?>
-									</ul>
-							    </li>
-						 	</ul>
-						</nav>
-					<?php
-	    			//else:
-	    			?>
-	    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
-	    			<?php
-	    			endif;
-	    			?>
-	    		</div>
   			</nav>
     	</div>
 	</header><!-- #masthead -->

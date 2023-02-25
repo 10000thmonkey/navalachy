@@ -94,7 +94,7 @@ class NVBK
 		global $wpdb;
 		require_once("lib-ical.php");
 
-		$current_time = date('Y-m-d 00:00:00');
+		$current_time = date('Y-m-d H:00:00');
 		$current_sync_time = date('Y-m-d H:i:s');
 		update_option("nvbk_last_synced", $current_time);
 
@@ -162,6 +162,9 @@ class NVBK
 		$wpdb->query($sql);
 
 
+		$sql = "DELETE FROM {$this->table_name} WHERE `status` = 'PENDING' AND `date_synced` < DATE_SUB(NOW(), INTERVAL 2 DAY)";
+		$wpdb->query( $sql );
+
 		$exchangeUrl = 'https://api.exchangerate.host/latest?base=EUR&symbols=CZK';
 		$exchangeData = json_decode(file_get_contents($exchangeUrl));
 		update_option("nvbk_exchange_EUR_CZK", $exchangeData->rates->CZK);
@@ -173,18 +176,19 @@ class NVBK
     public function insert_booking ( $apartment_id, $start_date, $end_date, $fields = [], $order_id = 1 )
     {
     	global $wpdb;
-
+        //$wpdb->show_errors();
+        
     	$data = array(
-            'calendar_id' => absint($apartment_id),
+            'apartment_id' => absint( $apartment_id ),
             'uid' => current_time('Y-m-d H:i:s') . '@navalachy.cz',
             'order_id' => $order_id,
-            'start_date' => date('Y-m-d 00:00:00', strtotime($start_date)),
+            'begin_date' => date('Y-m-d 00:00:00', strtotime($start_date)),
             'end_date' => date('Y-m-d 00:00:00', strtotime($end_date)),
             'fields' => serialize($fields),
             'status' => 'PENDING',
             'is_read' => '0',
             'date_created' => current_time('Y-m-d H:i:s'),
-            'date_modified' => current_time('Y-m-d H:i:s'),
+            'date_synced' => current_time('Y-m-d H:i:s'),
         );
 
         $keys = implode(", ", array_keys( $this->columns ) );
@@ -192,10 +196,11 @@ class NVBK
 
 		$sql = "INSERT INTO {$this->table_name} ({$keys})
 				VALUES {$format}
-				ON DUPLICATE KEY UPDATE `date_modified` = '" . current_time('Y-m-d H:i:s')."'";
+				ON DUPLICATE KEY UPDATE `date_synced` = '" . current_time('Y-m-d H:i:s')."'";
 
 		$query = $wpdb->prepare( $sql, array_values( $data ) );
 		$wpdb->query($query);
+		//$wpdb->print_error();
 
 		return $wpdb->insert_id;
     }
@@ -243,7 +248,7 @@ class NVBK
     	return $wpdb->get_results(
     		$wpdb->prepare(
 	    		"SELECT * FROM {$this->table_name}
-	            WHERE `status` IN ('CONFIRMED', 'PENDING', 'SYNCED', 'CLOSED')
+	            WHERE `status` IN ('CONFIRMED', 'PENDING', 'SYNCED', 'CLOSED', 'RESERVED')
 	            AND `apartment_id` = %s
 	            " . $range, $apartment_id, $begin, $end
 	        )
@@ -312,7 +317,7 @@ class NVBK
 	        	AND ( `begin_date` <= %s AND `end_date` >= %s )
 	        	OR  ( `begin_date` >= %s AND `end_date` <= %s )
 	        )
-	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED')" . $apartments_sql . "
+	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED', 'RESERVED')" . $apartments_sql . "
 	        GROUP BY `apartment_id` ",
 			$from, $from,
 			$to, $to,
@@ -355,7 +360,6 @@ class NVBK
 		    WHERE `calendar_id` = %d
 		    AND `end_date` >= %s
 		    AND `start_date` <= %s
-		    AND `status` NOT LIKE 'PENDING'
 		", (int)$apartment_id, $begin." 00:00:00", $end." 00:00:00" );
 
 		$res = $wpdb->get_results($query);
@@ -464,7 +468,7 @@ class NVBK
 			WHERE `apartment_id` = %s
 			AND `end_date` >= %s
 			AND `begin_date` < %s
-			AND `status` IN ('SYNCED', 'CLOSED', 'PENDING', 'CONFIRMED')"
+			AND `status` IN ('SYNCED', 'CLOSED', 'PENDING', 'CONFIRMED', 'RESERVED')"
 		, $apartmentId, date("Y-m-d 00:00:00"), date('Y-m-d 00:00:00', strtotime("+1 year") ) );
 		$results = $wpdb->get_results( $query );
 
@@ -473,8 +477,11 @@ class NVBK
 		foreach ( $results as $result )
 	    {
 	    	$range = $this->get_date_range_array( $result->begin_date, $result->end_date );
-	    	array_pop($range);
-	    	array_shift($range);
+
+	    	// uncomment this, if one day turnaround allowed 
+	    	//array_pop($range);
+	    	//array_shift($range);
+	    	
 	    	array_push( $disabledDates, ...$range );
 	    }
 	    return $disabledDates;

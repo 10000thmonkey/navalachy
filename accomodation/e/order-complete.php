@@ -11,7 +11,6 @@ nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 	$checkin = date("H:i", strtotime($VAR["apartment"]["checkin"][0]));
 	$checkout = date("H:i", strtotime($VAR["apartment"]["checkout"][0]));
 
-	echo var_dump($VAR["apartment"]);
 
 	$output = <<<HTML
 

@@ -17,11 +17,12 @@ while( $amenities_query->fetch() ) {
 
 wp_enqueue_script( "lightbox", "/wp-content/themes/navalachy/assets/lightbox/lightbox.min.js", ["jquery"] );
 wp_enqueue_style( "lightbox", "/wp-content/themes/navalachy/assets/lightbox/lightbox.min.css");
+
 wp_enqueue_script("nv-booking", "/wp-content/themes/navalachy/accomodation/a/booking.js");
+
 wp_enqueue_script("nv-slider", "/wp-content/themes/navalachy/assets/slider.js" );
 
 wp_enqueue_script( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.js" );
-wp_enqueue_style( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.css" );
 
 get_header();
 ?>
@@ -46,7 +47,7 @@ get_header();
 
 	<div class="main columns cols-flex cols-md contentwrap gap-lg">
 
-		<div class="sections-left col padding-hg">
+		<div class="sections-left padding-hg">
 
 			<div class="box padding-lg gap-lg rows">
 
@@ -126,7 +127,7 @@ get_header();
 	<div class="main contentwrap">
 		<div class="reviews padding-xl">
 
-			<h3>Recenze</h3>
+			<h2>Recenze</h2>
 
 			<nv-modal aria-hidden="true" id="accomodation-modal-reviews">
 				<div>
@@ -220,7 +221,7 @@ get_header();
 								<div class="icon">
 									<i class="nvicon nvicon-phone"></i>
 									<span class="nodisplay"></span>
-									<a class="link" onclick="this.parentElement.q('span').removeClass('nodisplay').html('<?= $host["billing_phone"][0];?>'); this.remove();">Zobrazit</a>
+									<a class="link" onclick="this.parentElement.q('span').removeClass('nodisplay').html( JSON.parse( '<?= esc_attr( json_encode( explode( " ", $host["billing_phone"][0] ) ) );?>' ).join(' ') ); this.remove();">Zobrazit</a>
 								</div>
 								<div class="icon">
 									<i class="nvicon nvicon-email"></i>
@@ -278,7 +279,7 @@ get_header();
 		<div class="padding-xl rows gap-md" id="map">
 		
 			<div class="space-around-hg">
-				<h3>Adresa</h3>
+				<h2>Adresa</h2>
 				<span><?=$meta_fields["address"][0];?></span>
 			</div>
 

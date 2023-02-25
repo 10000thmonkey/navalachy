@@ -97,6 +97,7 @@ function nv_ajax ( $endpoint, $callback )
 
     $passing = function () use ( $callback ) {
         //echo var_dump( $callback );
+        if(WP_DEBUG) @ini_set( 'display_errors', 1 );
         echo json_encode( call_user_func( $callback ) );
         die();
     };

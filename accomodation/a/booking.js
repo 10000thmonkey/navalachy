@@ -27,7 +27,7 @@ class NV_Booking
 			adultsValue: this.form.q("#field-adults .field-value"),
 			kidsValue: this.form.q("#field-kids .field-value"),
 
-			priceField: this.form.q("#field-price"),
+			//priceField: this.form.q("#field-price"),
 			priceFieldSet: q("aside.reservation #fieldset-price")[0],
 
 			messageBoxDatepicker: this.form.q(".datepicker .messagebox"),
@@ -174,34 +174,53 @@ class NV_Booking
 				this.preCheckout("yes", (data) => {
 					var data = JSON.parse(data);
 					
-					this.el.priceField.removeClass("nodisplay").q(".field-value").html(data.price.price_final);
+					//this.el.priceField.removeClass("nodisplay").q(".field-value").html( data.price.price_final );
 
 					this.el.priceFieldSet.removeClass("nodisplay").html("");
 
 					if (data.price.costs.length != 0) {
 						this.el.priceFieldSet
-							.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    .insert(createNode("div").addClass("field-label").html("Pronájem × " +data.price.nights+ " noci"))
-							    .insert(createNode("div").addClass("field-value").html(data.price.price_host)))
+							.insert( createNode("h3").html("V ceně") )
+							.insert( createNode("div", ["field", "field-price-costs"])
+							    .insert( createNode("div", "field-label").html("Pronájem × " +data.price.nights+ " noci"))
+							    .insert( createNode("div", "field-value").html( data.price.price_host )));
 						for (let cost of data.price.costs) {
 							this.el.priceFieldSet
-								.insert(createNode("div").addClass(["field", "field-price-costs"])
-							    	.insert(createNode("div").addClass("field-label").html(cost[0]))
-							    	.insert(createNode("div").addClass("field-value").html(cost[1])));
+								.insert( createNode("div").addClass(["field", "field-price-costs"])
+							    	.insert( createNode("div", "field-label").html( cost[0] ))
+							    	.insert( createNode("div", "field-value").html( cost[1] )));
 						}
 					}
+
+					this.el.priceFieldSet
+						.insert(createNode("div").addClass(["field","field-price-final"]) //celkova cena
+					        .insert( createNode("div", "field-label").html("Celkem k platbě"))
+					        .insert( createNode("div", "field-value").html( data.price.price_final )));
+
+
 					if (data.price.discounts.length != 0) {
 						for (let discount of data.price.discounts) {
 							this.el.priceFieldSet
-								.insert(createNode("div").addClass(["field","field-price-discounts"])
-							    	.insert(createNode("div").addClass("field-label").html(discount.label))
-							    	.insert(createNode("div").addClass("field-value").html(discount.value)));
+								.insert( createNode("h3").html("Sleva") )
+								.insert( createNode("div", ["field","field-price-discounts"])
+							    	.insert( createNode("div", "field-label").html( discount.label ))
+							    	.insert( createNode("div", "field-value").html( discount.value )));
 						}
 					}
-					this.el.priceFieldSet
-						.insert(createNode("div").addClass(["field","field-price-final"]) //celkova cena
-					        .insert(createNode("div").addClass("field-label").html("Celkem"))
-					        .insert(createNode("div").addClass("field-value").html(data.price.price_final)));
+
+					data.price.additional_costs = [ ["Energie", ""] , ["Dřevo navíc",""] ];
+					if ( data.price.additional_costs.length > 0 )
+					{
+						//this.el.priceFieldSet.html("Palivové dřevo navíc a energie jednoduše doplatíte při odjezdu dle spotřeby");
+						//.insert( createNode("h3").html("Není v ceně") );
+						// for ( let cost of data.price.additional_costs ) {
+						// 	this.el.priceFieldSet
+						// 		.insert( createNode("div", ["field", "field-price-costs"])
+						// 		    .insert( createNode("div", "field-label").html( cost[0] ))
+						// 		    .insert( createNode("div", "field-value").html( cost[1] )));
+						// }
+					}
+
 
 
 					this.el.spinner.hide();
@@ -221,6 +240,8 @@ class NV_Booking
 		let endDay = new Date( end );
 	 	this.el.endValue.html( endDay.getDate() + ". " + (endDay.getMonth() + 1) + ". " + endDay.getFullYear() );
 	 	this.end = end;
+
+	 	if ( q("#accomodation-feed").length > 0 ) q("#accomodation-feed").addClass("feed-filtered");
 
 	 	this.set();
 	}
@@ -300,13 +321,16 @@ class NV_Booking
 		this.el.spinner.show();
 		this.el.datepicker.hide();
 
-		this.preCheckout( "no", (data) => {
-			var data = JSON.parse(data);
-			if(!data.success) {
-				this.form.q(".reservation-form-popup > .messages")[0].display().messagebox("Vyskytla se chyba", "error", "error");
-				console.log(data);
-			} else {
+		this.preCheckout( "no", (res) =>
+		{
+			let data = JSON.parse(res);
+			let status = parseInt(data.status);
+
+			if ( status === 0 ) {
 				location.href = "/checkout";
+			} else if ( status === 1 ) {
+				this.form.q(".reservation-form-popup > .messages")[0].display().messagebox("Tento termín bohužel nelze rezervovat", "error", "error");
+				console.log(data);
 			}
 		});
 	}
@@ -324,7 +348,7 @@ class NV_Booking
 			return alert("Vyberte prosím datum příjezdu i odjezdu");
 
 		let feed = q("#accomodation-feed")[0];
-		feed.spinnerShow();
+		feed.spinnerShow().addClass("feed-filtered");
 
 		jax.post(
 		    "/wp-admin/admin-ajax.php",
