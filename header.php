@@ -19,7 +19,7 @@ global $user;
 
 
 	<?php wp_head(); ?>
-	<?php if ( ! WP_DEBUG && ! $isAdmin ): ?>
+	<?php if ( ! WP_DEBUG_DISPLAY && ! $isAdmin ): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];

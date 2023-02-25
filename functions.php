@@ -38,7 +38,7 @@ add_filter(
 
 if ( isset( $user ) && is_array( $user->roles ) )
 {
-    if ( ! WP_DEBUG || ! in_array( 'administrator', $user->roles ) )
+    if ( ! WP_DEBUG_DISPLAY || ! in_array( 'administrator', $user->roles ) )
     {
     	add_filter( "show_admin_bar", "__return_false" );
     }
@@ -120,7 +120,17 @@ if ( defined( "DOING_AJAX" ) && DOING_AJAX )
 
 
 
+add_action(
+	'wppusher_theme_was_updated',
+	function () {
 
+		ob_start();
+
+	    w3tc_flush_all();
+
+	    error_log( "Flushed cache! " . ob_get_clean() );
+	}
+);
 
 
 
