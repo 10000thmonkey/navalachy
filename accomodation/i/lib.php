@@ -151,8 +151,8 @@ class NVBK
 
 				$query = $wpdb->prepare( $sql, array_values( $values ) );
 
-				print_r( $wpdb->query( $query ) );
-				$wpdb->print_error();
+				$wpdb->query( $query );
+				//$wpdb->print_error();
 			}
 		}
 
@@ -277,7 +277,7 @@ class NVBK
 
     	return $results;
     }
- 
+
 
 
 
@@ -481,7 +481,7 @@ class NVBK
 	    	// uncomment this, if one day turnaround allowed 
 	    	//array_pop($range);
 	    	//array_shift($range);
-
+	    	
 	    	array_push( $disabledDates, ...$range );
 	    }
 	    return $disabledDates;
