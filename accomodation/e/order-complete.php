@@ -5,8 +5,8 @@ nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 	$featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0], "medium" );
 	$avatar = wp_get_attachment_image_url( $VAR["host"]["profile_picture"][0] );
 	$host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
-	$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"][0]) );
-	$end = date("j. n. Y", strtotime($VAR["nvbk"]["end"][0]) );
+	$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"]) );
+	$end = date("j. n. Y", strtotime($VAR["nvbk"]["end"]) );
 	$people = intval($VAR["nvbk"]["adults"][0]) + intval($VAR["nvbk"]["kids"][0]);
 	$checkin = date("H:i", strtotime($VAR["apartment"]["checkin"][0]));
 	$checkout = date("H:i", strtotime($VAR["apartment"]["checkout"][0]));
@@ -44,7 +44,7 @@ nv_new_e( "accomodation/e/order-complete", function ( $VAR )
 		<div style="padding: 30px;">
 
 			<h3 style="color:#232f5b;">Cena</h3>
-			<p style="margin:10px 0">{$VAR["order"]["_order_total"][0]} {$VAR["order"]["_order_currency"][0]}</p>
+			<p style="margin:10px 0">{$VAR["nvbk"]["price"]}</p>
 			
 			<h3 style="color:#232f5b;">Kontaktní údaje</h3>
 			<p style="">{$VAR["order"]["_billing_first_name"][0]} {$VAR["order"]["_billing_last_name"][0]}</p>

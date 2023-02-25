@@ -36,9 +36,9 @@ $VAR = [
 $featured_img = wp_get_attachment_image_url( (int)$VAR["apartment"]["_thumbnail_id"][0], "medium" );
 $avatar = wp_get_attachment_image_url( $VAR["host"]["profile_picture"][0] );
 $host = $VAR["host"]["first_name"][0] . " " . $VAR["host"]["last_name"][0];
-$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"][0]) );
-$end = date("j. n. Y", strtotime($VAR["nvbk"]["end"][0]) );
-$people = intval($VAR["nvbk"]["adults"][0]) + intval($VAR["nvbk"]["kids"][0]);
+$begin = date("j. n. Y", strtotime($VAR["nvbk"]["begin"]) );
+$end = date("j. n. Y", strtotime($VAR["nvbk"]["end"]) );
+$people = intval($VAR["nvbk"]["adults"]) + intval($VAR["nvbk"]["kids"]);
 $checkin = date("H:i", strtotime($VAR["apartment"]["checkin"][0]));
 $checkout = date("H:i", strtotime($VAR["apartment"]["checkout"][0]));
 $billing_info = <<<HTML
@@ -72,7 +72,7 @@ $output = <<<HTML
 
 			<div>
 				<h3>Cena</h3>
-				<p>{$VAR["order"]["_order_total"][0]} {$VAR["order"]["_order_currency"][0]}</p>
+				<p>{$VAR["nvbk"]["price"]}</p>
 			</div>
 			
 			<div class="cols cols-sm-2 gap-md">

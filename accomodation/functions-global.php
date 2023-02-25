@@ -51,6 +51,16 @@ add_action(
 			)
 		));
 
+		$mail = nv_send_mail (array(
+			"to" => $host_meta["_billing_email"][0], 
+			"subject" => "Nová rezervace objektu ".$nvbk_meta["apartment_name"]." - NaValachy.cz",
+			"body" => $mail_body,
+			"headers" => array(
+				"From: info@navalachy.cz",
+				'Content-Type: text/html; charset=UTF-8'
+			)
+		));
+
 	    wp_safe_redirect( get_site_url()."/booking-confirmed?key=" . $_GET['key'] );
 	}
 );

@@ -129,12 +129,12 @@ function navalachy_modules()
     global $NV_MODULES;
 
 
-    wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css" );
-    wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/assets/legacy.css" );
-    wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css" );
+    wp_enqueue_style( 'navalachy-style', $templ_dir."/assets/style.css?v=0.1" );
+    wp_enqueue_style( "navalachy-style-legacy", $templ_dir."/assets/legacy.css?v=0.1" );
+    wp_enqueue_style( "navalachy-icons", $templ_dir. "/assets/icons/style.css?v=0.1" );
 
-    wp_enqueue_script( "nv-domster", $templ_dir. "/assets/domster.js" );
-    wp_enqueue_script( "nv-framework", $templ_dir. "/assets/framework.js" );
+    wp_enqueue_script( "nv-domster", $templ_dir. "/assets/domster.js?v=0.1" );
+    wp_enqueue_script( "nv-framework", $templ_dir. "/assets/framework.js?v=0.1" );
 
     if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
         wp_enqueue_script( 'comment-reply' );
