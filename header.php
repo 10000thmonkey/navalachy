@@ -37,7 +37,7 @@ global $user;
 		gtag('js', new Date());
 
 		gtag('config', 'G-R6ZWF4NFP5');
-
+	</script>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-9LDG9K764S"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
