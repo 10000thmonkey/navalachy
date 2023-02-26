@@ -273,7 +273,7 @@ class NVFeed extends NVRepeat
 
 				for ( let key of attrparams ) if ( urlparams[ key ] ) params[ key ] = urlparams[ key ];
 			} else {
-				params = Object.fromEntries( new URLSearchParams( location.search ) );
+				params = Object.assign( params, Object.fromEntries( new URLSearchParams( location.search ) ) );
 			}
 
 			jax.post(
@@ -449,7 +449,11 @@ window.nv.messagebox = {};
 
 
 
-window.nv.logged = !! ( document.cookie.replace(/(?:(?:^|.*;\s*)wordpress_logged_in_\S*\s*\=\s*([^;]*).*$)|^.*$/, "$1") );
+
+
+
+
+window.nv.logged = ( document.cookie.indexOf("wp-settings-time") !== -1 );
 class NVLoggedIn extends NVElement
 {
 	constructor () { super(); }

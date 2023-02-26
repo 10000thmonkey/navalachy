@@ -9,7 +9,7 @@ nv_ajax(
 		return nv_c( "tips/c/feed", [
 			"tags" => empty( $_POST['tags'] ) ? [] : $_POST['tags'],
 			"orderby" => "date",
-			"paged" => $_POST['paged'],
+			"paged" => empty( $_POST['paged'] ) ? 1 : $_POST['paged'],
 		] );
 	}
 );

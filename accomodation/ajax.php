@@ -41,7 +41,7 @@ nv_ajax (
 	"accomodation/form-contact",
 	function ()
 	{
-		if(WP_DEBUG_DISPLAY) @ini_set( 'display_errors', 1 );
+		if( $NV_DEV ) @ini_set( 'display_errors', 1 );
 		$from = $_POST["name"] ? $_POST['name'] : "";
 		$headers = 
 		

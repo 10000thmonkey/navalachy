@@ -389,7 +389,7 @@ class NVBK
 
 
 		//user currency only changes output prices
-		$user_currency = $_SESSION['currency'];
+		$user_currency = $_COOKIE['currency'];
 
 		if ($user_currency == "CZK") { 
 			$user_currency_coef = $currencies[$user_currency][1];

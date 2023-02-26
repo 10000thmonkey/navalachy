@@ -25,9 +25,6 @@ get_header();
 	] );
 	?>
 
-	<?php
-	$feed = nv_c( "accomodation/c/feed", [ "range" => $range, "apartments" => [] ] );
-	?>
 	<nv-feed id="accomodation-feed" nv-ajax-get="accomodation/feed" nv-ajax-params="begin,end" class="contentwrap space-around-hg padding-lg">
 		<div class="padding-hg feed-filters">
 			<a class="button button-plain" style="width:fit-content;" onclick="document.q('#accomodation-feed')[0].removeClass('feed-filtered').feedFetch();">Zobrazit vše</a>

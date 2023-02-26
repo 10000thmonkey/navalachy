@@ -1,18 +1,51 @@
 <?php
+remove_action('template_redirect', 'redirect_canonical');
 
-session_start();
-$_SESSION['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
+
+// function custom_router() {
+
+// 	//add_rewrite_rule('([a-zA-Z0-9,_]+)$', 'index.php?route1=$matches[1]', 'top');
+// 	//add_rewrite_rule('^blog/?$', 'index.php?route1=blog', 'top' );
+//     //add_rewrite_rule('^blog/([^/]*)/?', 'index.php?custom_page=$matches[1]', 'top');
+// }
+// add_action('init', 'custom_router');
+
+
+
+
+
+
+$NV_DEV = empty( $_GET['NV_DEV'] ) ? NV_DEV : true;
+
+
+//session_start();
+$_COOKIE['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
 $currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
+
+
+
 
 $templ_dir = get_template_directory();
 
-require_once "$templ_dir/accomodation/functions-global.php";
+$global_functions = glob( get_template_directory() . "/*/functions-global.php");
+foreach ( $global_functions as $gf )
+	require_once "$gf";
+
 require_once "$templ_dir/inc/functions-nv.php";
 require_once "$templ_dir/inc/functions-email.php";
 
 if ( class_exists( 'WooCommerce' ) ) {
 	require_once "$templ_dir/inc/functions-woocommerce.php";
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -38,7 +71,7 @@ add_filter(
 
 if ( isset( $user ) && is_array( $user->roles ) )
 {
-    if ( ! WP_DEBUG_DISPLAY || ! in_array( 'administrator', $user->roles ) )
+    if ( ! $NV_DEV || ! in_array( 'administrator', $user->roles ) )
     {
     	add_filter( "show_admin_bar", "__return_false" );
     }
@@ -93,13 +126,14 @@ add_filter(
 
 
 
+
+
 // DOING AJAX.
 // Tries to load ajax.php from module directory.
 
 if ( defined( "DOING_AJAX" ) && DOING_AJAX )
 {
 	$action = $_REQUEST['action'];
-	
 	if ( strpos( $action, "/") )
 	{	
 		//$mod = explode( "/", $action )[0];

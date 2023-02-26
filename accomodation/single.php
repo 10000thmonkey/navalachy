@@ -83,6 +83,7 @@ get_header();
 							<i class="nvicon nvicon-<?php echo $key;?>"></i>
 							<?php echo $value;?>
 						</div>
+						
 					<?php 
 					endforeach;
 					?>

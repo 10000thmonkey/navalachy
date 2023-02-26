@@ -8,6 +8,7 @@
  *
  * @package navalachy
  */
+global $NV_DEV;
 global $user;
 ?>
 <!doctype html>
@@ -19,7 +20,7 @@ global $user;
 
 
 	<?php wp_head(); ?>
-	<?php if ( ! WP_DEBUG_DISPLAY && ! $isAdmin ): ?>
+	<?php if ( ! $NV_DEV && ! $isAdmin ): ?>
 	<script type='text/javascript'>
 		window.smartlook||(function(d) {
 		var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
@@ -36,6 +37,16 @@ global $user;
 		gtag('js', new Date());
 
 		gtag('config', 'G-R6ZWF4NFP5');
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-9LDG9K764S"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-9LDG9K764S');
+	</script>
+
 	</script>
 	<?php endif; ?>
 </head>
@@ -68,32 +79,40 @@ global $user;
     		</nav>
     		<div class="header-right">
 
-    			<?php if ( WP_DEBUG ): ?>
-    			<nv-logged-in>
-					<nav role="navigation" class="dropdown-nav">
-						<ul>
-						    <li>
-						    	<a class="button button-plain" onclick="this.parentElement.q('.dropdown')[0].toggleHide();">
-						    		<?=$user->data->display_name;?>
-									<div class="avatar avatar-small">
-										<?= nv_c( "UI/responsive-image", [ "attachment_id" => 1404, "sizes" => "(min-width: 1px) 32px, 32px" ] ); ?>
-									</div>
-						    	</a>
-								<ul class="dropdown padding-md hiding hidden">
-									<li><a href="/my-account">Můj účet</a></li>
-									<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
-										<li><a href="/dashboard/accomodation">Ubytování</a></li>
-									<?php endif; ?>
+    			<?php if ( $NV_DEV ): ?>
 
-									<li><a href="/my-account/customer-logout">Odhlásit</a></li>
-								</ul>
-						    </li>
-					 	</ul>
-					</nav>
-				</nv-logged-in>
-				<nv-logged-out>
-    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
-    			</nv-logged-out>
+	    			<nv-logged-in>
+						<nav role="navigation" class="dropdown-nav">
+							<ul>
+							    <li>
+
+									<nv-dropdown nv-dropdown="" class="dropdown padding-md hiding hidden">
+										<nv-dropdown-open>
+									    	<a class="button button-plain" onclick="this.parentElement.q('.dropdown')[0].toggleHide();">
+									    		<?=$user->data->display_name;?>
+												<div class="avatar avatar-small">
+													<?= nv_c( "UI/responsive-image", [ "attachment_id" => 1404, "sizes" => "(min-width: 1px) 32px, 32px" ] ); ?>
+												</div>
+									    	</a>	
+										</nv-dropdown-open>
+										<nv-dropdown-items>
+											<li><a href="/my-account">Můj účet</a></li>
+											<?php if( in_array( "accomodation_host", $user->roles ) || in_array( "administrator", $user->roles ) ): ?>
+												<li><a href="/dashboard/accomodation">Ubytování</a></li>
+											<?php endif; ?>
+
+											<li><a href="/my-account/customer-logout">Odhlásit</a></li>
+										</nv-dropdown-items>	
+									</nv-dropdown>
+							    </li>
+						 	</ul>
+						</nav>
+					</nv-logged-in>
+
+					<nv-logged-out>
+	    				<a class="button button-secondary-transparent" href="/my-account/">Přihlásit</a>
+	    			</nv-logged-out>
+
     			<?php endif; ?>
 
 				<button class="menu-toggle nvicon nvicon-menu" aria-controls="primary-menu-mobile" aria-expanded="false" onclick="document.q('.site-header')[0].toggleClass('toggle')"></button>

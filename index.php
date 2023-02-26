@@ -15,7 +15,9 @@
 get_header();
 
 
+
 $post_type = get_post_type();
+do_action("qm/debug", __DIR__."/$post_type/archive.php");
 
 if ( file_exists( __DIR__."/$post_type/functions.php" ) )
 	include_once __DIR__."/$post_type/functions.php";
