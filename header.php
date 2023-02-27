@@ -77,7 +77,7 @@ global $user;
     			?>
 
     		</nav>
-    		<div class="header-right">
+    		<div class="header-right nodisplay">
 
     			<?php if ( $NV_DEV ): ?>
 
@@ -86,7 +86,7 @@ global $user;
 							<ul>
 							    <li>
 
-									<nv-dropdown nv-dropdown="" class="dropdown padding-md hiding hidden">
+									<nv-dropdown nv-dropdown="" class="dropdown padding-md hiding hidden ">
 										<nv-dropdown-open>
 									    	<a class="button button-plain" onclick="this.parentElement.q('.dropdown')[0].toggleHide();">
 									    		<?=$user->data->display_name;?>

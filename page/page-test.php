@@ -4,14 +4,18 @@ include_once( get_template_directory(). "/accomodation/i/lib.php" );
 global $nvbk;
 
 
-get_header();
+//get_header();
 
 
 //echo var_dump( file_exists(get_template_directory()."/accomodation/i/lib.php"));
 
 
+if ($_GET["test"] == "or")
+{
+	echo var_dump( $_GET["test"] || false );
+}
 
-if ($_GET["test"] == 0)
+if ( $_GET["test"] === "0")
 {
 	echo $nvbk->create_table();
 	$wpdb->print_error();

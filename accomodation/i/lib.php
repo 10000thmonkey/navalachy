@@ -44,12 +44,12 @@ class NVBK
 	{
 		$this->rate_eur_czk = get_option("nvbk_exchange_EUR_CZK");
 
-		if ($debug) $this->debug = true;
+		if ( !! $debug ) $this->debug = true;
 
 		//check if table is created
-		$nvbk_table_exists = get_option("nvbk_table_exists");
+		$nvbk_table_exists = !! absint( get_option("nvbk_table_exists") );
 
-		if ( $nvbk_table_exists === false || $this->debug )
+		if ( ! $nvbk_table_exists || $this->debug )
 		{
 			$this->create_table();
 			$this->sync();

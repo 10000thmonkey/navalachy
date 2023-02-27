@@ -49,8 +49,8 @@ get_header();
 		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xxl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
-					<a href="/tipy"><h2>Do přírody</h2></a>
-					<p class="text-primary">Objevte krásu valašské přírody</p>
+					<a href="/tipy"><h2>Kam na výlet?</h2></a>
+					<p class="text-primary"> Kam na výlet s dětmi, na kola nebo na romantickou procházku?</p>
 				</div>
 
 				<div>
@@ -63,7 +63,7 @@ get_header();
 					) );
 					foreach ( $tags_query as $tag )
 					{
-						$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
+						$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0], "tag" => $tag->description ] );
 						echo <<<HTML
 
 						<a class="hovercard" href="/tipy?tags={$tag->slug}">
@@ -90,7 +90,7 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences-clip" clipPathUnits="objectBoundingBox"><path d="M1,1 C0.65,0.947,0.55,0.895,0,0.895 L0,0.105 C0.35,0.053,0.8,0.053,1,0"></path></clipPath>
 			</svg>
-			<div class="padding-lg">
+			<div class="padding-xl">
 				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xxl">
 
 					<?php
@@ -129,8 +129,8 @@ get_header();
 		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xxl rows gap-hg">
 				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
-					<a href="/tipy"><h2>Za zážitky</h2></a>
-					<p class="text-primary">Poznejte osobitou kulturu Valach všemi smysly</p>
+					<a href="/tipy"><h2>Zážitky</h2></a>
+					<p class="text-primary">Poznejte osobitou tradici Valašska, folklor a místní zvyky</p>
 				</div>
 
 				<div>
@@ -168,7 +168,7 @@ get_header();
 			<svg class="clip-path-template">
 				<clipPath id="section-experiences2-clip" clipPathUnits="objectBoundingBox"><path d="M1,0.895 C0.55,1,0.4,0.842,0,1 L0,0 C0.4,0.105,0.7,0,1,0.105"></path></clipPath>
 			</svg>
-			<div class="padding-lg">
+			<div class="padding-xl">
 				<div class="contentwrap highlight cols cols-sm-2 gap-lg padding-xxl">
 
 					<?php

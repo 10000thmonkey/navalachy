@@ -17,15 +17,22 @@ nv_new_c (
 	"tips/c/feed",
 	function ( $VAR )
 	{
+		$VAR = array_merge( [
+			"limit" => 9,
+			"orderby" => "date",
+			"paged" => 1
+		], $VAR );
+
 		$items = [];
 		$wpargs = [
 			'post_type' => 'tips',
-			'post_status' => 'publish'
+			'post_status' => 'publish',
+			'posts_per_page' => $VAR['limit'],
+			'orderby' => $VAR['orderby'],
+			'paged' => $VAR['paged']
 		];
 
 		//add arguments to query, if they are provided
-		if ( !empty($VAR["limit"]) )
-			$wpargs["posts_per_page"] = $VAR["limit"];
 
 		if ( !empty($VAR["tags"]) )
 			$wpargs['tax_query'] = array( array(
@@ -34,17 +41,10 @@ nv_new_c (
 				'terms' => explode( ",", $VAR["tags"] )
 			) );
 
-		if ( !empty($VAR["orderby"]) )
-			$wpargs["orderby"] = $VAR["orderby"];
-
-		if ( !empty($VAR["paged"]) )
-			$wpargs["paged"] = $VAR["paged"];
-
+	
 		if ( !empty($VAR["post__in"]) )
 			$wpargs["post__in"] = $VAR["post__in"];
 
-		else
-			$VAR["paged"] = 1;
 
 
 		$query = new WP_Query( $wpargs );
