@@ -14,7 +14,7 @@
  * @package WooCommerce\Templates
  * @version 5.2.0
  */
-@session_start();
+//@session_start();
 defined( 'ABSPATH' ) || exit;
 ?>
 

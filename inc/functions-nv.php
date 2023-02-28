@@ -93,11 +93,12 @@ function nv_t ( $path )
 
 function nv_ajax ( $endpoint, $callback )
 {
+    global $NV_DEV;
     $endpoint = str_replace( "/", "_", $endpoint );
 
     $passing = function () use ( $callback ) {
         //echo var_dump( $callback );
-        if(WP_DEV) @ini_set( 'display_errors', 1 );
+        if( $NV_DEV ) @ini_set( 'display_errors', 1 );
         echo json_encode( call_user_func( $callback ) );
         die();
     };

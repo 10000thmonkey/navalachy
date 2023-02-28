@@ -48,7 +48,7 @@ get_header();
 
 		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xxl rows gap-hg">
-				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
+				<div class="cols-flex gap-lg block-header">
 					<a href="/tipy"><h2>Kam na výlet?</h2></a>
 					<p class="text-primary"> Kam na výlet s dětmi, na kola nebo na romantickou procházku?</p>
 				</div>
@@ -128,7 +128,7 @@ get_header();
 
 		<div class="section-block padding-lg">
 			<div class="contentwrap box padding-xxl rows gap-hg">
-				<div class="cols-flex gap-lg block-header" style="align-items: baseline;">
+				<div class="cols-flex gap-lg block-header">
 					<a href="/tipy"><h2>Zážitky</h2></a>
 					<p class="text-primary">Poznejte osobitou tradici Valašska, folklor a místní zvyky</p>
 				</div>

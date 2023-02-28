@@ -268,7 +268,7 @@ class NVBK
 
     	$query = $wpdb->prepare("
 			SELECT * FROM {$this->table_name}
-			WHERE `calendar_id` = %s
+			WHERE `apartment_id` = %s
 			AND `uid` LIKE '%navalachy.cz'
 			AND `status` = 'CONFIRMED'
 		" . $range, $apartment_id );
@@ -357,7 +357,7 @@ class NVBK
 
 		$query = $wpdb->prepare("
 		    SELECT * FROM {$this->table_name}
-		    WHERE `calendar_id` = %d
+		    WHERE `apartment_id` = %d
 		    AND `end_date` >= %s
 		    AND `start_date` <= %s
 		", (int)$apartment_id, $begin." 00:00:00", $end." 00:00:00" );
