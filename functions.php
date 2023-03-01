@@ -16,7 +16,7 @@
 
 
 $NV_DEV = ! empty( $_GET['NV_DEV'] ) ? true : NV_DEV;
-echo var_dump($NV_DEV);
+//echo var_dump($NV_DEV);
 
 
 
