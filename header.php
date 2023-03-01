@@ -10,6 +10,7 @@
  */
 global $NV_DEV;
 global $user;
+global $isAdmin;
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?>>

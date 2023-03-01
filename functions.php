@@ -1,5 +1,5 @@
 <?php
-remove_action('template_redirect', 'redirect_canonical');
+//remove_action('template_redirect', 'redirect_canonical');
 
 
 // function custom_router() {
@@ -15,8 +15,8 @@ remove_action('template_redirect', 'redirect_canonical');
 
 
 
-$NV_DEV = empty( $_GET['NV_DEV'] ) ? NV_DEV : true;
-
+$NV_DEV = ! empty( $_GET['NV_DEV'] ) ? true : NV_DEV;
+echo var_dump($NV_DEV);
 
 
 
@@ -83,7 +83,7 @@ add_filter(
 
 if ( isset( $user ) && is_array( $user->roles ) )
 {
-    if ( ! $NV_DEV || ! in_array( 'administrator', $user->roles ) )
+    if ( ! $NV_DEV || ! $isAdmin )
     {
     	add_filter( "show_admin_bar", "__return_false" );
     }
