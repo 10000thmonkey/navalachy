@@ -105,16 +105,18 @@
 	@media (max-width: @breakpoint-xs) {padding: var(--space-sm)}
 }
 .padding-xl {padding: var(--space-xl);
-	@media (max-width: @breakpoint-xs) {padding: var(--space-md)}
-	@media (max-width: @breakpoint-md) {padding: var(--space-hg)}
 	@media (max-width: @breakpoint-lg) {padding: var(--space-lg)}
+	@media (max-width: @breakpoint-md) {padding: var(--space-hg)}
+	@media (max-width: @breakpoint-sm) {padding: var(--space-md)}
+	@media (max-width: @breakpoint-xs) {padding: var(--space-sm)}
 }
 .padding-xxl {padding: var(--space-xxl);
 	@media (max-width: @breakpoint-lg) {padding: var(--space-xl)}
 	@media (max-width: @breakpoint-md) {padding: var(--space-lg)}
-	@media (max-width: @breakpoint-xs) {padding: var(--space-md)}
+	@media (max-width: @breakpoint-sm) {padding: var(--space-md)}
+	@media (max-width: @breakpoint-xs) {padding: var(--space-sm)}
 }
-.padding-xxxl {padding: var(--spacelgxxl);
+.padding-xxxl {padding: var(--spacel-xxxl);
 	@media (max-width: @breakpoint-lg) {padding: var(--space-xxl)} }
 
 .gap-xs { gap: var(--space-xs); }

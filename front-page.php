@@ -63,7 +63,11 @@ get_header();
 					) );
 					foreach ( $tags_query as $tag )
 					{
-						$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0], "tag" => $tag->description ] );
+						$i = nv_c( "UI/responsive-image", [
+							"attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0],
+							"alt" => $tag->description,
+							"sizes" => "(min-width: 1px) 200px, 200px",
+						] );
 						echo <<<HTML
 
 						<a class="hovercard" href="/tipy?tags={$tag->slug}">
@@ -99,7 +103,7 @@ get_header();
 					?>
 
 					<a href="<?= $post_1_link;?>" class="img-golden">
-						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
+						<?= nv_c( "UI/responsive-image", ["attachment_id" => get_post_thumbnail_id( $post_1->ID ), "sizes" => "(max-width: 440px) 300px, 500px" ] ); ?>
 					</a>
 
 					<div class="info rows gap-sm">
@@ -143,7 +147,11 @@ get_header();
 						) );
 						foreach ( $tags_query as $tag )
 						{
-							$i = nv_c( "UI/responsive-image", [ "attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0] ] );
+							$i = nv_c( "UI/responsive-image", [
+								"attachment_id" => (int) get_term_meta( $tag->term_id )["image"][0],
+								"alt" => $tag->description,
+								"sizes" => "(min-width: 1px) 200px, 200px",
+							] );
 							echo <<<HTML
 							<a class="hovercard" href="/tipy?tags={$tag->slug}">
 								$i
@@ -176,7 +184,7 @@ get_header();
 					$post_1_link = get_post_permalink( $post_1 );
 					?>
 					<a href="<?= get_post_permalink( $post_1 );?>" class="img-golden">
-						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ) ] ); ?>
+						<?= nv_c( "UI/responsive-image", [ "attachment_id" => get_post_thumbnail_id( $post_1->ID ), "sizes" => "(max-width: 440px) 300px, 500px" ] ); ?>
 					</a>
 
 					<div class="info rows gap-sm">
@@ -214,7 +222,7 @@ get_header();
 					<?= nv_c( "accomodation/c/form" ); ?>
 				</div>
 
-				<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3 ] ); ?>
+				<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3, "sizes" => "(min-width: 1px) 500px, 500px" ] ); ?>
 
 				<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">
 					<nv-items class="gap-md">

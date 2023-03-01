@@ -18,18 +18,26 @@ remove_action('template_redirect', 'redirect_canonical');
 $NV_DEV = empty( $_GET['NV_DEV'] ) ? NV_DEV : true;
 
 
-//session_start();
-$_COOKIE['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
-$currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
+
+
+if ( ! $NV_DEV )
+{
+	add_action(
+		"send_headers",
+		function() {
+			header( "Strict-Transport-Security: max-age=604800; includeSubDomains" );
+		}
+	);
+}
 
 
 
+
+
+
+//load modules, global functions 
 
 $templ_dir = get_template_directory();
-
-$global_functions = glob( get_template_directory() . "/*/functions-global.php");
-foreach ( $global_functions as $gf )
-	require_once "$gf";
 
 require_once "$templ_dir/inc/functions-nv.php";
 require_once "$templ_dir/inc/functions-email.php";
@@ -37,6 +45,10 @@ require_once "$templ_dir/inc/functions-email.php";
 if ( class_exists( 'WooCommerce' ) ) {
 	require_once "$templ_dir/inc/functions-woocommerce.php";
 }
+
+$global_functions = glob( get_template_directory() . "/*/functions-global.php");
+foreach ( $global_functions as $gf )
+	require_once "$gf";
 
 
 

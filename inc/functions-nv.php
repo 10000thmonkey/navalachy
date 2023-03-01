@@ -1,9 +1,10 @@
 <?php
-global $_VAR;
 $templ_dir = get_template_directory();
 
 
 
+$_COOKIE['currency'] = "CZK"; //empty($_SESSION['currency']) ? "CZK" : "EUR";
+$currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
 
 
 

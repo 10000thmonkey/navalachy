@@ -18,6 +18,7 @@ nv_new_c (
 			"page" => 1,
 			"apartments" => [],
 			"limit" => 9,
+			"sizes" => "(min-width: 1px) 800px",
 		], $VAR );
 	
 		$args = [
@@ -54,7 +55,7 @@ nv_new_c (
 
 				$img = nv_c( "UI/responsive-image", [
 					"attachment_id" => get_post_thumbnail_id( $id ),
-					"sizes" => "(min-width: 1px) 800px"
+					"sizes" => $VAR["sizes"]
 				] );
 
 				$permalink = get_permalink( $query->post );

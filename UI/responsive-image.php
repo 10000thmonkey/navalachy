@@ -29,7 +29,7 @@ nv_new_c (
                 srcset="'.esc_attr( $srcset ).'"
                 sizes="'.esc_attr( $VAR["sizes"] ).'"
                 alt="'.esc_attr( $VAR['alt'] ).'"
-                title='.esc_attr( $VAR['title']) .'
-                loading="lazy"/>';
+                title="'.esc_attr( $VAR['title']) .'"
+                loading="lazy" />';
     }
 );
