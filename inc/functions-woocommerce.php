@@ -10,6 +10,19 @@ function is_woocommerce_page ()
 }
 
 
+add_action(
+	"init",
+	function()
+	{
+	    remove_image_size( 'woocommerce_thumbnail' );
+	    remove_image_size( 'woocommerce_single' );
+	    remove_image_size( 'woocommerce_gallery_thumbnail' );
+	    remove_image_size( 'shop_catalog' );
+	    remove_image_size( 'shop_single' );
+	    remove_image_size( 'shop_thumbnail' );
+	}
+);
+
 
 
 add_action(

@@ -85,13 +85,13 @@ jax = {
 
 
 
-var createNode = function (element = "div", classes = undefined) {
+window.createNode = function (element = "div", classes = undefined) {
 	let el = document.createElement(element);
 	if (classes) el.addClass(classes);
 	return el;
 };
 
-var q = function (q) {
+window.q = function (q) {
 	if (typeof q == "function") return document.on("DOMContentLoaded", (e)=>q(e));
 	let res = (this == window) ? document.querySelectorAll(q) : this.querySelectorAll(q);
 	return res; 
