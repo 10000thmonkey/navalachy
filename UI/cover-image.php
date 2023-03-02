@@ -6,7 +6,7 @@ function nv_calculate_img_source ( $id, $orientation )
 	foreach ( get_intermediate_image_sizes() as $size )
 	{
 	    // Get the image size information
-	    $image_src = wp_get_attachment_image_src( $VAR["attachment_id"], $size );
+	    $image_src = wp_get_attachment_image_src( $id, $size );
 	    $url = $image_src[0];
 	    $width = $image_src[1];
 	    $height = $image_src[2];
