@@ -26,6 +26,8 @@ add_action(
 		wp_dequeue_script( "wc-add-to-cart" );
 		wp_dequeue_script( "wc-cart-fragments-js-extra" );
 
+		wp_dequeue_style( "wc-stripe-blocks-checkout-style-css" );
+
 		add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 	},
 	999
@@ -36,6 +38,7 @@ add_action(
 	function () {
 		wp_dequeue_style( "wc-blocks-style" );
 		wp_dequeue_style( "wc-blocks-vendors-style" );
+		wp_dequeue_style( "wc-stripe-blocks-checkout-style-css" );
 	}, 999
 );
 
