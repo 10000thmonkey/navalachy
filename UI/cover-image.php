@@ -31,8 +31,8 @@ nv_new_c (
 		$VAR["subheading"] = $VAR["subheading"] ? "<h5>{$VAR["subheading"]}</h5>" : "";
 
 
-		$sources = nv_calculate_img_source ( $attachment_id );
-		$sources_portait = $VAR["attachment_id_portrait"] ? nv_calculate_img_source( $VAR["attachment_id_portrait"] ) : "";
+		$sources = nv_calculate_img_source ( $attachment_id, "landscape" );
+		$sources_portait = $VAR["attachment_id_portrait"] ? nv_calculate_img_source( $VAR["attachment_id_portrait"], "portrait" ) : "";
 
 		$img = nv_c( "UI/responsive-image", [ "attachment_id" => $VAR["attachment_id"], "sizes" => "(min-width: 1px) 100vh, 100vh" ] );
 
