@@ -9,7 +9,7 @@ get_header();
 
 	<?= nv_c( "UI/cover-image", [
 		"attachment_id" => 1193,
-		"attachment_id_portrait" => 1677,
+		"attachment_id_portrait" => 1678,
 		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
 	] );
 	?>

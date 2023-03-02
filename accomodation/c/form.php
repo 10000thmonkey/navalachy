@@ -98,7 +98,7 @@ nv_new_c(
 		$search_action = $VAR["isa"] ? "cal.search()" : "cal.goToSearch()";
 		?>
 			
-		<a class="button button-icon nomargin" onclick="<?=$search_action;?>">Vyhledat<div class="nvicon nvicon-search"></div></a>
+		<nv-button class="button button-icon nomargin" onclick="<?=$search_action;?>">Vyhledat<div class="nvicon nvicon-search"></div></nv-button>
 
 		<?php endif; ?>
 
