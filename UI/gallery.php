@@ -24,7 +24,7 @@ nv_new_c (
 		    'posts_per_page' => -1, 
 		    'post_status' => 'any', 
 		    'post__in' => $VAR["gallery"],
-		    "orderby" => "post__in"
+		    "orderby" => "post__in",
 		); 
 		$gallery = get_posts($args);
 

@@ -2,19 +2,29 @@
 function nv_calculate_img_source ( $id, $orientation )
 {
 	$source = [];
+	$height = 0;
 	// Loop through all the available image sizes
 	foreach ( get_intermediate_image_sizes() as $size )
 	{
 	    // Get the image size information
 	    $image_src = wp_get_attachment_image_src( $id, $size );
+	    if ( empty( $image_src ) ) continue;
+
 	    $url = $image_src[0];
-	    $width = $image_src[1];
+	    $width = absint( $image_src[1] * ( $orientation === "landscape" ? 0.8 : 0.7 ) );
 	    $height = $image_src[2];
 
-	    $source[] = "<source srcset='{$url}' media='(max-height: {$height}) and (orientation: {$orientation})'></source>";
+	    $source[] = "{$url} {$width}w";
 	}
-	return implode( "\n", $source );
+	$srcset = implode( ", ", $source );
+	return 
+	    "<source
+	    	srcset='{$srcset}'
+	    	media='(orientation: {$orientation})'
+	    	sizes='(min-width: 1px) 100vw, 100vw'
+	    ></source>";
 }
+
 
 nv_new_c (
 	"UI/cover-image",
@@ -31,10 +41,10 @@ nv_new_c (
 		$VAR["subheading"] = $VAR["subheading"] ? "<h5>{$VAR["subheading"]}</h5>" : "";
 
 
-		$sources = nv_calculate_img_source ( $attachment_id, "landscape" );
-		$sources_portait = $VAR["attachment_id_portrait"] ? nv_calculate_img_source( $VAR["attachment_id_portrait"], "portrait" ) : "";
+		$sources = nv_calculate_img_source ( $VAR["attachment_id"], "landscape" );
+		$sources_portrait = $VAR["attachment_id_portrait"] ? nv_calculate_img_source( $VAR["attachment_id_portrait"], "portrait" ) : "";
 
-		$img = nv_c( "UI/responsive-image", [ "attachment_id" => $VAR["attachment_id"], "sizes" => "(min-width: 1px) 100vh, 100vh" ] );
+		$img = nv_c( "UI/responsive-image", [ "attachment_id" => $VAR["attachment_id"], "sizes" => "(min-width: 1px) 100vh, 100vh", "nonresponsive" => true ] );
 
 
 		return <<<HTML
@@ -46,7 +56,6 @@ nv_new_c (
 					{$sources_portrait}
 					{$img}
 				</picture>
-				$i
 			</div>
 			<div class="cover-content rows gap-md">
 				{$VAR["heading"]}

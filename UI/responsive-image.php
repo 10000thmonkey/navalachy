@@ -9,12 +9,19 @@ nv_new_c (
             "title" => "",
             "show_title" => false,
             "alt" => "",
-            "attachment_id" => 1
+            "attachment_id" => 1,
+            "nonresponsive" => false,
         ], $VAR );
 
+
+        if ( $VAR["nonresponsive"] ) {
+            $VAR["sizes"] = "";
+            $srcset = "";
+        } else {
+            $srcset = wp_get_attachment_image_srcset( $VAR["attachment_id"], "large" );
+        }
+
         $src = wp_get_attachment_image_url( $VAR["attachment_id"], "medium");
-        $srcfull = wp_get_attachment_image_url( $VAR["attachment_id"], "full");
-        $srcset = wp_get_attachment_image_srcset( $VAR["attachment_id"], "large" );
 
         if ( $VAR["show_title"] ) 
             if ( empty( $VAR["title"] ) )
