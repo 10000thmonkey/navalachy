@@ -1,5 +1,4 @@
 <?php
-wp_enqueue_script("nv-slider", "/wp-content/themes/navalachy/assets/slider.js" );
 wp_enqueue_script("nv-booking", "/wp-content/themes/navalachy/accomodation/a/booking.js");
 wp_enqueue_script( "nv-datepicker", "/wp-content/themes/navalachy/accomodation/a/hello-week.min.js" );
 
@@ -10,7 +9,7 @@ get_header();
 	<?= nv_c( "UI/cover-image", [
 		"attachment_id" => 1193,
 		"attachment_id_portrait" => 1678,
-		"content" => '<img decoding="async" src="/wp-content/uploads/uvodni-titulek.svg" alt="" width="500" height="350">'
+		"content" => '<img decoding="async" src="/wp-content/uploads/logo-navalachy.svg" alt="Logo NaValachy.cz - Záruka zážitku a tradic" width="500" height="350">'
 	] );
 	?>
 	<svg class="clip-path-template">
