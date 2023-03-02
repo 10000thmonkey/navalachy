@@ -164,6 +164,35 @@ if ( defined( "DOING_AJAX" ) && DOING_AJAX )
 
 
 
+add_action(
+	"init",
+	function()
+	{
+	    remove_image_size( 'woocommerce_thumbnail' );
+	    remove_image_size( 'woocommerce_single' );
+	    remove_image_size( 'woocommerce_gallery_thumbnail' );
+	    remove_image_size( 'shop_catalog' );
+	    remove_image_size( 'shop_single' );
+	    remove_image_size( 'shop_thumbnail' );
+	    //remove_image_size( 'medium_large' );
+	    remove_image_size( '1536x1536' );
+
+	    update_option('medium_large_size_w', '800');
+	    update_option('medium_large_size_h', '0');
+	}
+);
+add_filter(
+    'intermediate_image_sizes', 
+    function ( $default_image_sizes )
+    {
+        unset( $default_image_sizes["medium"] );
+	    unset( $default_image_sizes['medium_large'] );
+	    return $default_image_sizes;
+    }
+);
+
+
+
 
 
 add_action(

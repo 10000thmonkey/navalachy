@@ -2,7 +2,7 @@
 
 nv_new_c (
     "UI/responsive-image",
-    function ( $_VAR )
+    function ( $VAR )
     {
         $VAR = array_merge( [
             "sizes" => "(max-width: 600px) 100vw, 25vw",
@@ -10,7 +10,7 @@ nv_new_c (
             "show_title" => false,
             "alt" => "",
             "attachment_id" => 1
-        ], $_VAR );
+        ], $VAR );
 
         $src = wp_get_attachment_image_url( $VAR["attachment_id"], "medium");
         $srcfull = wp_get_attachment_image_url( $VAR["attachment_id"], "full");
