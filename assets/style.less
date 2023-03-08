@@ -2563,6 +2563,8 @@ nv-messagebox .message, .messagebox {
 	&.cols-3 {grid-template-columns: 1fr 1fr;}
 	&.cols-4 {grid-template-columns: 1fr 1fr;}
 
+	&.cols-xs-2 { @media(min-width: @breakpoint-xs) {grid-template-columns: 1fr 1fr;} }
+
 	&.cols-sm-2 { @media(min-width: @breakpoint-sm) {grid-template-columns: 1fr 1fr;} }
 	&.cols-sm-3 { @media(min-width: @breakpoint-sm) {grid-template-columns: 1fr 1fr 1fr;} }
 
