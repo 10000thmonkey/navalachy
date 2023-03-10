@@ -57,7 +57,8 @@ nv_new_c(
 		
 		<?php if( $VAR["iss"] ) : ?>
 		
-		<a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');document.body.css('overflow','hidden')">Pokračovat</a>
+		<!--a class="button continuebutton" onclick="this.closestParent('aside').removeClass('reallyaside').addClass('slided');document.body.css('overflow','hidden')">Pokračovat</a-->
+		<a class="button" style="background: var(--color-ui-grey);color:var(--primary);">Testovací provoz</a>
 
 
 		<div class="reservation-form-popup rows gap-md">
@@ -87,7 +88,8 @@ nv_new_c(
 
 
 
-			<a class="button" onclick="cal.sendToCheckout()">Rezervovat</a>
+			<!--a class="button" onclick="cal.sendToCheckout()">Rezervovat</a-->
+			<a class="button" style="background: var(--color-ui-grey);color:var(--primary);">Testovací provoz</a>
 			
 			<div class="messages nodisplay"></div>
 
