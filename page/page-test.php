@@ -15,8 +15,9 @@ if ($_GET["test"] == "or")
 	echo var_dump( $_GET["test"] || false );
 }
 
-if ( $_GET["test"] === "0")
+if ( $_GET["test"] === 0)
 {
+	ini_set("display_errors", 1);
 	echo $nvbk->create_table();
 	$wpdb->print_error();
 	echo $nvbk->sync();
@@ -57,9 +58,11 @@ if ($_GET['test'] == 3)
 
 	print_r($booking);
 }
-if ($_GET["test"] == 4)
+if ($_GET["test"] == "4")
 {
-	print_r(wp_get_current_user());
+	$wpdb->show_errors();
+	include __DIR__ . "/../Booking/ical.php";
+	$wpdb->print_error();
 	//print_r(get_user_meta( wp_get_current_user() ));
 }
 if ($_GET["test"] == 5)
