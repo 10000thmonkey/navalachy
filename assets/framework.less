@@ -57,15 +57,26 @@
 
 //////// SPACE-SROUND (MARGIN TOP & BOTTOM)
 
-.space-around-xl { margin-top: var(--space-xl); margin-bottom: var(--space-xl); }
-.space-around-lg { margin-top: var(--space-lg); margin-bottom: var(--space-lg);
-	@media (max-width: @breakpoint-md) { margin-top: var(--space-hg); margin-bottom: var(--space-hg); }
-	@media (max-width: @breakpoint-sm) { margin-top: var(--space-md); margin-bottom: var(--space-md); }
-}
-.space-around-hg { margin-top: var(--space-hg); margin-bottom: var(--space-hg); }
-.space-around-md { margin-top: var(--space-md); margin-bottom: var(--space-md); }
-.space-around-sm { margin-top: var(--space-sm); margin-bottom: var(--space-sm); }
 .space-around-xs { margin-top: var(--space-xs); margin-bottom: var(--space-xs); }
+.space-around-sm { margin-top: var(--space-sm); margin-bottom: var(--space-sm); }
+.space-around-md { margin-top: var(--space-md); margin-bottom: var(--space-md); }
+.space-around-hg { margin-top: var(--space-hg); margin-bottom: var(--space-hg); }
+.space-around-lg { margin-top: var(--space-lg); margin-bottom: var(--space-lg);
+	@media (max-width: @breakpoint-sm) { margin-top: var(--space-md); margin-bottom: var(--space-md); }
+	@media (max-width: @breakpoint-md) { margin-top: var(--space-hg); margin-bottom: var(--space-hg); }
+}
+.space-around-xl { margin-top: var(--space-xl); margin-bottom: var(--space-xl);
+	@media (max-width: @breakpoint-sm) { margin-top: var(--space-hg); margin-bottom: var(--space-hg); }
+	@media (max-width: @breakpoint-md) { margin-top: var(--space-lg); margin-bottom: var(--space-lg); }
+}
+.space-around-xxl { margin-top: var(--space-xxl); margin-bottom: var(--space-lg);
+	@media (max-width: @breakpoint-sm) { margin-top: var(--space-lg); margin-bottom: var(--space-lg); }
+	@media (max-width: @breakpoint-md) { margin-top: var(--space-xl); margin-bottom: var(--space-xl); }
+}
+.space-around-xxxl { margin-top: var(--space-xxxl); margin-bottom: var(--space-xxxl);
+	@media (max-width: @breakpoint-sm) { margin-top: var(--space-xl); margin-bottom: var(--space-xl); }
+	@media (max-width: @breakpoint-md) { margin-top: var(--space-xxl); margin-bottom: var(--space-xxl); }
+}
 
 
 //////// PADDING
