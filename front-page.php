@@ -70,7 +70,7 @@ get_header();
 						] );
 						echo <<<HTML
 
-						<a class="hovercard" href="/tipy?tags={$tag->slug}">
+						<a class="hovercard" href="/tipy/?tags={$tag->slug}">
 							$i
 							<div class="iconset">
 								<div class="icon">
