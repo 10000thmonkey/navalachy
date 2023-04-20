@@ -153,7 +153,7 @@ get_header();
 								"sizes" => "(min-width: 1px) 200px, 200px",
 							] );
 							echo <<<HTML
-							<a class="hovercard" href="/tipy?tags={$tag->slug}">
+							<a class="hovercard" href="/tipy/?tags={$tag->slug}">
 								$i
 								<div class="iconset">
 									<div class="icon">

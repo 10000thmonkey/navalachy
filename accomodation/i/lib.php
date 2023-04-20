@@ -371,7 +371,9 @@ class NVBK
 	public function get_new_booking_price ( $apartment_id, $begin = NULL, $end = NULL )
 	{
 		global $wpdb;
-		global $currencies;
+		//global $currencies;
+
+		$currencies = ["EUR" => ["€", 1], "CZK" => ["Kč", floatval(get_option("nvbk_exchange_EUR_CZK"))]];
 
 
 		$apartment = new WP_Query(["post_type" => "accomodation", "post__in" => [$apartment_id]] );
