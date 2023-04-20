@@ -95,7 +95,14 @@ if ($_GET["test"] == 8)
 	<?php
 }
 
+if($_GET["test"] == 10)
+{
+	$exchangeUrl = 'https://api.exchangerate.host/latest?base=EUR&symbols=CZK';
+	$exchangeData = json_decode(file_get_contents($exchangeUrl));
+	echo update_option("nvbk_exchange_EUR_CZK", $exchangeData->rates->CZK);
 
+	print_r($exchangeData);
+}
 
 get_footer();
 

@@ -36,13 +36,14 @@ class NVBK
     	'customer_note' => '',
     	'host_note' => ''
     ];
+    public $exchange = [];
 	public $table_name = "nvbk_booking";
 	public $debug = false;
 
 
 	public function __construct( $debug = false )
 	{
-		$this->rate_eur_czk = get_option("nvbk_exchange_EUR_CZK");
+		$this->exchange["EUR_CZK"] = get_option("nvbk_exchange_EUR_CZK");
 
 		if ( !! $debug ) $this->debug = true;
 
