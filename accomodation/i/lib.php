@@ -324,6 +324,7 @@ class NVBK
 			$to, $to,
 			$from, $to
 		);
+		error_log($query);
 		$results = $wpdb->get_results($query);
 		foreach ( $results as $value ) $apartments_not_available[] = $value->apartment_id;
 
