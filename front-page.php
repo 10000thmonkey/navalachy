@@ -221,7 +221,7 @@ get_header();
 
 					<?= nv_c( "accomodation/c/form" ); ?>
 				</div>
-<?= var_dump(get_option("nvbk_exchange_EUR_CZK"));?>
+				
 				<?php $feed = nv_c( "accomodation/c/feed", [ "limit" => 3, "sizes" => "(max-width: 800px) 300px, 500px" ] ); ?>
 
 				<nv-repeat nv-items="<?= esc_attr( json_encode( $feed["items"] ) ); ?>" class="hovercards">

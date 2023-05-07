@@ -60,7 +60,7 @@ get_header();
 
 				<p><?= $meta_fields["desc_short"][0]; ?></p>
 
-				<div class="iconset iconset-hg cols cols-sm-2">
+				<div class="iconset iconset-hg cols cols-sm-2" style="display: grid;">
 					
 					<?php
 					$basic_information = array();
@@ -161,9 +161,10 @@ get_header();
 							$c = $pod->display("text");
 
 							$avatarId = get_post_thumbnail_id();
-							if (empty($avatarId)) $avatarId = 1364;
+							if (empty($avatarId)) $avatarId = 1404;
 							$avatarImg = nv_c( "UI/responsive-image", [
 								"attachment_id"=> $avatarId,
+								"placeholder" => "avatar",
 								"sizes" => "(min-width:1px) 64px, 64px"
 							] );
 							

@@ -11,6 +11,7 @@ nv_new_c (
             "alt" => "",
             "attachment_id" => 1,
             "nonresponsive" => false,
+            "placeholder" => "default",
         ], $VAR );
 
 
@@ -22,6 +23,13 @@ nv_new_c (
         }
 
         $src = wp_get_attachment_image_url( $VAR["attachment_id"], "medium");
+
+        if ( ! $src ) {
+            if ( "avatar" === $VAR["placeholder"] ) $VAR["attachment_id"] = 1404;
+            elseif ( "default" === $VAR["placeholder"] ) $VAR["attachment_id"] = 96;
+
+            $src = wp_get_attachment_image_url( $VAR["attachment_id"] );
+        }
 
         if ( $VAR["show_title"] ) 
             if ( empty( $VAR["title"] ) )
