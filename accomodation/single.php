@@ -165,7 +165,7 @@ get_header();
 							$avatarImg = nv_c( "UI/responsive-image", [
 								"attachment_id"=> $avatarId,
 								"placeholder" => "avatar",
-								"sizes" => "(min-width:1px) 64px, 64px"
+								"nonresponsive" => true,
 							] );
 							
 							//if ($meta["ubytko"][0] != $ID) continue;
