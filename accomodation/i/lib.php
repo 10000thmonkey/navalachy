@@ -314,9 +314,9 @@ class NVBK
 			SELECT `apartment_id` FROM {$this->table_name}
 	        WHERE
 	        (
-	        		( `begin_date` <= %s AND `end_date` >= %s )
-	        	AND ( `begin_date` <= %s AND `end_date` >= %s )
-	        	OR  ( `begin_date` >= %s AND `end_date` <= %s )
+	        	   ( `begin_date` <= %s AND `end_date` >= %s )
+	        	OR ( `begin_date` <= %s AND `end_date` >= %s )
+	        	OR ( `begin_date` >= %s AND `end_date` <= %s )
 	        )
 	        AND `status` IN ('SYNCED', 'PENDING', 'CONFIRMED', 'CLOSED', 'RESERVED')" . $apartments_sql . "
 	        GROUP BY `apartment_id` ",
