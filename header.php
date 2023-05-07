@@ -32,14 +32,7 @@ global $isAdmin;
 		smartlook('init', '794196b5441c964e421dc60be90b282ea9023239', { region: 'eu' });
 	</script>
 	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-R6ZWF4NFP5"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'G-R6ZWF4NFP5');
-	</script>
+	
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-9LDG9K764S"></script>
 	<script>
 	  window.dataLayer = window.dataLayer || [];
